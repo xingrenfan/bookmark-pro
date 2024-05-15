@@ -5,7 +5,6 @@ import com.intellij.ide.SelectInContext;
 import com.intellij.ide.SelectInManager;
 import com.intellij.ide.SelectInTarget;
 import com.intellij.openapi.fileEditor.FileNavigator;
-import com.intellij.openapi.fileEditor.FileNavigatorImpl;
 import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.FileTypeManager;
@@ -29,11 +28,11 @@ public class OpenChangeFile extends OpenFileDescriptor {
 
     @Override
     public void navigate(boolean requestFocus) {
-        FileNavigator fileNavigator = new BookmarkFileNavigator();
+        BookmarkFileNavigator fileNavigator = new BookmarkFileNavigator();
         fileNavigator.navigate(this, requestFocus);
     }
 
-    class BookmarkFileNavigator extends FileNavigatorImpl {
+    class BookmarkFileNavigator implements FileNavigator {
         @Override
         public void navigate(@NotNull OpenFileDescriptor descriptor, boolean requestFocus) {
             if (!descriptor.getFile().isDirectory()) {
@@ -43,6 +42,11 @@ public class OpenChangeFile extends OpenFileDescriptor {
             if (navigateInProjectView(descriptor.getProject(), descriptor.getFile(), requestFocus)) return;
 
             BookmarkNoticeUtil.errorMessages(descriptor.getProject(), "Files of this type cannot be opened");
+        }
+
+        @Override
+        public boolean navigateInEditor(@NotNull OpenFileDescriptor descriptor, boolean requestFocus) {
+            return true;
         }
 
         private boolean navigateInEditorOrNativeApp(Project project, OpenFileDescriptor descriptor, boolean requestFocus) {

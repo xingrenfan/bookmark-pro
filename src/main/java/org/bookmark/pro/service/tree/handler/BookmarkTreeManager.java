@@ -2,6 +2,7 @@ package org.bookmark.pro.service.tree.handler;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.TreeSpeedSearch;
+import com.intellij.ui.TreeUIHelper;
 import org.bookmark.pro.constants.BookmarkProConstant;
 import org.bookmark.pro.constants.BookmarkProIcon;
 import org.bookmark.pro.context.BookmarkRunService;
@@ -154,9 +155,10 @@ public final class BookmarkTreeManager extends BookmarkMenus implements Bookmark
      * @param bookmarkTree 书签树
      */
     private void addTreeSearch(BookmarkTree bookmarkTree) {
-        TreeSpeedSearch treeSpeedSearch = new TreeSpeedSearch(bookmarkTree);
-        treeSpeedSearch.setCanExpand(true);
-        bookmarkTree.setShowsRootHandles(true);
+        TreeUIHelper treeHelper = TreeUIHelper.getInstance();
+        treeHelper.installTreeSpeedSearch(bookmarkTree);
+        treeHelper.installSmartExpander(bookmarkTree);
+//        bookmarkTree.setShowsRootHandles(true);
     }
 
     /**
