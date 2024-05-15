@@ -1,0 +1,58 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.intellij' version '1.17.2'
+}
+
+group 'org.bookmark.pro'
+version '2021.0.0'
+
+repositories {
+    maven { url 'https://maven.aliyun.com/repository/public/' }
+    maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+    maven {
+        allowInsecureProtocol = true
+        url 'http://maven.aliyun.com/nexus/content/groups/public/'
+    }
+    maven {
+        allowInsecureProtocol = true
+        url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'
+    }
+    maven {
+        allowInsecureProtocol = true
+        url 'http://maven.aliyun.com/nexus/content/repositories/google'
+    }
+    maven {
+        allowInsecureProtocol = true
+        url 'http://maven.aliyun.com/nexus/content/repositories/gradle-plugin'
+    }
+    mavenLocal()
+    mavenCentral()
+}
+
+allprojects {
+    tasks.withType(JavaCompile) {
+        // 禁止过期方法检查
+        options.deprecation = true
+    }
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    // https://mvnrepository.com/artifact/org.mockito/mockito-all
+    testImplementation 'org.mockito:mockito-all:1.10.19'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+intellij {
+    version.set("2021.2.1")
+    plugins = ["java"]
+}
+
+patchPluginXml {
+    sinceBuild = '212'
+    untilBuild = '233.*'
+}
+
+tasks.buildSearchableOptions {
+    enabled = false
+}
