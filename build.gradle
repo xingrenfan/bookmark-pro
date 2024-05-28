@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'org.bookmark.pro'
-version '20220201'
+version '212-222.01.01'
 
 repositories {
     maven { url 'https://maven.aliyun.com/repository/public/' }
@@ -44,12 +44,12 @@ dependencies {
 }
 
 intellij {
-    version.set("2022.2")
+    version.set("2021.2.2")
     plugins = ["java"]
 }
 
 patchPluginXml {
-    sinceBuild = '222.3345.118'
+    sinceBuild = '212.5080.55'
     untilBuild = '222.4554.10'
 }
 
