@@ -1,0 +1,11 @@
+{
+  "toolchains": [
+    {
+      "type": "jdk",
+      "provider": {
+        "type": "vendored",
+        "version": "11"
+      }
+    }
+  ]
+}
