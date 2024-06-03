@@ -20,7 +20,7 @@ public interface BookmarkProConstant {
     /**
      * idea 插件下载地址
      */
-    String IDEA_PLUGIN_URI = "https://plugins.jetbrains.com/plugin/24441-markbook-pro";
+    String IDEA_PLUGIN_URI = "https://plugins.jetbrains.com/plugin/24476-markbook-pro";
 
     /**
      * 书签前缀
