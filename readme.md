@@ -3,6 +3,11 @@
 一款简单易用的IDEA书签插件。可以进行书签分组、书签切换、代码跳转、书签注释展示以及配置， 使代码更容易阅读。
 Bookmark-Pro借鉴[Bookmark-X](https://plugins.jetbrains.com/plugin/22013-bookmark-x)在此基础上修改并添加一些实用的功能。
 
+# 感谢
+感谢大家的付出与努力。此排序不分先后。
+- [sjz128751](https://github.com/sjz128751)
+- [zqc11](https://github.com/zqc11)
+
 # 使用说明
 
 - 添加书签
@@ -44,7 +49,7 @@ Bookmark-Pro借鉴[Bookmark-X](https://plugins.jetbrains.com/plugin/22013-bookma
 ![](./readme/qq_group.png)
 
 # 更新历史记录
-优化书签树管理窗口：书签右键编辑菜单
+- 优化书签树管理窗口：书签右键编辑菜单
 
 
 # 迭代演变进度
