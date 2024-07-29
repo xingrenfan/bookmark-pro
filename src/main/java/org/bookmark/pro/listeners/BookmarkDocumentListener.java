@@ -125,13 +125,14 @@ public class BookmarkDocumentListener implements DocumentListener {
                         // 管理器中删除书签
                         BookmarkRunService.getBookmarkManage(project).removeBookmarkNode(node);
                     }
-                    continue;
+//                    continue;
                 }
                 nodeModel.setLine(bookmarkPositionLine - rowGap);
                 nodeModel.setVirtualFile(virtualFile);
                 // 添加新书签
                 BookmarkRunService.getDocumentService(project).addBookmarkNode(project, node);
                 node.setUserObject(nodeModel);
+                BookmarkRunService.getBookmarkManage(project).addBookmarkNode(node);
                 BookmarkRunService.getBookmarkManage(project).getBookmarkTree().getModel().nodeChanged(node);
             }
             BookmarkRunService.getPersistenceService(project).saveBookmark(project);

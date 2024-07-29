@@ -33,10 +33,16 @@ public class BookmarkUpdateHandler extends BaseServiceUtil implements BookmarkEd
     private JCheckBox enableGroup;
 
     @Override
-    public void lineNumInspect(JPanel panel, GridBagConstraints constraints, JSpinner bookmarkLineNum, int value, int maxValue) {
-        SpinnerModel model = new SpinnerNumberModel(value, 1, maxValue, 1);
-        BookmarkEditorUtil.addNumberFormatter(bookmarkLineNum, model);
-        bookmarkLineNum(panel, constraints, maxValue, this.nowLineNumber);
+    public void lineNumInspect(JPanel panel, GridBagConstraints constraints, JSpinner bookmarkLineNum, int value, Integer maxValue, boolean showMaxLine) {
+        // 通过最大行显示控制是否可以修改书签行
+        bookmarkLineNum.setEnabled(showMaxLine);
+        if (showMaxLine) {
+            SpinnerModel model = new SpinnerNumberModel(value, 1, maxValue.intValue(), 1);
+            BookmarkEditorUtil.addNumberFormatter(bookmarkLineNum, model);
+            bookmarkLineNum(panel, constraints, maxValue, this.nowLineNumber);
+        } else {
+            bookmarkLineNum.setValue(value);
+        }
         this.nowLineNumber = this.nowLineNumber + 1;
     }
 

@@ -17,12 +17,14 @@ public interface BookmarkEditService {
     /**
      * 设置行号检查
      *
-     * @param panel       面板
-     * @param constraints 约束
-     * @param value       价值
-     * @param maxValue    最大值
+     * @param panel           面板
+     * @param constraints     约束
+     * @param bookmarkLineNum 书签行数
+     * @param value           价值
+     * @param maxValue        最大值
+     * @param showMaxLine     显示最大线
      */
-    void lineNumInspect(JPanel panel, GridBagConstraints constraints, JSpinner bookmarkLineNum, int value, int maxValue);
+    void lineNumInspect(JPanel panel, GridBagConstraints constraints, JSpinner bookmarkLineNum, int value, Integer maxValue, boolean showMaxLine);
 
     /**
      * 设置失效警告

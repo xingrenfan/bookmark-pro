@@ -43,6 +43,10 @@ Bookmark-Pro借鉴[Bookmark-X](https://plugins.jetbrains.com/plugin/22013-bookma
 # 交流 & 沟通
 ![](./readme/qq_group.png)
 
+# 更新历史记录
+优化书签树管理窗口：书签右键编辑菜单
+
+
 # 迭代演变进度
 - [X] 基础功能以及现有问题优化
 - [ ] 支持GIT分支切换

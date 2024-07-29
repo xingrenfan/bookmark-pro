@@ -43,7 +43,7 @@ class BaseServiceUtil {
      * @param maxValue    最大值
      * @param rowNum      行数
      */
-    protected void bookmarkLineNum(JPanel panel, GridBagConstraints constraints, int maxValue, int rowNum) {
+    protected void bookmarkLineNum(JPanel panel, GridBagConstraints constraints, Integer maxValue, int rowNum) {
         // 第四行 第一列
         JLabel lbName = new JLabel("Bookmark Line Limit:");
         constraints.gridx = 0;
@@ -52,7 +52,6 @@ class BaseServiceUtil {
         constraints.weighty = rowNum;
         panel.add(lbName, constraints);
         lbName.setForeground(BookmarkProConstant.CUE_COLOR);
-
         // 第四行 第二列
         JLabel number = new JLabel("The bookmark Line number max is " + maxValue + ".");
         constraints.gridx = 1;

@@ -107,28 +107,30 @@ public final class DocumentServiceHandler implements DocumentService {
 
     @Override
     public void removeBookmarkNode(Project project, BookmarkTreeNode bookmarkNode) {
-        BookmarkNodeModel nodeModel = (BookmarkNodeModel) bookmarkNode.getUserObject();
-        // 删除书签节点缓存
-        this.bookmarkNodeCache.remove(nodeModel.getUuid());
         if (bookmarkNode.isBookmark()) {
-            // 获取虚拟文件
-            if (nodeModel.getVirtualFile() != null) {
-                // 文件名
-                String fileName = BookmarkProUtil.virtualFileName(project, nodeModel.getVirtualFile());
-                if (this.bookmarkFileName.containsKey(fileName)) {
-                    // 根据文件名获取所有书签
-                    Set<String> cacheUuid = this.bookmarkFileName.get(fileName);
-                    cacheUuid.remove(nodeModel.getUuid());
-                    if (CollectionUtil.isEmpty(cacheUuid)) {
-                        this.bookmarkFileName.remove(fileName);
-                    } else {
-                        this.bookmarkFileName.put(fileName, cacheUuid);
+            BookmarkNodeModel nodeModel = (BookmarkNodeModel) bookmarkNode.getUserObject();
+            // 删除书签节点缓存
+            this.bookmarkNodeCache.remove(nodeModel.getUuid());
+            if (bookmarkNode.isBookmark()) {
+                // 获取虚拟文件
+                if (nodeModel.getVirtualFile() != null) {
+                    // 文件名
+                    String fileName = BookmarkProUtil.virtualFileName(project, nodeModel.getVirtualFile());
+                    if (this.bookmarkFileName.containsKey(fileName)) {
+                        // 根据文件名获取所有书签
+                        Set<String> cacheUuid = this.bookmarkFileName.get(fileName);
+                        cacheUuid.remove(nodeModel.getUuid());
+                        if (CollectionUtil.isEmpty(cacheUuid)) {
+                            this.bookmarkFileName.remove(fileName);
+                        } else {
+                            this.bookmarkFileName.put(fileName, cacheUuid);
+                        }
                     }
                 }
             }
-        }
-        if (bookmarkNode.isGroup() && this.groupNodeCache.containsKey(nodeModel.getUuid())) {
-            this.groupNodeCache.remove(nodeModel.getUuid());
+            if (bookmarkNode.isGroup() && this.groupNodeCache.containsKey(nodeModel.getUuid())) {
+                this.groupNodeCache.remove(nodeModel.getUuid());
+            }
         }
     }
 

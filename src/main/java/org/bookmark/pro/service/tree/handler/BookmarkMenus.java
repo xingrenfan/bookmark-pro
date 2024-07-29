@@ -5,10 +5,11 @@ import com.intellij.openapi.ui.InputValidatorEx;
 import com.intellij.openapi.ui.JBMenuItem;
 import com.intellij.openapi.ui.JBPopupMenu;
 import com.intellij.openapi.ui.Messages;
+import org.bookmark.pro.constants.BookmarkProIcon;
 import org.bookmark.pro.context.BookmarkRunService;
+import org.bookmark.pro.dialogs.modify.BookmarkEditDialog;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.domain.model.GroupNodeModel;
-import org.bookmark.pro.utils.BookmarkNoticeUtil;
 import org.bookmark.pro.utils.CharacterUtil;
 import org.jsoup.internal.StringUtil;
 
@@ -129,6 +130,7 @@ class BookmarkMenus {
      */
     private JBPopupMenu createDeleteMenus(final Project project, final BookmarkTree bookmarkTree) {
         JBPopupMenu popupMenu = new JBPopupMenu();
+        popupMenu.add(createEditMenu(project, bookmarkTree));
         popupMenu.add(createDeleteMenu(project, bookmarkTree));
         return popupMenu;
     }
@@ -151,9 +153,9 @@ class BookmarkMenus {
             BookmarkTreeNode selectedNode = (BookmarkTreeNode) path.getLastPathComponent();
             if (selectedNode.isGroup()) {
                 if (selectedNode.isBookmark()) {
-                    // 修改书签分组
+                    // 书签
                     BookmarkNodeModel nodeModel = (BookmarkNodeModel) selectedNode.getUserObject();
-                    // 校验规则
+                    /*// 校验规则
                     InputValidatorEx validatorEx = inputString -> {
                         if (StringUtil.isBlank(inputString)) return "Group name is not empty";
                         return null;
@@ -165,6 +167,18 @@ class BookmarkMenus {
                     if (!groupName.equals(nodeModel.getName())) {
                         nodeModel.setName(groupName);
                     }
+                    BookmarkRunService.getBookmarkManage(project).getBookmarkTree().getModel().nodeChanged(selectedNode);*/
+                    new BookmarkEditDialog(project, false).defaultNode(nodeModel, null, false).showAndCallback((name, desc, lineNum, parentNode, enableGroup) -> {
+                        nodeModel.setName(name);
+                        nodeModel.setDesc(desc);
+                        nodeModel.setInvalid(false);
+                        nodeModel.setGroup(enableGroup);
+                        nodeModel.setBookmark(true);
+                        selectedNode.setGroup(enableGroup);
+                        selectedNode.setBookmark(true);
+                        selectedNode.setInvalid(false);
+//                        bookmarkManage.changeBookmarkNode(parentNode, treeNode);
+                    });
                     BookmarkRunService.getBookmarkManage(project).getBookmarkTree().getModel().nodeChanged(selectedNode);
                 } else {
                     // 修改书签分组
@@ -187,7 +201,20 @@ class BookmarkMenus {
                     BookmarkRunService.getBookmarkManage(project).getBookmarkTree().getModel().nodeChanged(selectedNode);
                 }
             } else {
-                BookmarkNoticeUtil.errorMessages(project, "Please in the editor modify bookmark.");
+                // 书签
+                BookmarkNodeModel nodeModel = (BookmarkNodeModel) selectedNode.getUserObject();
+                new BookmarkEditDialog(project, false).defaultNode(nodeModel, null, false).showAndCallback((name, desc, lineNum, parentNode, enableGroup) -> {
+                    nodeModel.setName(name);
+                    nodeModel.setDesc(desc);
+                    nodeModel.setInvalid(false);
+                    nodeModel.setGroup(enableGroup);
+                    nodeModel.setBookmark(true);
+                    selectedNode.setGroup(enableGroup);
+                    selectedNode.setBookmark(true);
+                    selectedNode.setInvalid(false);
+//                        bookmarkManage.changeBookmarkNode(parentNode, treeNode);
+                });
+                BookmarkRunService.getBookmarkManage(project).getBookmarkTree().getModel().nodeChanged(selectedNode);
             }
         });
         return editMenu;

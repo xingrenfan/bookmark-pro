@@ -44,12 +44,12 @@ dependencies {
 }
 
 intellij {
-    version.set("2023.1")
+    version.set("2022.2.5")
     plugins = ["java"]
 }
 
 patchPluginXml {
-    sinceBuild = '231.8109.175'
+    sinceBuild = '212.5080.55'
     untilBuild = '233.*'
 }
 
