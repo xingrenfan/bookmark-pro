@@ -65,11 +65,7 @@ public class BookmarkCreateHandler extends BaseServiceUtil implements BookmarkEd
             JComboBox<BookmarkTreeNode> bookmarkType = new JComboBox<>();
             documentService.getBookmarkGroup().stream().forEach(dto -> bookmarkType.addItem(dto));
             if (selectedNode.isGroup()) {
-                if (selectedNode.isBookmark()) {
-                    bookmarkType.setSelectedItem(selectedNode);
-                } else {
-                    bookmarkType.setSelectedItem(selectedNode);
-                }
+                bookmarkType.setSelectedItem(selectedNode);
                 this.parentNode = selectedNode;
             } else {
                 BookmarkTreeNode selectedNodeParent = (BookmarkTreeNode) selectedNode.getParent();
