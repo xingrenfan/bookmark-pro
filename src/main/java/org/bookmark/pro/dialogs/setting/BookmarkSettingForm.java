@@ -25,6 +25,7 @@ public class BookmarkSettingForm implements Configurable {
     private JSpinner maxCharNum;
     private JCheckBox lineDocument;
     private JSpinner selectedShowNum;
+    private JTextField sjzBeiFen;
 
     private GeneralSettings generalSettings;
 
@@ -36,7 +37,7 @@ public class BookmarkSettingForm implements Configurable {
     @Override
     public @Nullable JComponent createComponent() {
         // 初始化全局设置
-        generalSettings = new GeneralSettings(markText, markLabSel, noteLabSel, separatorSel, maxCharNum, lineDocument, selectedShowNum);
+        generalSettings = new GeneralSettings(markText, markLabSel, noteLabSel, separatorSel, maxCharNum, lineDocument, selectedShowNum,sjzBeiFen);
         generalSettings.initGeneralSettings();
         //设置颜色选择监听
         colorChooseListener(mainPane, noteLabSel);

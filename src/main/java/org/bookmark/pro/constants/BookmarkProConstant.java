@@ -26,6 +26,10 @@ public interface BookmarkProConstant {
      * 书签前缀
      */
     String BOOKMARK_PREFIX = "bookmark.pro:prefix";
+    /**
+     * 书签前缀
+     */
+    String BOOKMARK_SJZBEIFEN = "bookmark.pro:sjzBeiFen";
 
     /**
      * 书签前缀颜色

@@ -54,11 +54,13 @@ public class BookmarkCreateHandler extends BaseServiceUtil implements BookmarkEd
     public void showBookmarkParent(Project project, JPanel panel, GridBagConstraints constraints, BookmarkNodeModel node) {
         BookmarkTree bookmarkTree = BookmarkRunService.getBookmarkManage(project).getBookmarkTree();
         TreePath path = bookmarkTree.getSelectionPath();
+        BookmarkTreeNode selectedNode = null;
         if (null == path) {
-            return;
+            selectedNode = (BookmarkTreeNode)bookmarkTree.getModel().getRoot();
+        }else {
+            selectedNode = (BookmarkTreeNode) path.getLastPathComponent();
         }
-        // 当前选中的
-        BookmarkTreeNode selectedNode = (BookmarkTreeNode) path.getLastPathComponent();
+
         if (selectedNode != null) {
             DocumentService documentService = BookmarkRunService.getDocumentService(project);
             // 获取父级书签下拉选项书签

@@ -11,12 +11,16 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.io.FileUtil;
 import org.bookmark.pro.constants.BookmarkProIcon;
 import org.bookmark.pro.context.BookmarkRunService;
+import org.bookmark.pro.dialogs.setting.GeneralSettings;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
 import org.bookmark.pro.utils.CharacterUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.io.File;
+import java.text.DateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 /**
@@ -26,6 +30,9 @@ import java.util.Objects;
  * @date 2024-1-31
  */
 public final class BookmarkExportAction extends AnAction {
+
+    private GeneralSettings generalSettings;
+
     public BookmarkExportAction() {
         super("Bookmark Export", null, AllIcons.ToolbarDecorator.Export);
     }
@@ -47,8 +54,41 @@ public final class BookmarkExportAction extends AnAction {
         if (CharacterUtil.isNotEmpty(newFileName)) {
             fileName = newFileName;
         }
-        if (BookmarkRunService.getPersistenceService(project).exportBookmark(project, projectDir + File.separator + fileName)) {
-            sendExportNotice(project, projectDir);
+//        if (BookmarkRunService.getPersistenceService(project).exportBookmark(project, projectDir + File.separator + fileName)) {
+//            sendExportNotice(project, projectDir);
+//        }
+        // 获取当前时间
+        LocalDateTime now = LocalDateTime.now();
+        // 定义时间格式
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日HH小时mm分钟ss秒");
+        // 格式化当前时间
+        String currentTimeString = now.format(formatter);
+        // 创建File对象
+        String sjzPath = projectDir + File.separator + "SjzMarkBook";
+        File folder = new File(sjzPath);
+        // 检查文件夹是否已经存在
+        if (!folder.exists()) {
+            // 创建文件夹
+            boolean created = folder.mkdirs();
+        }
+        String sjzFileName = project.getName()+currentTimeString + ".json";
+        if (BookmarkRunService.getPersistenceService(project).exportBookmark(project,
+                sjzPath+ File.separator + sjzFileName)) {
+            sendExportNotice(project, sjzPath);
+        }
+        // 导出到另一个文件夹
+        if (!"".equals(BookmarkRunService.getBookmarkSettings().getSjzBeiFen())){
+            String sjzPath2 = BookmarkRunService.getBookmarkSettings().getSjzBeiFen() + File.separator + "SjzMarkBook";
+            File folder2 = new File(sjzPath2);
+            // 检查文件夹是否已经存在
+            if (!folder2.exists()) {
+                // 创建文件夹
+                boolean created = folder2.mkdirs();
+            }
+            if (BookmarkRunService.getPersistenceService(project).exportBookmark(project,
+                    sjzPath2+ File.separator + sjzFileName)) {
+                sendExportNotice(project, sjzPath2);
+            }
         }
     }
 

@@ -24,6 +24,15 @@ public class PersistentService implements PersistentStateComponent<BookmarkPro> 
     }
 
     public void setState(BookmarkPro state) {
+        if (state==null){
+            throw new RuntimeException("书签为空,保存异常!");
+        }
+        if (state.getChildren()==null){
+            throw new RuntimeException("书签的孩子节点为空,保存异常!");
+        }
+        if (this.state!=null && this.state.getChildren()!=null&&this.state.getChildren().size()-state.getChildren().size()>3){
+            throw new RuntimeException("一次修改不可超过3个,保存异常!");
+        }
         this.state = state;
     }
 

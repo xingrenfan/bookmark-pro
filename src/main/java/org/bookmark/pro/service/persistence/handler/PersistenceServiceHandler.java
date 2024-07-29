@@ -154,6 +154,42 @@ public class PersistenceServiceHandler implements PersistenceService {
         return treeNode;
     }
 
+
+    /**
+     * 生成树节点
+     *
+     * @param project  项目
+     * @param bookmark 书签
+     * @param searchText 搜索文本
+     * @return {@link BookmarkTreeNode}
+     */
+    private BookmarkTreeNode generateTreeNodeSearch(Project project, BookmarkPro bookmark, String searchText) {
+        AbstractTreeNodeModel model = BookmarkConverter.beanToModel(project, bookmark);
+        if (bookmark.isBookmark() && !bookmark.isGroup()) {
+            // 纯书签不支持分组
+            return new BookmarkTreeNode(model);
+        }
+        // 是纯分组或者书签分组 支持分组
+        BookmarkTreeNode treeNode = new BookmarkTreeNode(model, true);
+
+        List<BookmarkPro> childrenBookmarks = bookmark.getChildren();
+        if (CollectionUtils.isEmpty(childrenBookmarks)) {
+            return treeNode;
+        }
+        for (BookmarkPro childrenBookmark : childrenBookmarks) {
+            // 递归处理子节点，确保所有层级都被检查
+            BookmarkTreeNode childNode = generateTreeNodeSearch(project, childrenBookmark, searchText);
+            if (childNode != null && childNode.getChildCount() > 0) {
+                treeNode.add(childNode);
+            } else if (childrenBookmark.getName().contains(searchText) ||
+                    (childrenBookmark.getDesc() != null && childrenBookmark.getDesc().contains(searchText))) {
+                treeNode.add(new BookmarkTreeNode(BookmarkConverter.beanToModel(project, childrenBookmark)));
+            }
+        }
+        return treeNode;
+    }
+
+
     @Override
     public void addOneBookmark(Project project, BookmarkPro bookmark) {
         PersistentService service = getPersistentService(project, PersistentService.class);
@@ -165,5 +201,12 @@ public class PersistenceServiceHandler implements PersistenceService {
     public BookmarkTreeNode getBookmarkNode(Project project) {
         PersistentService service = getPersistentService(project, PersistentService.class);
         return generateTreeNode(project, service.getState());
+    }
+
+
+    @Override
+    public BookmarkTreeNode getBookmarkNodeSearch(Project project,String searchText) {
+        PersistentService service = getPersistentService(project, PersistentService.class);
+        return generateTreeNodeSearch(project, service.getState(),searchText);
     }
 }

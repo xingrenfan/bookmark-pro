@@ -3,6 +3,7 @@ package org.bookmark.pro.service.tree.handler;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.treeStructure.Tree;
 import org.bookmark.pro.context.BookmarkRunService;
+import org.bookmark.pro.domain.model.GroupNodeModel;
 
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
@@ -69,8 +70,22 @@ public class BookmarkTree extends Tree {
      */
     protected void removeNode(Project project, BookmarkTreeNode node) {
         model.removeNodeFromParent(node);
-        // 删除缓存书签树
-        BookmarkRunService.getDocumentService(project).removeBookmarkNode(project, node);
+        // 下面是我修改的地方，删除分组时，删除缓存的分组信息 sjz
+        if (node.getUserObject() instanceof GroupNodeModel){
+            GroupNodeModel nodeModel = (GroupNodeModel)node.getUserObject();
+            if (node.children()!=null &&  node.children().hasMoreElements()){
+                // 遍历 Enumeration
+                while ( node.children().hasMoreElements()) {
+                    BookmarkTreeNode treeNode = (BookmarkTreeNode)node.children().nextElement();
+                    removeNode(project, treeNode);// 这个递归也是我加点sjz  我觉得非常牛逼
+                }
+            }
+//            BookmarkRunService.getDocumentService(project).delBookMarkGroup(nodeModel.getUuid());
+        }else {
+            // 删除缓存书签树
+            BookmarkRunService.getDocumentService(project).removeBookmarkNode(project, node);
+        }
+
     }
 
     /**

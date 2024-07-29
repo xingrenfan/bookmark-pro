@@ -44,9 +44,19 @@ class GlobalSettings extends BaseSetting {
         return Objects.toString(properties.getValue(BookmarkProConstant.BOOKMARK_PREFIX), BookmarkProIcon.DEFAULT_PREFIX_SIGN);
     }
 
+    public String getSjzBeiFen() {
+        return Objects.toString(properties.getValue(BookmarkProConstant.BOOKMARK_SJZBEIFEN), "~");
+    }
+
     public void setPrefix(String text) {
         if (text != null) {
             properties.setValue(BookmarkProConstant.BOOKMARK_PREFIX, text);
+        }
+    }
+
+    public void setSjzBeiFen(String text) {
+        if (text != null) {
+            properties.setValue(BookmarkProConstant.BOOKMARK_SJZBEIFEN, text);
         }
     }
 

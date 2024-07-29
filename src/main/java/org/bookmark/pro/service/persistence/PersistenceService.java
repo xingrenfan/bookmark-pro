@@ -54,4 +54,12 @@ public interface PersistenceService {
      * @return {@link BookmarkTreeNode}
      */
     BookmarkTreeNode getBookmarkNode(Project project);
+
+    /**
+     * 获取书签节点----具有搜索功能
+     *
+     * @param project 项目
+     * @return {@link BookmarkTreeNode}
+     */
+    BookmarkTreeNode getBookmarkNodeSearch(Project project,String searchText);
 }
