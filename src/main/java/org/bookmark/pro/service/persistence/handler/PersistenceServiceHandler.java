@@ -21,6 +21,8 @@ import org.bookmark.pro.utils.CharacterUtil;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 public class PersistenceServiceHandler implements PersistenceService {
     private Project openProject;
@@ -160,33 +162,68 @@ public class PersistenceServiceHandler implements PersistenceService {
      *
      * @param project  项目
      * @param bookmark 书签
-     * @param searchText 搜索文本
+     * @param searchText 搜索文本（正则表达式）
      * @return {@link BookmarkTreeNode}
      */
     private BookmarkTreeNode generateTreeNodeSearch(Project project, BookmarkPro bookmark, String searchText) {
         AbstractTreeNodeModel model = BookmarkConverter.beanToModel(project, bookmark);
-        if (bookmark.isBookmark() && !bookmark.isGroup()) {
-            // 纯书签不支持分组
-            return new BookmarkTreeNode(model);
+        BookmarkTreeNode treeNode = new BookmarkTreeNode(model, !bookmark.isBookmark());
+
+        // 编译正则表达式
+        Pattern pattern;
+        try {
+            pattern = Pattern.compile(searchText, Pattern.CASE_INSENSITIVE);
+        } catch (PatternSyntaxException e) {
+            // 如果正则表达式无效，返回空节点
+            return null;
         }
-        // 是纯分组或者书签分组 支持分组
-        BookmarkTreeNode treeNode = new BookmarkTreeNode(model, true);
+
+        // 判断当前节点是否匹配搜索文本
+        boolean isParentMatched = pattern.matcher(bookmark.getName()).find() ||
+                (bookmark.getDesc() != null && pattern.matcher(bookmark.getDesc()).find());
 
         List<BookmarkPro> childrenBookmarks = bookmark.getChildren();
         if (CollectionUtils.isEmpty(childrenBookmarks)) {
+            return isParentMatched ? treeNode : null;
+        }
+
+        // 如果父节点匹配，则添加所有子节点
+        if (isParentMatched) {
+            for (BookmarkPro childrenBookmark : childrenBookmarks) {
+                BookmarkTreeNode childNode = new BookmarkTreeNode(BookmarkConverter.beanToModel(project, childrenBookmark));
+                treeNode.add(childNode);
+                addAllChildren(childNode, childrenBookmark, project);
+            }
             return treeNode;
         }
+
+        // 递归处理子节点
         for (BookmarkPro childrenBookmark : childrenBookmarks) {
-            // 递归处理子节点，确保所有层级都被检查
             BookmarkTreeNode childNode = generateTreeNodeSearch(project, childrenBookmark, searchText);
-            if (childNode != null && childNode.getChildCount() > 0) {
+            if (childNode != null) {
                 treeNode.add(childNode);
-            } else if (childrenBookmark.getName().contains(searchText) ||
-                    (childrenBookmark.getDesc() != null && childrenBookmark.getDesc().contains(searchText))) {
-                treeNode.add(new BookmarkTreeNode(BookmarkConverter.beanToModel(project, childrenBookmark)));
             }
         }
-        return treeNode;
+
+        return treeNode.getChildCount() > 0 ? treeNode : null;
+    }
+
+    /**
+     * 递归添加所有子节点
+     *
+     * @param parentNode  父节点
+     * @param bookmark    书签
+     * @param project     项目
+     */
+    private void addAllChildren(BookmarkTreeNode parentNode, BookmarkPro bookmark, Project project) {
+        List<BookmarkPro> childrenBookmarks = bookmark.getChildren();
+        if (CollectionUtils.isNotEmpty(childrenBookmarks)) {
+            for (BookmarkPro child : childrenBookmarks) {
+                BookmarkTreeNode childNode = new BookmarkTreeNode(BookmarkConverter.beanToModel(project, child));
+                parentNode.add(childNode);
+                addAllChildren(childNode, child, project);
+            }
+        }
     }
 
 

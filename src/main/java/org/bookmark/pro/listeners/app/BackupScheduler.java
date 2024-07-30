@@ -25,23 +25,20 @@ public class BackupScheduler implements BaseExportService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        scheduler.scheduleAtFixedRate(this::performBackupForAllProjects, 0, backupInterval, TimeUnit.HOURS);
+        // 设置初始延迟时间为备份间隔时间
+        scheduler.scheduleAtFixedRate(this::performBackupForAllProjects, backupInterval, backupInterval, TimeUnit.HOURS);
     }
 
     private void performBackupForAllProjects() {
-        Project[] projects = ProjectManager.getInstance().getOpenProjects();
-        for (Project project : projects) {
-            if (project != null) {
-                performBackup(project);
-            }
-        }
-    }
-
-    private void performBackup(Project project) {
         if (BookmarkRunService.getBookmarkSettings().getAutoBackup()) {
-            File autoBackupFile = getAutoBackupRootPath(project);
-            String fileName = project.getName() + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmmss")) + ".json";
-            BookmarkRunService.getPersistenceService(project).exportBookmark(project, autoBackupFile.getPath() + File.separator + fileName);
+            Project[] projects = ProjectManager.getInstance().getOpenProjects();
+            for (Project project : projects) {
+                if (project != null) {
+                    File autoBackupFile = getAutoBackupRootPath(project);
+                    String fileName = project.getName() + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmmss")) + ".json";
+                    BookmarkRunService.getPersistenceService(project).exportBookmark(project, autoBackupFile.getPath() + File.separator + fileName);
+                }
+            }
         }
     }
 }
