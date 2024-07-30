@@ -39,6 +39,8 @@ public class GeneralSettings {
     protected void initGeneralSettings() {
         // 设置是否启用行尾拓展
         lineEndDocument();
+        backUp.setText(BookmarkRunService.getBookmarkSettings().getBackUp());
+        backUpTime.setText(BookmarkRunService.getBookmarkSettings().getBackUpTime());
         // 前缀
         markLabSel.setForeground(BookmarkRunService.getBookmarkSettings().getPrefixColor());
         String bookmarkPrefix = BookmarkRunService.getBookmarkSettings().getPrefix();
