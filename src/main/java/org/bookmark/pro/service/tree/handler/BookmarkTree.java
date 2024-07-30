@@ -80,7 +80,7 @@ public class BookmarkTree extends Tree {
                     removeNode(project, treeNode);// 这个递归也是我加点sjz  我觉得非常牛逼
                 }
             }
-//            BookmarkRunService.getDocumentService(project).delBookMarkGroup(nodeModel.getUuid());
+            BookmarkRunService.getDocumentService(project).delBookMarkGroup(nodeModel.getUuid());
         }else {
             // 删除缓存书签树
             BookmarkRunService.getDocumentService(project).removeBookmarkNode(project, node);

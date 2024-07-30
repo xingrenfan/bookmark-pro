@@ -34,6 +34,14 @@ public interface DocumentService {
     BookmarkTreeNode getBookmarkNode(String uuid);
 
     /**
+     * 根据书签UUID 获取书签节点
+     *
+     * @param uuid UUID
+     * @return {@link BookmarkTreeNode}
+     */
+    BookmarkTreeNode delBookMarkGroup(String uuid);
+
+    /**
      * 获取书签节点
      *
      * @param virtualFile 虚拟文件
