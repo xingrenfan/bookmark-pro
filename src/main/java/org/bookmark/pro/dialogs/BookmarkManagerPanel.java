@@ -75,6 +75,10 @@ public class BookmarkManagerPanel extends JPanel {
         reloadBookmarkTree(project, bookmarkTree);
 
         // 添加搜索框监听器
+        addSearchListener(project, bookmarkTree);
+    }
+
+    private void addSearchListener(Project project, BookmarkTree bookmarkTree) {
         searchField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -96,9 +100,9 @@ public class BookmarkManagerPanel extends JPanel {
                 if (CharacterUtil.isBlank(filterText)){
                     reloadBookmarkTree(project, bookmarkTree);
                 } else {
-                    BookmarkRunService.getBookmarkManagerPanel(project).reloadBookmarkTreeSearch(
-                            project, BookmarkRunService.getBookmarkManage(project).getBookmarkTree(),filterText
-                    );
+                    new TreeLoadWorker(
+                            project, bookmarkTree, filterText, true
+                    ).execute();
                 }
             }
         });
@@ -115,17 +119,7 @@ public class BookmarkManagerPanel extends JPanel {
      * @param bookmarkTree 书签树
      */
     public void reloadBookmarkTree(Project project, BookmarkTree bookmarkTree) {
-        new TreeLoadWorker(project, bookmarkTree).execute();
-    }
-
-    /**
-     * 重新加载书签树----添加搜索功能
-     *
-     * @param project      项目
-     * @param bookmarkTree 书签树
-     */
-    public void reloadBookmarkTreeSearch(Project project, BookmarkTree bookmarkTree,String searchText) {
-        new SjzTreeLoadWork(project, bookmarkTree,searchText).execute();
+        new TreeLoadWorker(project, bookmarkTree, null, false).execute();
     }
 
     /**
@@ -178,15 +172,22 @@ public class BookmarkManagerPanel extends JPanel {
     public class TreeLoadWorker extends SwingWorker<DefaultTreeModel, Void> {
         private final Project project;
         private final BookmarkTree bookmarkTree;
+        private final String searchText;
+        private final boolean enableSearch;
 
-        TreeLoadWorker(Project project, BookmarkTree tree) {
+        TreeLoadWorker(Project project, BookmarkTree tree, String searchText, boolean enableSearch) {
             this.bookmarkTree = tree;
             this.project = project;
+            this.searchText = searchText;
+            this.enableSearch = enableSearch;
         }
 
         @Override
         protected DefaultTreeModel doInBackground() throws Exception {
             PersistenceService service = BookmarkRunService.getPersistenceService(openProject);
+            if (enableSearch){
+                return new DefaultTreeModel(service.getBookmarkNodeSearch(openProject,searchText));
+            }
             // 获取持久化书签对象
             return new DefaultTreeModel(service.getBookmarkNode(openProject));
         }
@@ -260,101 +261,13 @@ public class BookmarkManagerPanel extends JPanel {
                     }
                 });
                 treeLoaded = true;
+                if (enableSearch){
+                    // 展开所有节点,这个有问题,展开之后又会自己关闭
+                    expandAllNodes(bookmarkTree, 0, bookmarkTree.getRowCount());
+                }
             }catch (Exception e){
                 BookmarkNoticeUtil.projectNotice(project,  "出现异常"+e.getMessage() );
             }
         }
     }
-
-    class SjzTreeLoadWork  extends SwingWorker<DefaultTreeModel, Void>{
-
-        private final Project project;
-
-        private final BookmarkTree bookmarkTree;
-
-        private String searchText;
-
-        public SjzTreeLoadWork(Project project, BookmarkTree tree,String searchText) {
-            this.bookmarkTree = tree;
-            this.project = project;
-            this.searchText = searchText;
-        }
-
-        @Override
-        protected DefaultTreeModel doInBackground() throws Exception {
-            PersistenceService service = BookmarkRunService.getPersistenceService(openProject);
-            // 获取持久化书签对象
-            return new DefaultTreeModel(service.getBookmarkNodeSearch(openProject,searchText));
-        }
-
-        @Override
-        protected void done() {
-            DefaultTreeModel treeModel;
-            try {
-                treeModel = get();
-            } catch (InterruptedException | ExecutionException e) {
-                return;
-            }
-
-            treeModel.addTreeModelListener(new TreeModelListener() {
-                @Override
-                public void treeNodesChanged(TreeModelEvent e) {
-                    persistenceSave();
-                }
-
-                @Override
-                public void treeNodesInserted(TreeModelEvent e) {
-                    persistenceSave();
-                }
-
-                @Override
-                public void treeNodesRemoved(TreeModelEvent e) {
-                    persistenceSave();
-                }
-
-                @Override
-                public void treeStructureChanged(TreeModelEvent e) {
-                    // do nothing
-                }
-
-                /**
-                 * 持久性保存 TODO 待改成任务队列
-                 */
-                private void persistenceSave() {
-                    new SwingWorker<Void, Void>() {
-                        @Override
-                        protected Void doInBackground() throws Exception {
-                            BookmarkRunService.getPersistenceService(project).saveBookmark(project);
-                            return null;
-                        }
-                    }.execute();
-                }
-            });
-
-            this.bookmarkTree.setModel(treeModel);
-            TreeNode treeNode = (TreeNode) treeModel.getRoot();
-            treeModel.nodeStructureChanged(treeNode);
-            // 初始化加载数据到缓存
-            BookmarkRunService.getDocumentService(project).reloadingCacheNode(project, treeNode);
-            // 书签选中之后显示内容
-            this.bookmarkTree.addTreeSelectionListener(event -> {
-                BookmarkTreeNode selectedNode = (BookmarkTreeNode) bookmarkTree.getLastSelectedPathComponent();
-                if (selectedNode != null && selectedNode.isBookmark()) {
-                    BookmarkNodeModel bookmark = (BookmarkNodeModel) selectedNode.getUserObject();
-                    jepDesc.setText(CharacterUtil.abbreviate(
-                            Objects.toString(bookmark.getDesc()),
-                            "...",
-                            BookmarkRunService.getBookmarkSettings().getTreePanelShowNum()
-                    ));
-                } else {
-                    jepDesc.setText("");
-                }
-            });
-
-            treeLoaded = true;
-            // 展开所有节点,这个有问题,展开之后又会自己关闭
-            expandAllNodes(bookmarkTree, 0, bookmarkTree.getRowCount());
-        }
-    }
-
 }
