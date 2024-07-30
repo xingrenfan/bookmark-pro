@@ -3,8 +3,8 @@ plugins {
     id 'org.jetbrains.intellij' version '1.17.2'
 }
 
-group 'org.bookmark.pro'
-version '20230101'
+group pluginGroup
+version pluginVersion
 
 repositories {
     maven { url 'https://maven.aliyun.com/repository/public/' }
@@ -44,13 +44,13 @@ dependencies {
 }
 
 intellij {
-    version.set("2022.2.5")
+    version.set(platformVersion)
     plugins = ["java"]
 }
 
 patchPluginXml {
-    sinceBuild = '212.5080.55'
-    untilBuild = '233.*'
+    sinceBuild = sinceBuildVersion
+    untilBuild = untilBuildVersion
 }
 
 tasks.buildSearchableOptions {

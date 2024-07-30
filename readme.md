@@ -4,7 +4,9 @@
 Bookmark-Pro借鉴[Bookmark-X](https://plugins.jetbrains.com/plugin/22013-bookmark-x)在此基础上修改并添加一些实用的功能。
 
 # 感谢
+
 感谢大家的付出与努力。此排序不分先后。
+
 - [sjz128751](https://github.com/sjz128751)
 - [zqc11](https://github.com/zqc11)
 
@@ -22,7 +24,7 @@ Bookmark-Pro借鉴[Bookmark-X](https://plugins.jetbrains.com/plugin/22013-bookma
   选中分组节点，将使该节点变为激活状态，后续默认将书签添加至该分组
 
 - 书签树
-![](./readme/tree.png)
+  ![](./readme/tree.png)
 
 - 书签导航
   选择分组-使用快捷键 `Alt+shift+左/右方向键` 可切换并导航至书签指向的代码位置，切换行为只会在当前激活的分组下进行，并按书签从上到下的顺序进行切换。
@@ -32,27 +34,36 @@ Bookmark-Pro借鉴[Bookmark-X](https://plugins.jetbrains.com/plugin/22013-bookma
 
 - 配置展示信息
   通过简单的配置控制书签展示内容。
-![](./readme/config.png)
+  ![](./readme/config.png)
 
 - 导出书签
   快速导出保存书签。
-![](./readme/export.png)
+  ![](./readme/export.png)
 
 - 自动识别失效书签
   `❌ (Invalid Bookmark)`: 此书签标注行内容发生了变化，提示及时更新书签信息。
-![](./readme/invalid.png)
+  ![](./readme/invalid.png)
 
 # 支持
+
 ![](./readme/admire.png)
 
 # 交流 & 沟通
+
 ![](./readme/qq_group.png)
 
 # 更新历史记录
-- 优化书签树管理窗口：书签右键编辑菜单
 
+[212-222.01.04/223-241.01.02]
+
+- 优化书签树管理窗口：书签右键编辑菜单
+- 书签管理添加查询功能
+- 修复多项目启动书签树失效
+- 增加书签定时备份
+- 修复一些已知问题
 
 # 迭代演变进度
+
 - [X] 基础功能以及现有问题优化
 - [ ] 支持GIT分支切换
 - [ ] 支持多人协作修改

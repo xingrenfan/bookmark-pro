@@ -2,8 +2,9 @@
 <idea-plugin require-restart="true">
     <id>org.bookmark.pro.id</id>
     <name>MarkBook-Pro</name>
-    <version>20230101</version>
+    <version>212-222.01.04</version>
     <vendor email="xingrenfan@hotmail.com" url="https://github.com/xingrenfan/bookmark-pro">XingRenFan</vendor>
+    <idea-version since-build="212.5080.55" until-build="222.4554.10"/>
 
     <description><![CDATA[
       <p>An idea plug-in that helps us take notes when reading the source code</p>
@@ -27,8 +28,6 @@
      </ol>
     ]]>
     </change-notes>
-
-    <idea-version since-build="231.8109.175" until-build="233.0"/>
 
     <!-- 插件还可以指定可选的插件依赖项。在这种情况下，即使它依赖的插件没有安装或启用，插件也会加载，但插件的部分功能将不可用。 -->
     <depends>com.intellij.modules.lang</depends>
