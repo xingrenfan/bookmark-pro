@@ -38,7 +38,7 @@ class BookmarkMenus {
      * @param bookmarkTree
      */
     protected void addTreeMenus(Project project, BookmarkTree bookmarkTree) {
-        JBPopupMenu addGroupMenu = createGroupMenu(bookmarkTree);
+        JBPopupMenu addGroupMenu = createGroupMenu(project,bookmarkTree);
         JBPopupMenu treeMenus = createTreeMenus(project, bookmarkTree);
         JBPopupMenu deleteMenus = createDeleteMenus(project, bookmarkTree);
 
@@ -89,7 +89,7 @@ class BookmarkMenus {
         popupMenu.add(createEditMenu(project, bookmarkTree));
         popupMenu.add(createDeleteMenu(project, bookmarkTree));
         popupMenu.add(new JPopupMenu.Separator());
-        popupMenu.add(addGroupMenu(bookmarkTree));
+        popupMenu.add(addGroupMenu(project,bookmarkTree));
         return popupMenu;
     }
 
@@ -99,12 +99,12 @@ class BookmarkMenus {
      * @param bookmarkTree 书签树
      * @return {@link JBPopupMenu}
      */
-    private JBPopupMenu createGroupMenu(final BookmarkTree bookmarkTree) {
+    private JBPopupMenu createGroupMenu(Project project,final BookmarkTree bookmarkTree) {
         JBPopupMenu popupMenuRoot = new JBPopupMenu();
         JBMenuItem imAddGroupRoot = new JBMenuItem("Add Group");
         popupMenuRoot.add(imAddGroupRoot);
         // 增加书签分组
-        addActionListener(imAddGroupRoot, bookmarkTree);
+        addActionListener(project, imAddGroupRoot, bookmarkTree);
         return popupMenuRoot;
     }
 
@@ -114,10 +114,10 @@ class BookmarkMenus {
      * @param bookmarkTree 书签树
      * @return {@link JBMenuItem}
      */
-    private JBMenuItem addGroupMenu(final BookmarkTree bookmarkTree) {
+    private JBMenuItem addGroupMenu(Project project,final BookmarkTree bookmarkTree) {
         JBMenuItem addGroupMenu = new JBMenuItem("AddGroup");
         // 增加书签分组
-        addActionListener(addGroupMenu, bookmarkTree);
+        addActionListener(project, addGroupMenu, bookmarkTree);
         return addGroupMenu;
     }
 
@@ -258,7 +258,7 @@ class BookmarkMenus {
      * @param item         项目
      * @param bookmarkTree 书签树
      */
-    private void addActionListener(JBMenuItem item, final BookmarkTree bookmarkTree) {
+    private void addActionListener(Project project,JBMenuItem item, final BookmarkTree bookmarkTree) {
         item.addActionListener(e -> {
             // 获取选定的节点
             BookmarkTreeNode selectedNode = (BookmarkTreeNode) bookmarkTree.getLastSelectedPathComponent();
@@ -287,6 +287,7 @@ class BookmarkMenus {
             // 新的分组节点
             BookmarkTreeNode groupNode = new BookmarkTreeNode(new GroupNodeModel(groupName, UUID.randomUUID().toString()), true);
             bookmarkTree.getDefaultModel().insertNodeInto(groupNode, parent, 0);
+            BookmarkRunService.getDocumentService(project).addBookmarkNode(project, groupNode);
         });
     }
 }

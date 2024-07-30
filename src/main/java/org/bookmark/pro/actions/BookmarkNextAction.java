@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @date 2024/03/21
  */
 public class BookmarkNextAction extends AnAction {
+    @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         Project project = e.getProject();
         if (null == project) {
