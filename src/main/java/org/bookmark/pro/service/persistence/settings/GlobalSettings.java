@@ -45,11 +45,12 @@ class GlobalSettings extends BaseSetting {
     }
 
     public String getBackUp() {
-        return Objects.toString(properties.getValue(BookmarkProConstant.BOOKMARK_BACKUP), "~");
+        return Objects.toString(properties.getValue(BookmarkProConstant.BOOKMARK_BACKUP), "");
     }
 
     public String getBackUpTime() {
-        return Objects.toString(properties.getValue(BookmarkProConstant.BOOKMARK_BACKUP_TIME), "~");
+        // 默认12个小时备份一次
+        return Objects.toString(properties.getValue(BookmarkProConstant.BOOKMARK_BACKUP_TIME), "12");
     }
 
     public void setPrefix(String text) {
@@ -118,5 +119,17 @@ class GlobalSettings extends BaseSetting {
             return false;
         }
         return Boolean.valueOf(lineDocument);
+    }
+
+    public boolean getAutoBackup() {
+        String autoBackup = properties.getValue(BookmarkProConstant.BOOKMARK_AUTO_BACKUP);
+        if (CharacterUtil.isEmpty(autoBackup)) {
+            return false;
+        }
+        return Boolean.valueOf(autoBackup);
+    }
+
+    public void setAutoBackup(boolean autoBackup) {
+        properties.setValue(BookmarkProConstant.BOOKMARK_AUTO_BACKUP, autoBackup);
     }
 }

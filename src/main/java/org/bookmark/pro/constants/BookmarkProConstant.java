@@ -32,6 +32,11 @@ public interface BookmarkProConstant {
     String BOOKMARK_BACKUP = "bookmark.pro:backUp";
 
     /**
+     * 书签自动备份
+     */
+    String BOOKMARK_AUTO_BACKUP = "bookmark.pro:autoBackup";
+
+    /**
      * 备份时间
      */
     String BOOKMARK_BACKUP_TIME = "bookmark.pro:backUpTime";

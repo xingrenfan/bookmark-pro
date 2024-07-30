@@ -11,8 +11,6 @@ import java.util.Objects;
 
 public class GeneralSettings {
     protected JTextField markText;
-    protected JTextField backUp;
-    protected JTextField backUpTime;
     protected JLabel markLabSel;
     protected JLabel noteLabSel;
     protected JLabel separatorSel;
@@ -22,12 +20,8 @@ public class GeneralSettings {
 
     protected JCheckBox lineDocument;
 
-    public GeneralSettings(JTextField markText, JLabel markLabSel, JLabel noteLabSel,
-                           JLabel separatorSel, JSpinner maxCharNum, JCheckBox lineDocument,
-                           JSpinner selectedShowNum,JTextField  backUp, JTextField backUpTime) {
+    public GeneralSettings(JTextField markText, JLabel markLabSel, JLabel noteLabSel, JLabel separatorSel, JSpinner maxCharNum, JCheckBox lineDocument, JSpinner selectedShowNum) {
         this.markText = markText;
-        this.backUp=backUp;
-        this.backUpTime=backUpTime;
         this.markLabSel = markLabSel;
         this.noteLabSel = noteLabSel;
         this.separatorSel = separatorSel;
@@ -39,8 +33,6 @@ public class GeneralSettings {
     protected void initGeneralSettings() {
         // 设置是否启用行尾拓展
         lineEndDocument();
-        backUp.setText(BookmarkRunService.getBookmarkSettings().getBackUp());
-        backUpTime.setText(BookmarkRunService.getBookmarkSettings().getBackUpTime());
         // 前缀
         markLabSel.setForeground(BookmarkRunService.getBookmarkSettings().getPrefixColor());
         String bookmarkPrefix = BookmarkRunService.getBookmarkSettings().getPrefix();
@@ -141,9 +133,5 @@ public class GeneralSettings {
         BookmarkRunService.getBookmarkSettings().setPrefix(markText.getText());
         // 行尾拓展器：在行尾显示书签内容
         BookmarkRunService.getBookmarkSettings().setLineDocument(lineDocument.isSelected());
-        // 备份路径
-        BookmarkRunService.getBookmarkSettings().setBackUP(backUp.getText());
-        // 备份时间
-        BookmarkRunService.getBookmarkSettings().setBackUpTime(backUpTime.getText());
     }
 }
