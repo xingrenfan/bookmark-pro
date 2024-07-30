@@ -74,22 +74,7 @@ public class BookmarkManagerPanel extends JPanel {
 
         reloadBookmarkTree(project, bookmarkTree);
 
-//         添加搜索框的回车事件监听器
-//        searchField.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                filterTree();
-//            }
-//
-//            private void filterTree() {
-//                String filterText = searchField.getText();
-//                BookmarkRunService.getBookmarkManagerPanel(project)
-//                        .reloadBookmarkTreeSearch(project,
-//                                BookmarkRunService.getBookmarkManage(project).getBookmarkTree(), filterText);
-//            }
-//        });
-
-//         添加搜索框监听器
+        // 添加搜索框监听器
         searchField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -108,11 +93,13 @@ public class BookmarkManagerPanel extends JPanel {
 
             private void filterTree() {
                 String filterText = searchField.getText();
-                BookmarkRunService.getBookmarkManagerPanel(project)
-                        .reloadBookmarkTreeSearch(project,
-                                BookmarkRunService.getBookmarkManage(project).getBookmarkTree(),filterText);
-                // 展开所有节点,这个有问题,展开之后又会自己关闭
-//                expandAllNodes(bookmarkTree, 0, bookmarkTree.getRowCount());
+                if (CharacterUtil.isBlank(filterText)){
+                    reloadBookmarkTree(project, bookmarkTree);
+                } else {
+                    BookmarkRunService.getBookmarkManagerPanel(project).reloadBookmarkTreeSearch(
+                            project, BookmarkRunService.getBookmarkManage(project).getBookmarkTree(),filterText
+                    );
+                }
             }
         });
     }
@@ -365,6 +352,8 @@ public class BookmarkManagerPanel extends JPanel {
             });
 
             treeLoaded = true;
+            // 展开所有节点,这个有问题,展开之后又会自己关闭
+            expandAllNodes(bookmarkTree, 0, bookmarkTree.getRowCount());
         }
     }
 
