@@ -97,6 +97,13 @@ public class BookmarkDocumentListener implements DocumentListener {
     private void perceivedLineChange(Project project, VirtualFile virtualFile, Set<BookmarkTreeNode> bookmarkNodes, LineRange lineRange, int deleteStartNum, int deleteTotalNum, boolean isAddLine) {
         for (BookmarkTreeNode node : bookmarkNodes) {
             BookmarkNodeModel nodeModel = (BookmarkNodeModel) node.getUserObject();
+            if (nodeModel.getVirtualFile() == null) {
+                continue;
+            }
+            // 如果删除的行和书签的行号相同，则跳过
+            if (nodeModel.getLine()==lineRange.start-1){
+                continue;
+            }
             // 书签标记行号
             int bookmarkPositionLine = nodeModel.getLine();
             int rowGap = lineRange.end - lineRange.start;
