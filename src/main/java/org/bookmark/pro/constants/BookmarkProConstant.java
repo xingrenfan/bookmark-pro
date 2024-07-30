@@ -27,9 +27,14 @@ public interface BookmarkProConstant {
      */
     String BOOKMARK_PREFIX = "bookmark.pro:prefix";
     /**
-     * 书签前缀
+     * 备份
      */
-    String BOOKMARK_SJZBEIFEN = "bookmark.pro:sjzBeiFen";
+    String BOOKMARK_BACKUP = "bookmark.pro:backUp";
+
+    /**
+     * 备份时间
+     */
+    String BOOKMARK_BACKUP_TIME = "bookmark.pro:backUpTime";
 
     /**
      * 书签前缀颜色

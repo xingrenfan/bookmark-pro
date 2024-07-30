@@ -44,8 +44,12 @@ class GlobalSettings extends BaseSetting {
         return Objects.toString(properties.getValue(BookmarkProConstant.BOOKMARK_PREFIX), BookmarkProIcon.DEFAULT_PREFIX_SIGN);
     }
 
-    public String getSjzBeiFen() {
-        return Objects.toString(properties.getValue(BookmarkProConstant.BOOKMARK_SJZBEIFEN), "~");
+    public String getBackUp() {
+        return Objects.toString(properties.getValue(BookmarkProConstant.BOOKMARK_BACKUP), "~");
+    }
+
+    public String getBackUpTime() {
+        return Objects.toString(properties.getValue(BookmarkProConstant.BOOKMARK_BACKUP_TIME), "~");
     }
 
     public void setPrefix(String text) {
@@ -54,9 +58,15 @@ class GlobalSettings extends BaseSetting {
         }
     }
 
-    public void setSjzBeiFen(String text) {
+    public void setBackUP(String text) {
         if (text != null) {
-            properties.setValue(BookmarkProConstant.BOOKMARK_SJZBEIFEN, text);
+            properties.setValue(BookmarkProConstant.BOOKMARK_BACKUP, text);
+        }
+    }
+
+    public void setBackUpTime(String text) {
+        if (text != null) {
+            properties.setValue(BookmarkProConstant.BOOKMARK_BACKUP_TIME, text);
         }
     }
 

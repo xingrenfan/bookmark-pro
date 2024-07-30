@@ -27,6 +27,7 @@ public class AppActivationService implements StartupActivity {
     public void runActivity(@NotNull Project project) {
         // 插件启动通知
         startNotice(project);
+        new BackupScheduler(); // 启动定时备份任务
     }
 
     /**

@@ -1,94 +1,85 @@
-package org.bookmark.pro.actions;
+package org.bookmark.pro.listeners.app;
 
-import com.intellij.icons.AllIcons;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationAction;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.InputValidatorEx;
-import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.util.io.FileUtil;
 import org.bookmark.pro.constants.BookmarkProIcon;
 import org.bookmark.pro.context.BookmarkRunService;
-import org.bookmark.pro.dialogs.setting.GeneralSettings;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
-import org.bookmark.pro.utils.CharacterUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.io.File;
-import java.text.DateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
-/**
- * 书签导出操作
- *
- * @author Nonoas
- * @date 2024-1-31
- */
-public final class BookmarkExportAction extends AnAction {
+public class BackupScheduler {
 
-    private GeneralSettings generalSettings;
+    private final ScheduledExecutorService scheduler;
 
-    public BookmarkExportAction() {
-        super("Bookmark Export", null, AllIcons.ToolbarDecorator.Export);
+    public BackupScheduler() {
+        scheduler = Executors.newScheduledThreadPool(1);
+        // 默认12个小时备份一次
+        long backupInterval = 12;
+        try {
+            backupInterval = Integer.parseInt(BookmarkRunService.getBookmarkSettings().getBackUpTime()); // 获取备份间隔，时间为小时
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        scheduler.scheduleAtFixedRate(this::performBackupForAllProjects, 0, backupInterval, TimeUnit.HOURS);
     }
 
-    @Override
-    public void actionPerformed(@NotNull AnActionEvent e) {
-        Project project = e.getProject();
-        if (null == project) {
-            return;
+    private void performBackupForAllProjects() {
+        Project[] projects = ProjectManager.getInstance().getOpenProjects();
+        for (Project project : projects) {
+            if (project != null) {
+                performBackup(project);
+            }
         }
-        // 项目跟目录
+    }
+
+    private void performBackup(Project project) {
+        // 项目根目录
         String projectDir = FileUtil.toSystemIndependentName(Objects.requireNonNull(project.getBasePath()));
-//        String fileName = project.getName() + ".json";
-        InputValidatorEx validatorEx = inputString -> {
-            if (CharacterUtil.isBlank(inputString)) return "Save file name is not empty.";
-            return null;
-        };
-        //        if (CharacterUtil.isNotEmpty(newFileName)) {
-//            fileName = newFileName;
-//        }
-//        if (BookmarkRunService.getPersistenceService(project).exportBookmark(project, projectDir + File.separator + fileName)) {
-//            sendExportNotice(project, projectDir);
-//        }
         // 获取当前时间
         LocalDateTime now = LocalDateTime.now();
         // 定义时间格式
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日HH小时mm分钟ss秒");
         // 格式化当前时间
         String currentTimeString = now.format(formatter);
-        String sjzFileName = project.getName()+currentTimeString + ".json";
-        Messages.showInputDialog("name:", "SaveFileName", null, sjzFileName, validatorEx);
+        String sjzFileName = project.getName() + currentTimeString + ".json";
+
         // 如果配置了备份路径
-        if (!"".equals(BookmarkRunService.getBookmarkSettings().getBackUp())){
+        if (!"".equals(BookmarkRunService.getBookmarkSettings().getBackUp())) {
             String sjzPath2 = BookmarkRunService.getBookmarkSettings().getBackUp()
                     + File.separator + "MarkBook" + File.separator + project.getName();
             File folder2 = new File(sjzPath2);
             // 检查文件夹是否已经存在
             if (!folder2.exists()) {
-                // 创建文件夹
                 boolean created = folder2.mkdirs();
             }
             if (BookmarkRunService.getPersistenceService(project).exportBookmark(project,
-                    sjzPath2+ File.separator + sjzFileName)) {
+                    sjzPath2 + File.separator + sjzFileName)) {
                 sendExportNotice(project, sjzPath2);
             }
-        }else {
+        } else {
             // 没有配置备份路径，默认导出到项目根目录下
             String sjzPath = projectDir + File.separator + "MarkBook";
             File folder = new File(sjzPath);
             // 检查文件夹是否已经存在
             if (!folder.exists()) {
-                // 创建文件夹
                 boolean created = folder.mkdirs();
             }
             if (BookmarkRunService.getPersistenceService(project).exportBookmark(project,
-                    sjzPath+ File.separator + sjzFileName)) {
+                    sjzPath + File.separator + sjzFileName)) {
                 sendExportNotice(project, sjzPath);
             }
         }
@@ -112,6 +103,6 @@ public final class BookmarkExportAction extends AnAction {
             }
         };
 
-        BookmarkNoticeUtil.projectNotice(project, String.format("Export bookmark success.Out file directory:[%s]", projectDir), openExportFile);
+        BookmarkNoticeUtil.projectNotice(project, String.format("Export bookmark success. Output file directory: [%s]", projectDir), openExportFile);
     }
 }
