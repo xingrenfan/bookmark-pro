@@ -31,10 +31,11 @@ public class BackupScheduler {
         long backupInterval = 12;
         try {
             backupInterval = Integer.parseInt(BookmarkRunService.getBookmarkSettings().getBackUpTime()); // 获取备份间隔，时间为小时
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        scheduler.scheduleAtFixedRate(this::performBackupForAllProjects, 0, backupInterval, TimeUnit.HOURS);
+        // 设置初始延迟时间为备份间隔时间
+        scheduler.scheduleAtFixedRate(this::performBackupForAllProjects, backupInterval, backupInterval, TimeUnit.HOURS);
     }
 
     private void performBackupForAllProjects() {
@@ -99,6 +100,7 @@ public class BackupScheduler {
                     Desktop desktop = Desktop.getDesktop();
                     desktop.open(new File(projectDir));
                 } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         };
