@@ -2,9 +2,9 @@
 <idea-plugin require-restart="true">
     <id>org.bookmark.pro.id</id>
     <name>MarkBook-Pro</name>
-    <version>212-222.01.04</version>
+    <version>223-241.01.02</version>
     <vendor email="xingrenfan@hotmail.com" url="https://github.com/xingrenfan/bookmark-pro">XingRenFan</vendor>
-    <idea-version since-build="212.5080.55" until-build="222.4554.10"/>
+    <idea-version since-build="223.7571.182" until-build="241.*"/>
 
     <description><![CDATA[
       <p>An idea plug-in that helps us take notes when reading the source code</p>
@@ -64,7 +64,7 @@
 
     <actions>
         <!-- 窗口右键展示菜单 -->
-        <action id="bookmark.pro.right.menu.create" class="org.bookmark.pro.actions.BookmarkCreateEditAction" text="AddBookmark" icon="/icons/point.svg">
+        <action id="bookmark.pro.right.menu.create" class="org.bookmark.pro.actions.BookmarkCreateEditAction" text="Add/Update Bookmark" icon="/icons/point.svg">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
 

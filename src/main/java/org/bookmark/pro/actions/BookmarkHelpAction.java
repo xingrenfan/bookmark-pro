@@ -21,6 +21,7 @@ public class BookmarkHelpAction extends AnAction {
         super("Bookmark Help", null, AllIcons.Actions.Help);
     }
 
+    @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         try {
             URI uri = new URI(BookmarkProConstant.BOOKMARK_README_URI);

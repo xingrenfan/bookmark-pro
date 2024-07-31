@@ -28,7 +28,7 @@ public class OpenChangeFile extends OpenFileDescriptor {
 
     @Override
     public void navigate(boolean requestFocus) {
-        BookmarkFileNavigator fileNavigator = new BookmarkFileNavigator();
+        FileNavigator fileNavigator = new BookmarkFileNavigator();
         fileNavigator.navigate(this, requestFocus);
     }
 
@@ -69,7 +69,8 @@ public class OpenChangeFile extends OpenFileDescriptor {
         private boolean navigateInProjectView(@NotNull Project project, @NotNull VirtualFile file, boolean requestFocus) {
             SelectInContext context = new FileSelectInContext(project, file, null);
             for (SelectInTarget target : SelectInManager.getInstance(project).getTargetList()) {
-                if (context.selectIn(target, requestFocus)) {
+                if (!target.canSelect(context)) {
+                    target.selectIn(context, requestFocus);
                     BookmarkNoticeUtil.warningMessages(project, "Bookmark file changed, You need to restart the IDEA editor to open.");
                     return true;
                 }

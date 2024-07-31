@@ -10,6 +10,7 @@ import org.bookmark.pro.context.BookmarkRunService;
 import org.bookmark.pro.dialogs.modify.BookmarkEditDialog;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.domain.model.GroupNodeModel;
+import org.bookmark.pro.service.tree.BookmarkTreeManage;
 import org.bookmark.pro.utils.CharacterUtil;
 import org.jsoup.internal.StringUtil;
 
@@ -155,20 +156,8 @@ class BookmarkMenus {
                 if (selectedNode.isBookmark()) {
                     // 书签
                     BookmarkNodeModel nodeModel = (BookmarkNodeModel) selectedNode.getUserObject();
-                    /*// 校验规则
-                    InputValidatorEx validatorEx = inputString -> {
-                        if (StringUtil.isBlank(inputString)) return "Group name is not empty";
-                        return null;
-                    };
-                    String groupName = Messages.showInputDialog("name:", "EditGroup", null, nodeModel.getName(), validatorEx);
-                    if (StringUtil.isBlank(groupName)) {
-                        return;
-                    }
-                    if (!groupName.equals(nodeModel.getName())) {
-                        nodeModel.setName(groupName);
-                    }
-                    BookmarkRunService.getBookmarkManage(project).getBookmarkTree().getModel().nodeChanged(selectedNode);*/
                     new BookmarkEditDialog(project, false).defaultNode(nodeModel, null, false).showAndCallback((name, desc, lineNum, parentNode, enableGroup) -> {
+                        BookmarkRunService.getDocumentService(project).removeBookmarkNode(project, selectedNode);
                         nodeModel.setName(name);
                         nodeModel.setDesc(desc);
                         nodeModel.setInvalid(false);
@@ -177,9 +166,9 @@ class BookmarkMenus {
                         selectedNode.setGroup(enableGroup);
                         selectedNode.setBookmark(true);
                         selectedNode.setInvalid(false);
-//                        bookmarkManage.changeBookmarkNode(parentNode, treeNode);
+                        BookmarkRunService.getDocumentService(project).addBookmarkNode(project, selectedNode);
+                        BookmarkRunService.getBookmarkManage(project).changeBookmarkNode(selectedNode);
                     });
-                    BookmarkRunService.getBookmarkManage(project).getBookmarkTree().getModel().nodeChanged(selectedNode);
                 } else {
                     // 修改书签分组
                     GroupNodeModel nodeModel = (GroupNodeModel) selectedNode.getUserObject();
@@ -204,6 +193,7 @@ class BookmarkMenus {
                 // 书签
                 BookmarkNodeModel nodeModel = (BookmarkNodeModel) selectedNode.getUserObject();
                 new BookmarkEditDialog(project, false).defaultNode(nodeModel, null, false).showAndCallback((name, desc, lineNum, parentNode, enableGroup) -> {
+                    BookmarkRunService.getDocumentService(project).removeBookmarkNode(project, selectedNode);
                     nodeModel.setName(name);
                     nodeModel.setDesc(desc);
                     nodeModel.setInvalid(false);
@@ -212,9 +202,9 @@ class BookmarkMenus {
                     selectedNode.setGroup(enableGroup);
                     selectedNode.setBookmark(true);
                     selectedNode.setInvalid(false);
-//                        bookmarkManage.changeBookmarkNode(parentNode, treeNode);
+                    BookmarkRunService.getDocumentService(project).addBookmarkNode(project, selectedNode);
+                    BookmarkRunService.getBookmarkManage(project).changeBookmarkNode(selectedNode);
                 });
-                BookmarkRunService.getBookmarkManage(project).getBookmarkTree().getModel().nodeChanged(selectedNode);
             }
         });
         return editMenu;

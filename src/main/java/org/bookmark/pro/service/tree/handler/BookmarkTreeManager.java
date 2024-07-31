@@ -45,7 +45,7 @@ public final class BookmarkTreeManager extends BookmarkMenus implements Bookmark
         // 添加Root节点
         addProjectNode(project, this.bookmarkTree, this.groupNavigator);
         // 添加Ctrl+F搜索功能
-        addTreeSearch(this.bookmarkTree);
+//        addTreeSearch(this.bookmarkTree);
         // 添加拖拽处理方案
         addDragHandler(this.bookmarkTree);
         // 书签图标渲染
@@ -67,11 +67,9 @@ public final class BookmarkTreeManager extends BookmarkMenus implements Bookmark
 
     @Override
     public void addBookmarkNode(BookmarkTreeNode node) {
-        this.groupNavigator.setActivatedBookmark(node);
         // 获取父节点
         BookmarkTreeNode parent = this.groupNavigator.ensureActivatedGroup();
-        // 父节点添加书签节点
-        this.bookmarkTree.addNode(this.project, parent, node);
+        addBookmarkNode(parent, node);
     }
 
     @Override
@@ -154,12 +152,11 @@ public final class BookmarkTreeManager extends BookmarkMenus implements Bookmark
      *
      * @param bookmarkTree 书签树
      */
-    private void addTreeSearch(BookmarkTree bookmarkTree) {
-        TreeUIHelper treeHelper = TreeUIHelper.getInstance();
-        treeHelper.installTreeSpeedSearch(bookmarkTree);
-        treeHelper.installSmartExpander(bookmarkTree);
-//        bookmarkTree.setShowsRootHandles(true);
-    }
+    /*private void addTreeSearch(BookmarkTree bookmarkTree) {
+        TreeSpeedSearch treeSpeedSearch = new TreeSpeedSearch(bookmarkTree);
+        treeSpeedSearch.setCanExpand(true);
+        bookmarkTree.setShowsRootHandles(true);
+    }*/
 
     /**
      * 添加拖动处理程序

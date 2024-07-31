@@ -28,6 +28,7 @@ import java.util.UUID;
  * @date 2024/03/21
  */
 public class BookmarkCreateEditAction extends AnAction {
+    @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         Project project = e.getProject();
         Editor editor = e.getData(CommonDataKeys.EDITOR);
@@ -69,6 +70,7 @@ public class BookmarkCreateEditAction extends AnAction {
         int maxLineNum = getMaxLine(editor);
         if (contentMd5.equals(nodeModel.getMarkLineMd5())) {
             new BookmarkEditDialog(project, false).defaultNode(nodeModel, maxLineNum, true).showAndCallback((name, desc, lineNum, parentNode, enableGroup) -> {
+                bookmarkManage.removeBookmarkNode(treeNode);
                 nodeModel.setName(name);
                 nodeModel.setInvalid(false);
                 if (lineNum != markLine) {
@@ -83,7 +85,7 @@ public class BookmarkCreateEditAction extends AnAction {
                 treeNode.setGroup(enableGroup);
                 treeNode.setBookmark(true);
                 nodeModel.setDesc(desc);
-                bookmarkManage.changeBookmarkNode(parentNode, treeNode);
+                bookmarkManage.addBookmarkNode(parentNode, treeNode);
             });
         } else {
             // 不一致 置为失效书签
@@ -92,6 +94,7 @@ public class BookmarkCreateEditAction extends AnAction {
             bookmarkManage.changeBookmarkNode(null, treeNode);
             // 更新书签操作
             new BookmarkEditDialog(project, false).defaultNode(nodeModel, maxLineNum, true).defaultWarning(BookmarkProIcon.INVALID_SIGN).showAndCallback((name, desc, lineNum, parentNode, enableGroup) -> {
+                bookmarkManage.removeBookmarkNode(treeNode);
                 nodeModel.setName(name);
                 nodeModel.setDesc(desc);
                 if (lineNum != markLine) {
@@ -108,9 +111,10 @@ public class BookmarkCreateEditAction extends AnAction {
                 treeNode.setGroup(enableGroup);
                 treeNode.setBookmark(true);
                 treeNode.setInvalid(false);
-                bookmarkManage.changeBookmarkNode(parentNode, treeNode);
+                bookmarkManage.addBookmarkNode(parentNode, treeNode);
             });
         }
+        BookmarkRunService.getBookmarkManage(project).changeBookmarkNode(treeNode);
     }
 
     /**

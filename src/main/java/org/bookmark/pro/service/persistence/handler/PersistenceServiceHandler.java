@@ -160,8 +160,8 @@ public class PersistenceServiceHandler implements PersistenceService {
     /**
      * 生成树节点
      *
-     * @param project  项目
-     * @param bookmark 书签
+     * @param project    项目
+     * @param bookmark   书签
      * @param searchText 搜索文本（正则表达式）
      * @return {@link BookmarkTreeNode}
      */
@@ -211,9 +211,9 @@ public class PersistenceServiceHandler implements PersistenceService {
     /**
      * 递归添加所有子节点
      *
-     * @param parentNode  父节点
-     * @param bookmark    书签
-     * @param project     项目
+     * @param parentNode 父节点
+     * @param bookmark   书签
+     * @param project    项目
      */
     private void addAllChildren(BookmarkTreeNode parentNode, BookmarkPro bookmark, Project project) {
         List<BookmarkPro> childrenBookmarks = bookmark.getChildren();
@@ -242,8 +242,8 @@ public class PersistenceServiceHandler implements PersistenceService {
 
 
     @Override
-    public BookmarkTreeNode getBookmarkNodeSearch(Project project,String searchText) {
+    public BookmarkTreeNode getBookmarkNodeSearch(Project project, String searchText) {
         PersistentService service = getPersistentService(project, PersistentService.class);
-        return generateTreeNodeSearch(project, service.getState(),searchText);
+        return generateTreeNodeSearch(project, service.getState(), searchText);
     }
 }

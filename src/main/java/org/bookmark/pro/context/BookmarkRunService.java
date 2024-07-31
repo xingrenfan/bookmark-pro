@@ -14,6 +14,8 @@ import org.bookmark.pro.service.tree.BookmarkTreeManage;
 import org.bookmark.pro.service.tree.handler.BookmarkTreeManager;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -37,17 +39,17 @@ public class BookmarkRunService {
     /**
      * 书签管理器面板
      */
-    private static BookmarkManagerPanel bookmarkManagerPanel;
+    private static final Map<Project, BookmarkManagerPanel> bookmarkManagerPanelMap = new ConcurrentHashMap<>();
 
     /**
      * 书签树管理
      */
-    private static BookmarkTreeManage bookmarkTreeManage;
+    private static final Map<Project, BookmarkTreeManager> bookmarkTreeManagerMap = new ConcurrentHashMap<>();
 
     /**
      * 持久性服务
      */
-    private static PersistenceService persistenceService;
+    private static final Map<Project, PersistenceService> persistenceServiceMap = new ConcurrentHashMap<>();
 
     /**
      * 获取书签设置
@@ -76,18 +78,18 @@ public class BookmarkRunService {
      * @return {@link BookmarkManagerPanel}
      */
     public static BookmarkManagerPanel getBookmarkManagerPanel(Project project) {
-        if (bookmarkManagerPanel == null || !project.equals(bookmarkManagerPanel.getOpenProject())) {
-            try {
-                if (FAIR_LOCKS.tryLock()) {
-                    bookmarkManagerPanel = new BookmarkManagerPanel(project);
+        if (! bookmarkManagerPanelMap.containsKey(project)) {
+            if (FAIR_LOCKS.tryLock()) {
+                try {
+                    bookmarkManagerPanelMap.put(project, new BookmarkManagerPanel(project));
+                } catch (Exception e) {
+                    BookmarkNoticeUtil.errorMessages(project, "Bookmark tree manager panel initialization failed. message:" + e.getMessage());
+                } finally {
+                    FAIR_LOCKS.unlock();
                 }
-            } catch (Exception e) {
-                BookmarkNoticeUtil.errorMessages(project, "Bookmark tree manager panel initialization failed. message:" + e.getMessage());
-            } finally {
-                FAIR_LOCKS.unlock();
             }
         }
-        return bookmarkManagerPanel;
+        return bookmarkManagerPanelMap.getOrDefault(project, null);
     }
 
     /**
@@ -97,18 +99,18 @@ public class BookmarkRunService {
      * @return {@link BookmarkTreeManage}
      */
     public static BookmarkTreeManage getBookmarkManage(Project project) {
-        if (bookmarkTreeManage == null || !project.equals(bookmarkTreeManage.getOpenProject())) {
-            try {
-                if (FAIR_LOCKS.tryLock()) {
-                    bookmarkTreeManage = new BookmarkTreeManager(project);
+        if (!bookmarkTreeManagerMap.containsKey(project)) {
+            if (FAIR_LOCKS.tryLock()) {
+                try {
+                    bookmarkTreeManagerMap.put(project, new BookmarkTreeManager(project));
+                } catch (Exception e) {
+                    BookmarkNoticeUtil.errorMessages(project, "Bookmark tree manager initialization failed. message:" + e.getMessage());
+                } finally {
+                    FAIR_LOCKS.unlock();
                 }
-            } catch (Exception e) {
-                BookmarkNoticeUtil.errorMessages(project, "Bookmark tree manager initialization failed. message:" + e.getMessage());
-            } finally {
-                FAIR_LOCKS.unlock();
             }
         }
-        return bookmarkTreeManage;
+        return bookmarkTreeManagerMap.getOrDefault(project, null);
     }
 
     /**
@@ -118,18 +120,18 @@ public class BookmarkRunService {
      * @return {@link PersistenceService}
      */
     public static PersistenceService getPersistenceService(Project project) {
-        if (persistenceService == null || !project.equals(persistenceService.getOpenProject())) {
-            try {
-                if (FAIR_LOCKS.tryLock()) {
-                    persistenceService = new PersistenceServiceHandler(project);
+        if (! persistenceServiceMap.containsKey(project)) {
+            if (FAIR_LOCKS.tryLock()) {
+                try {
+                    persistenceServiceMap.put(project, new PersistenceServiceHandler(project));
+                } catch (Exception e) {
+                    BookmarkNoticeUtil.errorMessages(project, "Bookmark persistence service initialization failed. message:" + e.getMessage());
+                } finally {
+                    FAIR_LOCKS.unlock();
                 }
-            } catch (Exception e) {
-                BookmarkNoticeUtil.errorMessages(project, "Bookmark persistence service initialization failed. message:" + e.getMessage());
-            } finally {
-                FAIR_LOCKS.unlock();
             }
         }
-        return persistenceService;
+        return persistenceServiceMap.getOrDefault(project, null);
     }
 
     /**

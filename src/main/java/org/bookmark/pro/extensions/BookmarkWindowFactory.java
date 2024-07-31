@@ -23,7 +23,7 @@ import java.util.Arrays;
 public class BookmarkWindowFactory implements ToolWindowFactory {
 
     @Override
-    public void createToolWindowContent(@NotNull Project project, ToolWindow toolWindow) {
+    public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
         initTopMenus(toolWindow);
         ContentFactory contentFactory = ContentFactory.getInstance();
         Content regularRetention = contentFactory.createContent(BookmarkRunService.getBookmarkManagerPanel(project), null, false);

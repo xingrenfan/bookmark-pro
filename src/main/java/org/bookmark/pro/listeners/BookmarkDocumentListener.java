@@ -42,6 +42,7 @@ public class BookmarkDocumentListener implements DocumentListener {
         if (virtualFile == null) {
             return;
         }
+
         try {
             // 查询文件中的书签
             Set<BookmarkTreeNode> bookmarkNodes = BookmarkRunService.getDocumentService(project).getBookmarkNodes(project, virtualFile);
@@ -49,6 +50,7 @@ public class BookmarkDocumentListener implements DocumentListener {
                 // 空的直接返回
                 return;
             }
+
             // 获取变化内容
             CharSequence newFragment = event.getNewFragment();
             CharSequence oldFragment = event.getOldFragment();
@@ -57,114 +59,72 @@ public class BookmarkDocumentListener implements DocumentListener {
             String oldStr = String.valueOf(oldFragment);
             int newLineCount = StringUtil.countChars(newStr, '\n');
             int oldLineCount = StringUtil.countChars(oldStr, '\n');
+            // 当前行修改
             if ((newLineCount <= 0 && oldLineCount <= 0) || newLineCount == oldLineCount) {
                 return;
             }
+            int lineGap = newLineCount - oldLineCount;
+            boolean isAdd = lineGap > 0;
             // 计算行变化
             int offset = event.getOffset();
             // 变化所在行
-            int startLineNumber = 0;
-            int endLineNumber = 0;
-            boolean isAdd = true;
-            if (newLineCount > oldLineCount) {
-                isAdd = true;
-                startLineNumber = document.getLineNumber(offset) + 1;
-                endLineNumber = startLineNumber + newLineCount - oldLineCount;
-            } else {
-                isAdd = false;
-                endLineNumber = document.getLineNumber(offset) + 1;
-                startLineNumber = endLineNumber - oldLineCount + newLineCount;
-            }
+            int startLineNumber = document.getLineNumber(offset);
+            int endLineNumber = startLineNumber + (isAdd ? lineGap : -lineGap);
             LineRange lineRange = new LineRange(startLineNumber, endLineNumber);
             // 修复剩余书签
-            perceivedLineChange(project, virtualFile, bookmarkNodes, lineRange, document.getLineNumber(offset), oldLineCount, isAdd);
+            perceivedLineChange(project, document, virtualFile, bookmarkNodes, lineRange, isAdd, offset, getStartOffset(document, startLineNumber));
         } catch (Exception e) {
             BookmarkNoticeUtil.errorMessages(project, "Change bookmark mark line fail[" + e.getMessage() + "]");
         }
     }
 
+    private int getStartOffset(Document document, int lineNumber) {
+        int lineStartOffset = document.getLineStartOffset(lineNumber); // 当前行起始偏移量
+        int lineEndOffset = document.getLineEndOffset(lineNumber); // 当前行结束偏移量
+
+        for (int i = lineStartOffset; i < lineEndOffset; i++) {
+            char c = document.getCharsSequence().charAt(i);
+            if (!Character.isWhitespace(c)) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
     /**
      * 感知到线路变化
      *
-     * @param project        项目
-     * @param virtualFile    虚拟文件
-     * @param bookmarkNodes  为节点添加书签
-     * @param lineRange      线范围
-     * @param deleteStartNum 删除起始行
-     * @param deleteTotalNum 删除内容总行数
-     * @param isAddLine      是添加
+     * @param project       项目
+     * @param virtualFile   虚拟文件
+     * @param bookmarkNodes 为节点添加书签
+     * @param lineRange     线范围
+     * @param isAddLine     是添加
      */
-    private void perceivedLineChange(Project project, VirtualFile virtualFile, Set<BookmarkTreeNode> bookmarkNodes, LineRange lineRange, int deleteStartNum, int deleteTotalNum, boolean isAddLine) {
+    private void perceivedLineChange(Project project, Document document, VirtualFile virtualFile, Set<BookmarkTreeNode> bookmarkNodes, LineRange lineRange, boolean isAddLine, int offset, int startOffset) {
         for (BookmarkTreeNode node : bookmarkNodes) {
             BookmarkNodeModel nodeModel = (BookmarkNodeModel) node.getUserObject();
-            if (nodeModel.getVirtualFile() == null) {
-                continue;
-            }
-            // 如果删除的行和书签的行号相同，则跳过
-            if (nodeModel.getLine()==lineRange.start-1){
-                continue;
-            }
-            // 书签标记行号
             int bookmarkPositionLine = nodeModel.getLine();
-            int rowGap = lineRange.end - lineRange.start;
-            int changeLine = lineRange.start;
-            if (isAddLine) {
-                // 添加行
-                if (bookmarkPositionLine + 1 < changeLine) {
-                    continue;
-                }
-                // 移除缓存的旧书签
-                BookmarkRunService.getDocumentService(project).removeBookmarkNode(project, node);
-                nodeModel.setLine(bookmarkPositionLine + rowGap);
-                nodeModel.setVirtualFile(virtualFile);
-                // 添加新书签
-                BookmarkRunService.getDocumentService(project).addBookmarkNode(project, node);
-                node.setUserObject(nodeModel);
-                BookmarkRunService.getBookmarkManage(project).getBookmarkTree().getModel().nodeChanged(node);
-            } else {
-                if (bookmarkPositionLine <= changeLine) {
-                    continue;
-                }
-                // 移除缓存的旧书签
-                BookmarkRunService.getDocumentService(project).removeBookmarkNode(project, node);
-                if (skipAddBookmark(bookmarkPositionLine, lineRange.start, lineRange.end, deleteStartNum, deleteTotalNum, bookmarkPositionLine)) {
-                    if (deleteManageBookmark(deleteStartNum, deleteTotalNum, bookmarkPositionLine)) {
-                        // 管理器中删除书签
-                        BookmarkRunService.getBookmarkManage(project).removeBookmarkNode(node);
-                    }
-//                    continue;
-                }
-                nodeModel.setLine(bookmarkPositionLine - rowGap);
-                nodeModel.setVirtualFile(virtualFile);
-                // 添加新书签
-                BookmarkRunService.getDocumentService(project).addBookmarkNode(project, node);
-                node.setUserObject(nodeModel);
-                BookmarkRunService.getBookmarkManage(project).addBookmarkNode(node);
-                BookmarkRunService.getBookmarkManage(project).getBookmarkTree().getModel().nodeChanged(node);
+            if (bookmarkPositionLine < lineRange.start) continue;
+
+            int _startOffset = isAddLine ? startOffset : getStartOffset(document, bookmarkPositionLine);
+            if (bookmarkPositionLine == lineRange.start && offset > _startOffset) continue;
+
+            if (!isAddLine && (bookmarkPositionLine == lineRange.start || bookmarkPositionLine < lineRange.end)) {
+                // 管理器中删除书签
+                BookmarkRunService.getBookmarkManage(project).removeBookmarkNode(node);
+                continue;
             }
+
+            // 移除缓存的旧书签
+            BookmarkRunService.getDocumentService(project).removeBookmarkNode(project, node);
+            int lineGap = lineRange.end - lineRange.start;
+            nodeModel.setLine(bookmarkPositionLine + (isAddLine ? lineGap : -lineGap));
+            nodeModel.setVirtualFile(virtualFile);
+            node.setUserObject(nodeModel);
+            BookmarkRunService.getDocumentService(project).addBookmarkNode(project, node);
+            BookmarkRunService.getBookmarkManage(project).getBookmarkTree().getModel().nodeChanged(node);
             BookmarkRunService.getPersistenceService(project).saveBookmark(project);
         }
-    }
-
-    /**
-     * 跳过添加书签
-     *
-     * @param positionLine    位置线
-     * @param start           开始
-     * @param end             结束
-     * @param deleteStartNum  删除起始行
-     * @param deleteTotalNum  删除总行数
-     * @param bookmarkLineNum 书签行号
-     * @return boolean
-     */
-    private boolean skipAddBookmark(int positionLine, int start, int end, int deleteStartNum, int deleteTotalNum, int bookmarkLineNum) {
-        int deleteContentEndLineNum = deleteStartNum + deleteTotalNum;
-        return (positionLine < end && positionLine > start) || (bookmarkLineNum >= deleteStartNum && bookmarkLineNum <= deleteContentEndLineNum);
-    }
-
-    private boolean deleteManageBookmark(int deleteStartNum, int deleteTotalNum, int bookmarkLineNum) {
-        int deleteContentEndLineNum = deleteStartNum + deleteTotalNum;
-        return bookmarkLineNum >= deleteStartNum && bookmarkLineNum <= deleteContentEndLineNum;
     }
 
     private Editor getEditor(Document document) {
@@ -174,5 +134,4 @@ public class BookmarkDocumentListener implements DocumentListener {
         }
         return null;
     }
-
 }
