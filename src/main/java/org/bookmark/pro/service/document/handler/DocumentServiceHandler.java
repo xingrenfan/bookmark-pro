@@ -132,7 +132,8 @@ public final class DocumentServiceHandler implements DocumentService {
         }
         if (bookmarkNode.isGroup()) {
             bookmarkNode.children().asIterator().forEachRemaining(treeNode -> {
-                if (treeNode instanceof BookmarkTreeNode bookmarkTreeNode) {
+                if (treeNode instanceof BookmarkTreeNode) {
+                    BookmarkTreeNode bookmarkTreeNode = (BookmarkTreeNode) treeNode;
                     removeBookmarkNode(project, bookmarkTreeNode);
                 }
             });

@@ -25,7 +25,7 @@ public class BookmarkWindowFactory implements ToolWindowFactory {
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
         initTopMenus(toolWindow);
-        ContentFactory contentFactory = ContentFactory.getInstance();
+        ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         Content regularRetention = contentFactory.createContent(BookmarkRunService.getBookmarkManagerPanel(project), null, false);
         toolWindow.getContentManager().addContent(regularRetention);
     }
