@@ -64,9 +64,34 @@
 
     <actions>
         <!-- 窗口右键展示菜单 -->
-        <action id="bookmark.pro.right.menu.create" class="org.bookmark.pro.actions.BookmarkCreateEditAction" text="Add/Update Bookmark" icon="/icons/point.svg">
+        <!--<action id="bookmark.pro.right.menu.create" class="org.bookmark.pro.actions.BookmarkCreateEditAction" text="Add/Update Bookmark" icon="/icons/point.svg">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-        </action>
+        </action>-->
+
+        <group id="bookmark.pro.right.menu" text="BookmarkPro" popup="true">
+            <!-- 编辑窗口右键菜单:  -->
+            <add-to-group group-id="GoToMenu" anchor="after" relative-to-action="bookmark.pro.key.menu.create"/>
+            <!-- 创建|编辑书签 -->
+            <action id="bookmark.pro.key.menu.create" class="org.bookmark.pro.actions.BookmarkCreateEditAction" text="Add/Update Bookmark">
+                <!-- 添加快捷键 -->
+                <keyboard-shortcut first-keystroke="shift alt a" keymap="$default"/>
+            </action>
+            <!-- 删除一个书签 -->
+            <action id="bookmark.pro.key.menu.delete" class="org.bookmark.pro.actions.BookmarkDeleteAction" text="Delete Bookmark">
+                <!-- 添加快捷键 -->
+                <keyboard-shortcut first-keystroke="shift alt d" keymap="$default"/>
+            </action>
+            <!-- 下一个书签 -->
+            <action id="bookmark.pro.key.menu.next" class="org.bookmark.pro.actions.BookmarkNextAction" text="Next Bookmark">
+                <!-- 添加快捷键 -->
+                <keyboard-shortcut first-keystroke="shift alt RIGHT" keymap="$default"/>
+            </action>
+            <!-- 上一个书签 -->
+            <action id="bookmark.pro.key.menu.prev" class="org.bookmark.pro.actions.BookmarkPrevAction" text="Prev Bookmark">
+                <!-- 添加快捷键 -->
+                <keyboard-shortcut first-keystroke="shift alt LEFT" keymap="$default"/>
+            </action>
+        </group>
 
         <group id="org.intellij.sdk.action.GroupedActions" text="_Bookmark-Pro" popup="true">
             <!-- 编辑窗口右键菜单:  -->

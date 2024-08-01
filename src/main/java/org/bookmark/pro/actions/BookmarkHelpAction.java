@@ -3,11 +3,13 @@ package org.bookmark.pro.actions;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import org.bookmark.pro.constants.BookmarkProConstant;
+import com.intellij.openapi.ui.DialogWrapper;
+import org.bookmark.pro.dialogs.windows.BookmarkHelpForm;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import java.awt.*;
-import java.net.URI;
 
 /**
  * 书签帮助组件
@@ -15,23 +17,33 @@ import java.net.URI;
  * @author Lyon
  * @date 2024/03/21
  */
-public class BookmarkHelpAction extends AnAction {
-
+public final class BookmarkHelpAction extends AnAction {
     public BookmarkHelpAction() {
-        super("Bookmark Help", null, AllIcons.Actions.Help);
+        super("Bookmark Using Help", null, AllIcons.Actions.Help);
     }
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        try {
-            URI uri = new URI(BookmarkProConstant.BOOKMARK_README_URI);
-            Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
-            if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
-                desktop.browse(uri);
-            }
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-    }
+        BookmarkHelpForm helpForm = new BookmarkHelpForm();
+        helpForm
 
+        DialogWrapper helpDialog = new DialogWrapper(true) {
+            @Override
+            protected @Nullable JComponent createCenterPanel() {
+                JPanel dialogPanel = new JPanel(new BorderLayout());
+                JLabel addEdit = new JLabel("Add/Edit bookmark: Alt + shift + A");
+                addEdit.setPreferredSize(new Dimension(300, 100));
+                JLabel delete = new JLabel("Delete bookmark: Alt + shift + D");
+                delete.setPreferredSize(new Dimension(300, 100));
+                JLabel switchBookmark = new JLabel("Switch bookmark: Alt + shift + left/right keyboard");
+                switchBookmark.setPreferredSize(new Dimension(300, 100));
+                dialogPanel.add(addEdit, BorderLayout.CENTER);
+                dialogPanel.add(delete, BorderLayout.CENTER);
+                dialogPanel.add(switchBookmark, BorderLayout.CENTER);
+                return dialogPanel;
+            }
+        };
+        helpDialog.setTitle("BookmarkPro Using Help");
+        helpDialog.show();
+    }
 }

@@ -8,6 +8,7 @@ import com.intellij.ui.content.ContentFactory;
 import org.bookmark.pro.actions.BookmarkExportAction;
 import org.bookmark.pro.actions.BookmarkHelpAction;
 import org.bookmark.pro.actions.BookmarkImportAction;
+import org.bookmark.pro.actions.BookmarkIssueAction;
 import org.bookmark.pro.context.BookmarkRunService;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,9 +40,10 @@ public class BookmarkWindowFactory implements ToolWindowFactory {
     private void initTopMenus(ToolWindow toolWindow) {
         BookmarkExportAction exportAction = new BookmarkExportAction();
         BookmarkImportAction importAction = new BookmarkImportAction();
+        BookmarkIssueAction issueAction = new BookmarkIssueAction();
         BookmarkHelpAction helpAction = new BookmarkHelpAction();
         // 在 ToolWindow 的标题栏中添加自定义动作按钮
-        toolWindow.setTitleActions(Arrays.asList(importAction, exportAction, helpAction));
+        toolWindow.setTitleActions(Arrays.asList(importAction, exportAction, issueAction, helpAction));
     }
 
 }

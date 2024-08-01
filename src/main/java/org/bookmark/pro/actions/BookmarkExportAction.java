@@ -6,6 +6,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.InputValidatorEx;
 import com.intellij.openapi.ui.Messages;
+import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.base.BaseExportService;
 import org.bookmark.pro.utils.CharacterUtil;
 import org.jetbrains.annotations.NotNull;
@@ -39,9 +40,9 @@ public final class BookmarkExportAction extends AnAction implements BaseExportSe
         // 备份文件名
         String fileName = project.getName() + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmmss")) + ".json";
         String newFileName = Messages.showInputDialog("name:", "SaveFileName", null, fileName, validatorEx);
-        if (CharacterUtil.isNotEmpty(newFileName)) {
+        if (StringUtils.isNotEmpty(newFileName)) {
             fileName = newFileName;
+            exportSendNotice(project, backupRootFile.getPath(), fileName);
         }
-        exportSendNotice(project, backupRootFile.getPath(), fileName);
     }
 }

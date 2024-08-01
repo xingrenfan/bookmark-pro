@@ -116,7 +116,7 @@ class GlobalSettings extends BaseSetting {
     public boolean getLineDocument() {
         String lineDocument = properties.getValue(BookmarkProConstant.BOOKMARK_LINE_DOCUMENT);
         if (CharacterUtil.isEmpty(lineDocument)) {
-            return false;
+            return true;
         }
         return Boolean.valueOf(lineDocument);
     }
