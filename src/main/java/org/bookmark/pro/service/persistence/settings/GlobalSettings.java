@@ -44,9 +44,30 @@ class GlobalSettings extends BaseSetting {
         return Objects.toString(properties.getValue(BookmarkProConstant.BOOKMARK_PREFIX), BookmarkProIcon.DEFAULT_PREFIX_SIGN);
     }
 
+    public String getBackUp() {
+        return Objects.toString(properties.getValue(BookmarkProConstant.BOOKMARK_BACKUP), "");
+    }
+
+    public String getBackUpTime() {
+        // 默认12个小时备份一次
+        return Objects.toString(properties.getValue(BookmarkProConstant.BOOKMARK_BACKUP_TIME), "12");
+    }
+
     public void setPrefix(String text) {
         if (text != null) {
             properties.setValue(BookmarkProConstant.BOOKMARK_PREFIX, text);
+        }
+    }
+
+    public void setBackUP(String text) {
+        if (text != null) {
+            properties.setValue(BookmarkProConstant.BOOKMARK_BACKUP, text);
+        }
+    }
+
+    public void setBackUpTime(String text) {
+        if (text != null) {
+            properties.setValue(BookmarkProConstant.BOOKMARK_BACKUP_TIME, text);
         }
     }
 
@@ -95,8 +116,20 @@ class GlobalSettings extends BaseSetting {
     public boolean getLineDocument() {
         String lineDocument = properties.getValue(BookmarkProConstant.BOOKMARK_LINE_DOCUMENT);
         if (CharacterUtil.isEmpty(lineDocument)) {
-            return false;
+            return true;
         }
         return Boolean.valueOf(lineDocument);
+    }
+
+    public boolean getAutoBackup() {
+        String autoBackup = properties.getValue(BookmarkProConstant.BOOKMARK_AUTO_BACKUP);
+        if (CharacterUtil.isEmpty(autoBackup)) {
+            return false;
+        }
+        return Boolean.valueOf(autoBackup);
+    }
+
+    public void setAutoBackup(boolean autoBackup) {
+        properties.setValue(BookmarkProConstant.BOOKMARK_AUTO_BACKUP, autoBackup);
     }
 }

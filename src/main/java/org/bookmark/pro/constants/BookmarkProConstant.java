@@ -13,9 +13,14 @@ import java.awt.datatransfer.DataFlavor;
  */
 public interface BookmarkProConstant {
     /**
+     * 问题反馈 URI
+     */
+    String BOOKMARK_ISSUES_URI = "https://github.com/xingrenfan/bookmark-pro/issues";
+
+    /**
      * 书签自述文件 URI
      */
-    String BOOKMARK_README_URI = "https://github.com/xingrenfan/bookmark-pro/issues";
+    String BOOKMARK_README_URI = "https://github.com/xingrenfan/bookmark-pro/blob/main/readme.md";
 
     /**
      * idea 插件下载地址
@@ -26,6 +31,20 @@ public interface BookmarkProConstant {
      * 书签前缀
      */
     String BOOKMARK_PREFIX = "bookmark.pro:prefix";
+    /**
+     * 备份
+     */
+    String BOOKMARK_BACKUP = "bookmark.pro:backUp";
+
+    /**
+     * 书签自动备份
+     */
+    String BOOKMARK_AUTO_BACKUP = "bookmark.pro:autoBackup";
+
+    /**
+     * 备份时间
+     */
+    String BOOKMARK_BACKUP_TIME = "bookmark.pro:backUpTime";
 
     /**
      * 书签前缀颜色

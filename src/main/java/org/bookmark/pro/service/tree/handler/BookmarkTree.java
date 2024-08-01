@@ -3,6 +3,7 @@ package org.bookmark.pro.service.tree.handler;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.treeStructure.Tree;
 import org.bookmark.pro.context.BookmarkRunService;
+import org.bookmark.pro.domain.model.GroupNodeModel;
 
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;

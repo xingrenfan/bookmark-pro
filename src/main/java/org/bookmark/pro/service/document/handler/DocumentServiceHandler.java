@@ -58,7 +58,7 @@ public final class DocumentServiceHandler implements DocumentService {
     @Override
     public Set<BookmarkTreeNode> getBookmarkNodes(Project project, VirtualFile virtualFile) {
         String fileCanonicalPath = BookmarkProUtil.virtualFileName(project, virtualFile);
-        return Optional.ofNullable(this.bookmarkFileName.get(fileCanonicalPath)).orElse(new HashSet<>()).stream().map(uuid -> this.bookmarkNodeCache.get(uuid)).filter(Objects::nonNull).collect(Collectors.toSet());
+        return Optional.ofNullable(this.bookmarkFileName.get(fileCanonicalPath)).orElse(new HashSet<>()).stream().map(this.bookmarkNodeCache::get).filter(Objects::nonNull).collect(Collectors.toSet());
     }
 
     @Override
@@ -107,18 +107,21 @@ public final class DocumentServiceHandler implements DocumentService {
 
     @Override
     public void removeBookmarkNode(Project project, BookmarkTreeNode bookmarkNode) {
-        BookmarkNodeModel nodeModel = (BookmarkNodeModel) bookmarkNode.getUserObject();
+        AbstractTreeNodeModel nodeModel = (AbstractTreeNodeModel) bookmarkNode.getUserObject();
+        String uuid = nodeModel.getUuid();
         // 删除书签节点缓存
-        this.bookmarkNodeCache.remove(nodeModel.getUuid());
+        this.bookmarkNodeCache.remove(uuid);
         if (bookmarkNode.isBookmark()) {
+            BookmarkNodeModel bookmarkNodeModel = (BookmarkNodeModel) nodeModel;
+            VirtualFile virtualFile = bookmarkNodeModel.getVirtualFile();
             // 获取虚拟文件
-            if (nodeModel.getVirtualFile() != null) {
+            if (virtualFile != null) {
                 // 文件名
-                String fileName = BookmarkProUtil.virtualFileName(project, nodeModel.getVirtualFile());
+                String fileName = BookmarkProUtil.virtualFileName(project, virtualFile);
                 if (this.bookmarkFileName.containsKey(fileName)) {
                     // 根据文件名获取所有书签
                     Set<String> cacheUuid = this.bookmarkFileName.get(fileName);
-                    cacheUuid.remove(nodeModel.getUuid());
+                    cacheUuid.remove(uuid);
                     if (CollectionUtil.isEmpty(cacheUuid)) {
                         this.bookmarkFileName.remove(fileName);
                     } else {
@@ -127,8 +130,13 @@ public final class DocumentServiceHandler implements DocumentService {
                 }
             }
         }
-        if (bookmarkNode.isGroup() && this.groupNodeCache.containsKey(nodeModel.getUuid())) {
-            this.groupNodeCache.remove(nodeModel.getUuid());
+        if (bookmarkNode.isGroup()) {
+            bookmarkNode.children().asIterator().forEachRemaining(treeNode -> {
+                if (treeNode instanceof BookmarkTreeNode bookmarkTreeNode) {
+                    removeBookmarkNode(project, bookmarkTreeNode);
+                }
+            });
+            this.groupNodeCache.remove(uuid);
         }
     }
 

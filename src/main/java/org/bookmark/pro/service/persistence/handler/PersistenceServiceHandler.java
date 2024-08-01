@@ -20,7 +20,10 @@ import org.bookmark.pro.utils.CharacterUtil;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 public class PersistenceServiceHandler implements PersistenceService {
     private Project openProject;
@@ -67,7 +70,7 @@ public class PersistenceServiceHandler implements PersistenceService {
         // 导出到文件
         FileWriter fileWriter = null;
         try {
-            fileWriter = new FileWriter(savePath);
+            fileWriter = new FileWriter(savePath, Charset.forName("utf-8"));
             Gson gson = new Gson();
             gson.toJson(bookmarkPro, fileWriter);
             return true;
@@ -154,6 +157,77 @@ public class PersistenceServiceHandler implements PersistenceService {
         return treeNode;
     }
 
+
+    /**
+     * 生成树节点
+     *
+     * @param project    项目
+     * @param bookmark   书签
+     * @param searchText 搜索文本（正则表达式）
+     * @return {@link BookmarkTreeNode}
+     */
+    private BookmarkTreeNode generateTreeNodeSearch(Project project, BookmarkPro bookmark, String searchText) {
+        AbstractTreeNodeModel model = BookmarkConverter.beanToModel(project, bookmark);
+        BookmarkTreeNode treeNode = new BookmarkTreeNode(model, !bookmark.isBookmark());
+
+        // 编译正则表达式
+        Pattern pattern;
+        try {
+            pattern = Pattern.compile(searchText, Pattern.CASE_INSENSITIVE);
+        } catch (PatternSyntaxException e) {
+            // 如果正则表达式无效，返回空节点
+            return null;
+        }
+
+        // 判断当前节点是否匹配搜索文本
+        boolean isParentMatched = pattern.matcher(bookmark.getName()).find() ||
+                (bookmark.getDesc() != null && pattern.matcher(bookmark.getDesc()).find());
+
+        List<BookmarkPro> childrenBookmarks = bookmark.getChildren();
+        if (CollectionUtils.isEmpty(childrenBookmarks)) {
+            return isParentMatched ? treeNode : null;
+        }
+
+        // 如果父节点匹配，则添加所有子节点
+        if (isParentMatched) {
+            for (BookmarkPro childrenBookmark : childrenBookmarks) {
+                BookmarkTreeNode childNode = new BookmarkTreeNode(BookmarkConverter.beanToModel(project, childrenBookmark));
+                treeNode.add(childNode);
+                addAllChildren(childNode, childrenBookmark, project);
+            }
+            return treeNode;
+        }
+
+        // 递归处理子节点
+        for (BookmarkPro childrenBookmark : childrenBookmarks) {
+            BookmarkTreeNode childNode = generateTreeNodeSearch(project, childrenBookmark, searchText);
+            if (childNode != null) {
+                treeNode.add(childNode);
+            }
+        }
+
+        return treeNode.getChildCount() > 0 ? treeNode : null;
+    }
+
+    /**
+     * 递归添加所有子节点
+     *
+     * @param parentNode 父节点
+     * @param bookmark   书签
+     * @param project    项目
+     */
+    private void addAllChildren(BookmarkTreeNode parentNode, BookmarkPro bookmark, Project project) {
+        List<BookmarkPro> childrenBookmarks = bookmark.getChildren();
+        if (CollectionUtils.isNotEmpty(childrenBookmarks)) {
+            for (BookmarkPro child : childrenBookmarks) {
+                BookmarkTreeNode childNode = new BookmarkTreeNode(BookmarkConverter.beanToModel(project, child));
+                parentNode.add(childNode);
+                addAllChildren(childNode, child, project);
+            }
+        }
+    }
+
+
     @Override
     public void addOneBookmark(Project project, BookmarkPro bookmark) {
         PersistentService service = getPersistentService(project, PersistentService.class);
@@ -165,5 +239,12 @@ public class PersistenceServiceHandler implements PersistenceService {
     public BookmarkTreeNode getBookmarkNode(Project project) {
         PersistentService service = getPersistentService(project, PersistentService.class);
         return generateTreeNode(project, service.getState());
+    }
+
+
+    @Override
+    public BookmarkTreeNode getBookmarkNodeSearch(Project project, String searchText) {
+        PersistentService service = getPersistentService(project, PersistentService.class);
+        return generateTreeNodeSearch(project, service.getState(), searchText);
     }
 }

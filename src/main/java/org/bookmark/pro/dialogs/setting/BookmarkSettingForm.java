@@ -26,7 +26,13 @@ public class BookmarkSettingForm implements Configurable {
     private JCheckBox lineDocument;
     private JSpinner selectedShowNum;
 
+    private JButton backupButton;
+    private JTextField backUpPath;
+    private JCheckBox autoBackup;
+    private JSpinner backUpTime;
+
     private GeneralSettings generalSettings;
+    private BackupSetting backupSetting;
 
     @Override
     public @NlsContexts.ConfigurableName String getDisplayName() {
@@ -38,6 +44,8 @@ public class BookmarkSettingForm implements Configurable {
         // 初始化全局设置
         generalSettings = new GeneralSettings(markText, markLabSel, noteLabSel, separatorSel, maxCharNum, lineDocument, selectedShowNum);
         generalSettings.initGeneralSettings();
+        backupSetting = new BackupSetting(mainPane, backupButton, backUpPath, autoBackup, backUpTime);
+        backupSetting.initBackupSettings();
         //设置颜色选择监听
         colorChooseListener(mainPane, noteLabSel);
         colorChooseListener(mainPane, markLabSel);
@@ -54,6 +62,7 @@ public class BookmarkSettingForm implements Configurable {
     public void apply() throws ConfigurationException {
         // 保存常规配置
         generalSettings.saveGeneralSetting();
+        backupSetting.saveBackupSetting();
     }
 
     /**

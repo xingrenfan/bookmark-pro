@@ -79,15 +79,17 @@ public class BookmarkEditDialog extends DialogWrapper {
      * @param documentMaxLine 文档最大行数
      * @return {@link BookmarkEditDialog}
      */
-    public BookmarkEditDialog defaultNode(BookmarkNodeModel nodeModel, int documentMaxLine) {
+    public BookmarkEditDialog defaultNode(BookmarkNodeModel nodeModel, Integer documentMaxLine, boolean showMaxLine) {
         this.tfName.setText(nodeModel.getName());
         this.tfDesc.setText(nodeModel.getDesc());
         // 显示行数最大限制
-        this.bookmarkEditService.lineNumInspect(panel, constraints, this.bookmarkLineNum, nodeModel.getLine() + 1, documentMaxLine);
+        this.bookmarkEditService.lineNumInspect(panel, constraints, this.bookmarkLineNum, nodeModel.getLine() + 1, documentMaxLine, showMaxLine);
         // 显示书签是否可以做分组
         this.bookmarkEditService.showBookmarkEnable(panel, constraints, nodeModel);
-        // 显示书签父级菜单
-        this.bookmarkEditService.showBookmarkParent(project, panel, constraints, nodeModel);
+        if (showMaxLine) {
+            // 显示书签父级菜单
+            this.bookmarkEditService.showBookmarkParent(project, panel, constraints, nodeModel);
+        }
         return this;
     }
 
@@ -215,7 +217,7 @@ public class BookmarkEditDialog extends DialogWrapper {
     }
 
     public interface OnOKAction {
-        void onAction(String name, String desc, int lineNum, BookmarkTreeNode parentNode, boolean enableGroup);
+        void onAction(String name, String desc, Integer lineNum, BookmarkTreeNode parentNode, boolean enableGroup);
     }
 
 }
