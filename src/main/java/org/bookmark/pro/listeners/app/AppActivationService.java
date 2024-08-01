@@ -8,8 +8,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.StartupActivity;
 import org.bookmark.pro.constants.BookmarkProConstant;
 import org.bookmark.pro.constants.BookmarkProIcon;
-import org.bookmark.pro.service.tree.BookmarkTreeManage;
-import org.bookmark.pro.service.tree.handler.BookmarkTreeManager;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,7 +41,7 @@ public class AppActivationService implements StartupActivity {
                 try {
                     Desktop desktop = Desktop.getDesktop();
                     if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                        desktop.browse(new URI(BookmarkProConstant.BOOKMARK_README_URI));
+                        desktop.browse(new URI(BookmarkProConstant.BOOKMARK_ISSUES_URI));
                     }
                 } catch (Exception ex) {
                 }

@@ -13,9 +13,14 @@ import java.awt.datatransfer.DataFlavor;
  */
 public interface BookmarkProConstant {
     /**
+     * 问题反馈 URI
+     */
+    String BOOKMARK_ISSUES_URI = "https://github.com/xingrenfan/bookmark-pro/issues";
+
+    /**
      * 书签自述文件 URI
      */
-    String BOOKMARK_README_URI = "https://github.com/xingrenfan/bookmark-pro/issues";
+    String BOOKMARK_README_URI = "https://github.com/xingrenfan/bookmark-pro/blob/main/readme.md";
 
     /**
      * idea 插件下载地址

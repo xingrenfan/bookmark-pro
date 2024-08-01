@@ -3,6 +3,7 @@ package org.bookmark.pro.domain.model;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
+import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.domain.BookmarkPro;
 
 /**
@@ -74,12 +75,13 @@ public class BookmarkConverter {
             model.setInvalid(bookmarkPro.getInvalid());
             model.setBookmark(bookmarkPro.isBookmark());
             model.setGroup(bookmarkPro.isGroup());
-
-            VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByPath(bookmarkPro.getVirtualFilePath());
-            if (null == virtualFile) {
-                return model;
+            if (StringUtils.isNotBlank(bookmarkPro.getVirtualFilePath())) {
+                VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByPath(bookmarkPro.getVirtualFilePath());
+                if (null == virtualFile) {
+                    return model;
+                }
+                model.setVirtualFile(virtualFile);
             }
-            model.setVirtualFile(virtualFile);
             return model;
         } else {
             // 分组模型
