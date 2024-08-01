@@ -20,6 +20,7 @@ import org.bookmark.pro.utils.CharacterUtil;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -69,7 +70,7 @@ public class PersistenceServiceHandler implements PersistenceService {
         // 导出到文件
         FileWriter fileWriter = null;
         try {
-            fileWriter = new FileWriter(savePath);
+            fileWriter = new FileWriter(savePath, Charset.forName("utf-8"));
             Gson gson = new Gson();
             gson.toJson(bookmarkPro, fileWriter);
             return true;
