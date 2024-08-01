@@ -25,8 +25,8 @@ public final class BookmarkHelpAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         BookmarkHelpForm helpForm = new BookmarkHelpForm();
-        helpForm
-
+        helpForm.show();
+/*
         DialogWrapper helpDialog = new DialogWrapper(true) {
             @Override
             protected @Nullable JComponent createCenterPanel() {
@@ -44,6 +44,6 @@ public final class BookmarkHelpAction extends AnAction {
             }
         };
         helpDialog.setTitle("BookmarkPro Using Help");
-        helpDialog.show();
+        helpDialog.show();*/
     }
 }

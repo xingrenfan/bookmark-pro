@@ -18,13 +18,13 @@ import java.net.URI;
 public class BookmarkIssueAction extends AnAction {
 
     public BookmarkIssueAction() {
-        super("Bookmark Issue", null, AllIcons.FileTypes.AddAny);
+        super("Bookmark Issue", null, AllIcons.Actions.QuickfixBulb);
     }
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         try {
-            URI uri = new URI(BookmarkProConstant.BOOKMARK_README_URI);
+            URI uri = new URI(BookmarkProConstant.BOOKMARK_ISSUES_URI);
             Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
             if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
                 desktop.browse(uri);
