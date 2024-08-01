@@ -100,9 +100,7 @@ public class BookmarkManagerPanel extends JPanel {
                 if (CharacterUtil.isBlank(filterText)){
                     reloadBookmarkTree(project, bookmarkTree);
                 } else {
-                    new TreeLoadWorker(
-                            project, bookmarkTree, filterText, true
-                    ).execute();
+                    new TreeLoadWorker(project, bookmarkTree, filterText, true).execute();
                 }
             }
         });
