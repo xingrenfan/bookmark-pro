@@ -2,7 +2,7 @@
 <idea-plugin require-restart="true">
     <id>org.bookmark.pro.id</id>
     <name>MarkBook-Pro</name>
-    <version>212-222.01.05</version>
+    <version>212-222.01.06</version>
     <vendor email="xingrenfan@hotmail.com" url="https://github.com/xingrenfan/bookmark-pro">XingRenFan</vendor>
     <idea-version since-build="212.5080.55" until-build="222.*"/>
 
