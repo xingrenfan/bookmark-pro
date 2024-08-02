@@ -32,7 +32,7 @@ public interface BaseExportService {
         return backupRootFile;
     }
 
-    private String getRoot(Project project) {
+    default String getRoot(Project project) {
         if (CharacterUtil.isBlank(BookmarkRunService.getBookmarkSettings().getBackUp())) {
             // 项目跟目录
             String backupRoot = FileUtil.toSystemIndependentName(Objects.requireNonNull(project.getBasePath())) + File.separator + "BookmarkBackup";
