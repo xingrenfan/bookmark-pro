@@ -4,7 +4,7 @@
     <name>MarkBook-Pro</name>
     <version>223-241.01.03</version>
     <vendor email="xingrenfan@hotmail.com" url="https://github.com/xingrenfan/bookmark-pro">XingRenFan</vendor>
-    <idea-version since-build="223.7571.182" until-build="241.*"/>
+    <idea-version since-build="231.8109.175" until-build="241.*"/>
 
     <description><![CDATA[
       <p>An idea plug-in that helps us take notes when reading the source code</p>
@@ -41,7 +41,7 @@
         <!-- 配置 -->
         <applicationConfigurable instance="org.bookmark.pro.dialogs.setting.BookmarkSettingForm" id="bookmark.pro.config" displayName="Bookmark Pro"/>
         <!-- 左边栏设置锚点，展示窗口 -->
-        <toolWindow id="Bookmark-Pro" anchor="left" icon="/icons/bookmark.svg" factoryClass="org.bookmark.pro.extensions.BookmarkWindowFactory" secondary="true"/>
+        <toolWindow id="Bookmark-Pro" anchor="right" icon="/icons/bookmark.svg" factoryClass="org.bookmark.pro.extensions.BookmarkWindowFactory" secondary="true"/>
         <!-- 书签持久化 -->
         <projectService serviceImplementation="org.bookmark.pro.service.persistence.handler.PersistentService"/>
         <!--行尾拓展：显示书签名称-->

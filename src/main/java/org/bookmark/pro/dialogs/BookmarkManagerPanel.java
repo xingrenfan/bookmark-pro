@@ -4,6 +4,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.ui.JBUI;
+import org.bookmark.pro.base.I18N;
 import org.bookmark.pro.context.BookmarkRunService;
 import org.bookmark.pro.domain.BookmarkPro;
 import org.bookmark.pro.domain.model.BookmarkConverter;
@@ -62,7 +63,7 @@ public class BookmarkManagerPanel extends JPanel {
 
         // 添加搜索框到顶部
         JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.add(new JLabel("搜索书签: "), BorderLayout.WEST);
+        topPanel.add(new JLabel(I18N.get("manager.panel.search")), BorderLayout.WEST);
         topPanel.add(searchField, BorderLayout.CENTER);
         add(topPanel, BorderLayout.NORTH);
 
@@ -97,7 +98,7 @@ public class BookmarkManagerPanel extends JPanel {
 
             private void filterTree() {
                 String filterText = searchField.getText();
-                if (CharacterUtil.isBlank(filterText)){
+                if (CharacterUtil.isBlank(filterText)) {
                     reloadBookmarkTree(project, bookmarkTree);
                 } else {
                     new TreeLoadWorker(project, bookmarkTree, filterText, true).execute();
@@ -123,8 +124,8 @@ public class BookmarkManagerPanel extends JPanel {
     /**
      * 展开所有节点
      *
-     * @param tree 书签树
-     * @param start 起始行
+     * @param tree     书签树
+     * @param start    起始行
      * @param rowCount 行数
      */
     private void expandAllNodes(JTree tree, int start, int rowCount) {
@@ -183,8 +184,8 @@ public class BookmarkManagerPanel extends JPanel {
         @Override
         protected DefaultTreeModel doInBackground() throws Exception {
             PersistenceService service = BookmarkRunService.getPersistenceService(openProject);
-            if (enableSearch){
-                return new DefaultTreeModel(service.getBookmarkNodeSearch(openProject,searchText));
+            if (enableSearch) {
+                return new DefaultTreeModel(service.getBookmarkNodeSearch(openProject, searchText));
             }
             // 获取持久化书签对象
             return new DefaultTreeModel(service.getBookmarkNode(openProject));
@@ -229,8 +230,8 @@ public class BookmarkManagerPanel extends JPanel {
                         protected Void doInBackground() throws Exception {
                             try {
                                 BookmarkRunService.getPersistenceService(project).saveBookmark(project);
-                            }catch (Exception e){
-                                BookmarkNoticeUtil.projectNotice(project,  "出现异常"+e.getMessage());
+                            } catch (Exception e) {
+                                BookmarkNoticeUtil.projectNotice(project, "出现异常" + e.getMessage());
                             }
                             return null;
                         }
@@ -249,22 +250,18 @@ public class BookmarkManagerPanel extends JPanel {
                     BookmarkTreeNode selectedNode = (BookmarkTreeNode) bookmarkTree.getLastSelectedPathComponent();
                     if (selectedNode != null && selectedNode.isBookmark()) {
                         BookmarkNodeModel bookmark = (BookmarkNodeModel) selectedNode.getUserObject();
-                        jepDesc.setText(CharacterUtil.abbreviate(
-                                Objects.toString(bookmark.getDesc()),
-                                "...",
-                                BookmarkRunService.getBookmarkSettings().getTreePanelShowNum()
-                        ));
+                        jepDesc.setText(CharacterUtil.abbreviate(Objects.toString(bookmark.getDesc()), "...", BookmarkRunService.getBookmarkSettings().getTreePanelShowNum()));
                     } else {
                         jepDesc.setText("");
                     }
                 });
                 treeLoaded = true;
-                if (enableSearch){
+                if (enableSearch) {
                     // 展开所有节点,这个有问题,展开之后又会自己关闭
                     expandAllNodes(bookmarkTree, 0, bookmarkTree.getRowCount());
                 }
-            }catch (Exception e){
-                BookmarkNoticeUtil.projectNotice(project,  "出现异常"+e.getMessage() );
+            } catch (Exception e) {
+                BookmarkNoticeUtil.projectNotice(project, "出现异常" + e.getMessage());
             }
         }
     }

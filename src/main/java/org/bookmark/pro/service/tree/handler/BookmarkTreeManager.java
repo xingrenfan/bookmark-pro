@@ -1,11 +1,14 @@
 package org.bookmark.pro.service.tree.handler;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.ui.TreeSpeedSearch;
-import com.intellij.ui.TreeUIHelper;
+import com.intellij.openapi.ui.popup.JBPopup;
+import com.intellij.openapi.ui.popup.JBPopupFactory;
+import com.intellij.ui.awt.RelativePoint;
+import org.bookmark.pro.base.BookmarkTipPanel;
 import org.bookmark.pro.constants.BookmarkProConstant;
 import org.bookmark.pro.constants.BookmarkProIcon;
 import org.bookmark.pro.context.BookmarkRunService;
+import org.bookmark.pro.domain.model.AbstractTreeNodeModel;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.domain.model.GroupNodeModel;
 import org.bookmark.pro.service.tree.BookmarkTreeManage;
@@ -20,6 +23,7 @@ import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -46,6 +50,7 @@ public final class BookmarkTreeManager extends BookmarkMenus implements Bookmark
         addProjectNode(project, this.bookmarkTree, this.groupNavigator);
         // 添加Ctrl+F搜索功能
 //        addTreeSearch(this.bookmarkTree);
+        bookmarkTip(project, bookmarkTree);
         // 添加拖拽处理方案
         addDragHandler(this.bookmarkTree);
         // 书签图标渲染
@@ -222,6 +227,58 @@ public final class BookmarkTreeManager extends BookmarkMenus implements Bookmark
                 }
                 return this;
             }
+        });
+    }
+
+    private void bookmarkTip(Project project, BookmarkTree bookmarkTree) {
+        bookmarkTree.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                // Get the selected node
+                TreePath path = bookmarkTree.getPathForLocation(e.getX(), e.getY());
+                if (path != null) {
+                    // Show tooltip for the node
+                    showToolTip(getToolTipText(e), e);
+                } else {
+                    if (this.lastPopup != null) {
+                        lastPopup.cancel();
+                    }
+                }
+            }
+
+            private AbstractTreeNodeModel getToolTipText(MouseEvent e) {
+                TreePath path = bookmarkTree.getPathForLocation(e.getX(), e.getY());
+                if (path != null) {
+                    BookmarkTreeNode selectedNode = (BookmarkTreeNode) path.getLastPathComponent();
+                    if (selectedNode != null) {
+                        return (AbstractTreeNodeModel) selectedNode.getUserObject();
+                    }
+                }
+                return null;
+            }
+
+            private JBPopup lastPopup;
+            private AbstractTreeNodeModel lastAbstractTreeNodeModel;
+
+            private void showToolTip(AbstractTreeNodeModel abstractTreeNodeModel, MouseEvent e) {
+                if (abstractTreeNodeModel == null) {
+                    return;
+                }
+                if (lastAbstractTreeNodeModel == abstractTreeNodeModel) {
+                    return;
+                }
+                if (this.lastPopup != null) {
+                    lastPopup.cancel();
+                }
+                lastAbstractTreeNodeModel = abstractTreeNodeModel;
+
+                JBPopupFactory popupFactory = JBPopupFactory.getInstance();
+                lastPopup = popupFactory.createComponentPopupBuilder(new BookmarkTipPanel(lastAbstractTreeNodeModel), null).setFocusable(true).setResizable(true).setRequestFocus(true).createPopup();
+
+                Point adjustedLocation = new Point(e.getLocationOnScreen().x + 5, e.getLocationOnScreen().y + 10); // Adjust position
+                lastPopup.show(RelativePoint.fromScreen(adjustedLocation));
+            }
+
         });
     }
 
