@@ -10,6 +10,7 @@ import com.intellij.ui.EditorTextField;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.ui.JBDimension;
 import com.intellij.util.ui.JBUI;
+import org.bookmark.pro.base.I18N;
 import org.bookmark.pro.dialogs.modify.handler.BookmarkCreateHandler;
 import org.bookmark.pro.dialogs.modify.handler.BookmarkUpdateHandler;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
@@ -58,10 +59,10 @@ public class BookmarkEditDialog extends DialogWrapper {
         this.project = project;
         this.bookmarkLineNum = new JSpinner();
         if (createBookmark) {
-            setTitle("Create Bookmark");
+            setTitle(I18N.get("bookmark.windows.create"));
             this.bookmarkEditService = new BookmarkCreateHandler();
         } else {
-            setTitle("Edit Bookmark");
+            setTitle(I18N.get("bookmark.windows.edit"));
             this.bookmarkEditService = new BookmarkUpdateHandler();
         }
         init();
@@ -100,8 +101,8 @@ public class BookmarkEditDialog extends DialogWrapper {
 
     @Override
     protected JComponent createCenterPanel() {
-        tfName.setPlaceholder("Input bookmark text");
-        tfDesc.setPlaceholder("Input bookmark description");
+        tfName.setPlaceholder(I18N.get("bookmark.windows.input.place.text"));
+        tfDesc.setPlaceholder(I18N.get("bookmark.windows.input.place.desc"));
         tfDesc.setOneLineMode(false);
         tfDesc.setBorder(JBUI.Borders.empty());
         // 设置必输项检查
@@ -111,7 +112,7 @@ public class BookmarkEditDialog extends DialogWrapper {
         constraints.insets = JBUI.insets(5);
 
         // 第一行第一列
-        JLabel lbName = new JLabel("Bookmark Name:");
+        JLabel lbName = new JLabel(I18N.get("bookmark.windows.name"));
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.weightx = 0;
@@ -126,7 +127,7 @@ public class BookmarkEditDialog extends DialogWrapper {
         panel.add(tfName, constraints);
 
         // 第二行第一列
-        JLabel lbDesc = new JLabel("Bookmark Description:");
+        JLabel lbDesc = new JLabel(I18N.get("bookmark.windows.desc"));
         constraints.gridx = 0;
         constraints.gridy = 1;
         constraints.weightx = 0;
@@ -150,7 +151,7 @@ public class BookmarkEditDialog extends DialogWrapper {
         panel.add(scrollPane, constraints);
 
         // 第三行 第一列
-        JLabel lineNumber = new JLabel("Bookmark Line Number:");
+        JLabel lineNumber = new JLabel(I18N.get("bookmark.windows.lineNum"));
         constraints.gridx = 0;
         constraints.gridy = 2;
         constraints.weightx = 0;

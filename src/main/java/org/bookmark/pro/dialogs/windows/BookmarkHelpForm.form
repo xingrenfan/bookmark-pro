@@ -33,7 +33,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="c42ec" class="javax.swing.JLabel">
+                  <component id="c42ec" class="javax.swing.JLabel" binding="addUpdate">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -66,7 +66,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="c769a" class="javax.swing.JLabel">
+                  <component id="c769a" class="javax.swing.JLabel" binding="delete">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -97,7 +97,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="a0025" class="javax.swing.JLabel">
+                  <component id="a0025" class="javax.swing.JLabel" binding="others">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -133,7 +133,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="7c167" class="javax.swing.JLabel">
+                  <component id="7c167" class="javax.swing.JLabel" binding="settings">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
