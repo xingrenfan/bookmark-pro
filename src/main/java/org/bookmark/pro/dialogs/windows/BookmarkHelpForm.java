@@ -1,6 +1,7 @@
 package org.bookmark.pro.dialogs.windows;
 
 import com.intellij.openapi.ui.DialogWrapper;
+import org.bookmark.pro.base.I18N;
 import org.bookmark.pro.constants.BookmarkProConstant;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,10 +14,18 @@ import java.net.URI;
 public class BookmarkHelpForm extends DialogWrapper {
     private JPanel mainPanel;
     private JLabel readme;
+    private JLabel settings;
+    private JLabel others;
+    private JLabel delete;
+    private JLabel addUpdate;
 
     public BookmarkHelpForm() {
         super(true); // use current window as parent
         setTitle("bookmark Helper");
+        settings.setText(I18N.get("help.settings"));
+        others.setText(I18N.get("help.others"));
+        delete.setText(I18N.get("help.delete"));
+        addUpdate.setText(I18N.get("help.addUpdate"));
         init();
     }
 
