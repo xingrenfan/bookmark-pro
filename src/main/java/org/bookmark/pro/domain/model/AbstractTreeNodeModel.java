@@ -8,13 +8,15 @@ package org.bookmark.pro.domain.model;
  */
 public interface AbstractTreeNodeModel {
 
-    public boolean isBookmark();
+    String getDesc();
 
-    public boolean isGroup();
+    boolean isBookmark();
 
-    public String getName();
+    boolean isGroup();
 
-    public String getUuid();
+    String getName();
 
-    public String toString();
+    String getUuid();
+
+    String toString();
 }

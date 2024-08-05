@@ -27,6 +27,11 @@ public class GroupNodeModel implements AbstractTreeNodeModel {
     }
 
     @Override
+    public String getDesc() {
+        return "";
+    }
+
+    @Override
     public boolean isBookmark() {
         return false;
     }
