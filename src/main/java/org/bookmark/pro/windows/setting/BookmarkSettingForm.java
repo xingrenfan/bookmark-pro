@@ -1,4 +1,4 @@
-package org.bookmark.pro.dialogs.setting;
+package org.bookmark.pro.windows.setting;
 
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;

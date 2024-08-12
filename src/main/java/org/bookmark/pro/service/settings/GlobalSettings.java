@@ -1,11 +1,11 @@
-package org.bookmark.pro.service.persistence.settings;
+package org.bookmark.pro.service.settings;
 
 import com.intellij.ide.util.PropertiesComponent;
+import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.base.I18N;
 import org.bookmark.pro.constants.BookmarkProConstant;
 import org.bookmark.pro.constants.BookmarkProIcon;
-import org.bookmark.pro.utils.BookmarkProUtil;
-import org.bookmark.pro.utils.CharacterUtil;
+import org.bookmark.pro.utils.BookmarkUtil;
 
 import java.awt.*;
 import java.util.Objects;
@@ -77,7 +77,7 @@ class GlobalSettings extends BaseSetting {
     }
 
     public Color getPrefixColor() {
-        return BookmarkProUtil.getFontColor(Objects.toString(properties.getValue(BookmarkProConstant.BOOKMARK_PREFIX_COLOR), "128,128,128,255"));
+        return BookmarkUtil.getFontColor(Objects.toString(properties.getValue(BookmarkProConstant.BOOKMARK_PREFIX_COLOR), "128,128,128,255"));
     }
 
     public void setPrefixColor(Color color) {
@@ -87,7 +87,7 @@ class GlobalSettings extends BaseSetting {
     }
 
     public Color getSeparatorColor() {
-        return BookmarkProUtil.getFontColor(Objects.toString(properties.getValue(BookmarkProConstant.BOOKMARK_SEPARATOR_COLOR), "128,128,128,255"));
+        return BookmarkUtil.getFontColor(Objects.toString(properties.getValue(BookmarkProConstant.BOOKMARK_SEPARATOR_COLOR), "128,128,128,255"));
     }
 
     public void setSeparatorColor(Color color) {
@@ -97,7 +97,7 @@ class GlobalSettings extends BaseSetting {
     }
 
     public Color getContentColor() {
-        return BookmarkProUtil.getFontColor(Objects.toString(properties.getValue(BookmarkProConstant.BOOKMARK_CONTENT_COLOR), "153,153,255,255"));
+        return BookmarkUtil.getFontColor(Objects.toString(properties.getValue(BookmarkProConstant.BOOKMARK_CONTENT_COLOR), "153,153,255,255"));
     }
 
     public void setContentColor(Color color) {
@@ -116,7 +116,7 @@ class GlobalSettings extends BaseSetting {
 
     public boolean getLineDocument() {
         String lineDocument = properties.getValue(BookmarkProConstant.BOOKMARK_LINE_DOCUMENT);
-        if (CharacterUtil.isEmpty(lineDocument)) {
+        if (StringUtils.isBlank(lineDocument)) {
             return true;
         }
         return Boolean.valueOf(lineDocument);
@@ -124,7 +124,7 @@ class GlobalSettings extends BaseSetting {
 
     public boolean getAutoBackup() {
         String autoBackup = properties.getValue(BookmarkProConstant.BOOKMARK_AUTO_BACKUP);
-        if (CharacterUtil.isEmpty(autoBackup)) {
+        if (StringUtils.isEmpty(autoBackup)) {
             return false;
         }
         return Boolean.valueOf(autoBackup);

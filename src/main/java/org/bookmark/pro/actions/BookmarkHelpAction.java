@@ -3,7 +3,7 @@ package org.bookmark.pro.actions;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import org.bookmark.pro.dialogs.windows.BookmarkHelpForm;
+import org.bookmark.pro.windows.help.BookmarkHelpForm;
 import org.jetbrains.annotations.NotNull;
 
 /**

@@ -1,4 +1,4 @@
-package org.bookmark.pro.dialogs.modify;
+package org.bookmark.pro.windows.mark;
 
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
@@ -11,8 +11,8 @@ import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.ui.JBDimension;
 import com.intellij.util.ui.JBUI;
 import org.bookmark.pro.base.I18N;
-import org.bookmark.pro.dialogs.modify.handler.BookmarkCreateHandler;
-import org.bookmark.pro.dialogs.modify.handler.BookmarkUpdateHandler;
+import org.bookmark.pro.windows.mark.handler.BookmarkCreateHandler;
+import org.bookmark.pro.windows.mark.handler.BookmarkUpdateHandler;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;

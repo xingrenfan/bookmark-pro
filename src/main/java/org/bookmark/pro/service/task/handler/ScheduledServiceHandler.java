@@ -1,7 +1,7 @@
-package org.bookmark.pro.service.queue.handler;
+package org.bookmark.pro.service.task.handler;
 
 import com.intellij.openapi.components.Service;
-import org.bookmark.pro.service.queue.ScheduledService;
+import org.bookmark.pro.service.task.ScheduledService;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

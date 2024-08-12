@@ -10,11 +10,11 @@ import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import org.apache.commons.collections.CollectionUtils;
 import org.bookmark.pro.context.BookmarkRunService;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
-import org.bookmark.pro.utils.CollectionUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -46,7 +46,7 @@ public class BookmarkDocumentListener implements DocumentListener {
         try {
             // 查询文件中的书签
             Set<BookmarkTreeNode> bookmarkNodes = BookmarkRunService.getDocumentService(project).getBookmarkNodes(project, virtualFile);
-            if (CollectionUtil.isEmpty(bookmarkNodes)) {
+            if (CollectionUtils.isEmpty(bookmarkNodes)) {
                 // 空的直接返回
                 return;
             }

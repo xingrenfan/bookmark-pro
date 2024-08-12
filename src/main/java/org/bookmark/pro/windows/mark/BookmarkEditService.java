@@ -1,4 +1,4 @@
-package org.bookmark.pro.dialogs.modify;
+package org.bookmark.pro.windows.mark;
 
 import com.intellij.openapi.project.Project;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;

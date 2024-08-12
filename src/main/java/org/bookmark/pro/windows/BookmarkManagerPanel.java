@@ -1,9 +1,10 @@
-package org.bookmark.pro.dialogs;
+package org.bookmark.pro.windows;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.ui.JBUI;
+import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.base.I18N;
 import org.bookmark.pro.context.BookmarkRunService;
 import org.bookmark.pro.domain.BookmarkPro;
@@ -13,7 +14,6 @@ import org.bookmark.pro.service.persistence.PersistenceService;
 import org.bookmark.pro.service.tree.handler.BookmarkTree;
 import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
-import org.bookmark.pro.utils.CharacterUtil;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -98,7 +98,7 @@ public class BookmarkManagerPanel extends JPanel {
 
             private void filterTree() {
                 String filterText = searchField.getText();
-                if (CharacterUtil.isBlank(filterText)) {
+                if (StringUtils.isBlank(filterText)) {
                     reloadBookmarkTree(project, bookmarkTree);
                 } else {
                     new TreeLoadWorker(project, bookmarkTree, filterText, true).execute();
@@ -250,7 +250,7 @@ public class BookmarkManagerPanel extends JPanel {
                     BookmarkTreeNode selectedNode = (BookmarkTreeNode) bookmarkTree.getLastSelectedPathComponent();
                     if (selectedNode != null && selectedNode.isBookmark()) {
                         BookmarkNodeModel bookmark = (BookmarkNodeModel) selectedNode.getUserObject();
-                        jepDesc.setText(CharacterUtil.abbreviate(Objects.toString(bookmark.getDesc()), "...", BookmarkRunService.getBookmarkSettings().getTreePanelShowNum()));
+                        jepDesc.setText(StringUtils.abbreviate(Objects.toString(bookmark.getDesc()), "...", BookmarkRunService.getBookmarkSettings().getTreePanelShowNum()));
                     } else {
                         jepDesc.setText("");
                     }

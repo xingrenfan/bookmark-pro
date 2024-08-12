@@ -8,7 +8,6 @@ import com.intellij.openapi.ui.InputValidatorEx;
 import com.intellij.openapi.ui.Messages;
 import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.base.BaseExportService;
-import org.bookmark.pro.utils.CharacterUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -34,7 +33,7 @@ public final class BookmarkExportAction extends AnAction implements BaseExportSe
         }
         File backupRootFile = getRootPath(project);
         InputValidatorEx validatorEx = inputString -> {
-            if (CharacterUtil.isBlank(inputString)) return "Save file name is not empty.";
+            if (StringUtils.isBlank(inputString)) return "Save file name is not empty.";
             return null;
         };
         // 备份文件名

@@ -1,4 +1,4 @@
-package org.bookmark.pro.service.persistence.settings;
+package org.bookmark.pro.service.settings;
 
 import com.intellij.ide.util.PropertiesComponent;
 

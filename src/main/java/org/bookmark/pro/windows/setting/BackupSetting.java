@@ -1,4 +1,4 @@
-package org.bookmark.pro.dialogs.setting;
+package org.bookmark.pro.windows.setting;
 
 import org.bookmark.pro.context.BookmarkRunService;
 import org.bookmark.pro.utils.BookmarkEditorUtil;

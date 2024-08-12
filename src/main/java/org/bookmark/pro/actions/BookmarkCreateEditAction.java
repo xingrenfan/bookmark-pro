@@ -8,14 +8,14 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.constants.BookmarkProIcon;
 import org.bookmark.pro.context.BookmarkRunService;
-import org.bookmark.pro.dialogs.modify.BookmarkEditDialog;
+import org.bookmark.pro.windows.mark.BookmarkEditDialog;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.service.tree.BookmarkTreeManage;
 import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
-import org.bookmark.pro.utils.BookmarkProUtil;
-import org.bookmark.pro.utils.CharacterUtil;
+import org.bookmark.pro.utils.BookmarkUtil;
 import org.bookmark.pro.utils.SignatureUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -59,7 +59,7 @@ public class BookmarkCreateEditAction extends AnAction {
      */
     private void updateOneBookmark(Project project, Editor editor, BookmarkTreeNode treeNode, int markLine) {
         // 添加标记行的内容
-        String markLineContent = BookmarkProUtil.getAutoDescription(editor, markLine);
+        String markLineContent = BookmarkUtil.getAutoDescription(editor, markLine);
         // 原书签信息
         BookmarkNodeModel nodeModel = (BookmarkNodeModel) treeNode.getUserObject();
         // 书签管理器
@@ -75,7 +75,7 @@ public class BookmarkCreateEditAction extends AnAction {
                 nodeModel.setInvalid(false);
                 if (lineNum != markLine) {
                     // 再书签操作页更新过标记行，重新获取
-                    String markContent = BookmarkProUtil.getAutoDescription(editor, lineNum);
+                    String markContent = BookmarkUtil.getAutoDescription(editor, lineNum);
                     nodeModel.setMarkLineMd5(SignatureUtil.getMd5Digest(markContent));
                     nodeModel.setLine(lineNum);
                 }
@@ -99,7 +99,7 @@ public class BookmarkCreateEditAction extends AnAction {
                 nodeModel.setDesc(desc);
                 if (lineNum != markLine) {
                     // 再书签操作页更新过标记行，重新获取
-                    String markContent = BookmarkProUtil.getAutoDescription(editor, lineNum);
+                    String markContent = BookmarkUtil.getAutoDescription(editor, lineNum);
                     nodeModel.setMarkLineMd5(SignatureUtil.getMd5Digest(markContent));
                     nodeModel.setLine(lineNum);
                 } else {
@@ -137,12 +137,12 @@ public class BookmarkCreateEditAction extends AnAction {
         bookmarkModel.setUuid(UUID.randomUUID().toString());
         bookmarkModel.setLine(markLine);
         // 获取标记行内容
-        bookmarkModel.setMarkLineMd5(SignatureUtil.getMd5Digest(BookmarkProUtil.getAutoDescription(editor, markLine)));
+        bookmarkModel.setMarkLineMd5(SignatureUtil.getMd5Digest(BookmarkUtil.getAutoDescription(editor, markLine)));
         bookmarkModel.setInvalid(false);
         bookmarkModel.setColumn(column);
         // 设置书签标记文档
         bookmarkModel.setVirtualFile(file);
-        if (CharacterUtil.isEmpty(selectedText)) {
+        if (StringUtils.isNotBlank(selectedText)) {
             bookmarkModel.setDesc(selectedText);
         }
         bookmarkModel.setName(file.getName());
@@ -151,7 +151,7 @@ public class BookmarkCreateEditAction extends AnAction {
         new BookmarkEditDialog(project, true).defaultNode(bookmarkModel, getMaxLine(editor), true).showAndCallback((name, desc, lineNum, parentNode, enableGroup) -> {
             if (lineNum != markLine) {
                 // 再书签操作页更新过标记行，重新获取
-                String markContent = BookmarkProUtil.getAutoDescription(editor, lineNum);
+                String markContent = BookmarkUtil.getAutoDescription(editor, lineNum);
                 bookmarkModel.setMarkLineMd5(SignatureUtil.getMd5Digest(markContent));
                 bookmarkModel.setLine(lineNum);
             }

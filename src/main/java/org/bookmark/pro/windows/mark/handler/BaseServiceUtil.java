@@ -1,4 +1,4 @@
-package org.bookmark.pro.dialogs.modify.handler;
+package org.bookmark.pro.windows.mark.handler;
 
 import org.bookmark.pro.constants.BookmarkProConstant;
 import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;

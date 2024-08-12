@@ -1,4 +1,4 @@
-package org.bookmark.pro.dialogs.windows;
+package org.bookmark.pro.windows.help;
 
 import com.intellij.openapi.ui.DialogWrapper;
 import org.bookmark.pro.base.I18N;

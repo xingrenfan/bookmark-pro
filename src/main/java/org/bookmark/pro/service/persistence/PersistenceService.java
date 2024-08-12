@@ -12,8 +12,6 @@ import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
  * @date 2024/04/24
  */
 public interface PersistenceService {
-    Project getOpenProject();
-
     /**
      * 保存书签
      *

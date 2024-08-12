@@ -1,6 +1,6 @@
 package org.bookmark.pro.constants;
 
-import org.bookmark.pro.utils.BookmarkProUtil;
+import org.bookmark.pro.utils.BookmarkUtil;
 
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
@@ -94,16 +94,16 @@ public interface BookmarkProConstant {
     /**
      * 警告颜色 - 大红
      */
-    Color WARNING_COLOR = BookmarkProUtil.getFontColor("255,0,0,255");
+    Color WARNING_COLOR = BookmarkUtil.getFontColor("255,0,0,255");
 
     /**
      * 提示颜色 - 黄色
      */
-    Color CUE_COLOR = BookmarkProUtil.getFontColor("255,233,150,255");
+    Color CUE_COLOR = BookmarkUtil.getFontColor("255,233,150,255");
 
 
     /**
      * 提示颜色 - 浅绿色
      */
-    Color GREEN_COLOR = BookmarkProUtil.getFontColor("162,198,167,255");
+    Color GREEN_COLOR = BookmarkUtil.getFontColor("162,198,167,255");
 }

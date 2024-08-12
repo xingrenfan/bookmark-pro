@@ -1,10 +1,9 @@
-package org.bookmark.pro.dialogs.setting;
+package org.bookmark.pro.windows.setting;
 
 import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.base.I18N;
 import org.bookmark.pro.context.BookmarkRunService;
 import org.bookmark.pro.utils.BookmarkEditorUtil;
-import org.bookmark.pro.utils.CharacterUtil;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -43,7 +42,7 @@ public class GeneralSettings {
         String bookmarkPrefix = BookmarkRunService.getBookmarkSettings().getPrefix();
         markLabSel.setText(bookmarkPrefix);
         // 分隔符
-        if (CharacterUtil.isEmpty(bookmarkPrefix)) {
+        if (StringUtils.isBlank(bookmarkPrefix)) {
             separatorSel.setText(" ");
         } else {
             separatorSel.setText(" : ");
@@ -65,7 +64,7 @@ public class GeneralSettings {
             void updatePreview() {
                 // 分隔符
                 String prefix = markText.getText();
-                if (CharacterUtil.isEmpty(prefix)) {
+                if (StringUtils.isEmpty(prefix)) {
                     separatorSel.setText(" ");
                 } else {
                     separatorSel.setText(" : ");

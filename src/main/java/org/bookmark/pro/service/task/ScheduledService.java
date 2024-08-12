@@ -1,4 +1,4 @@
-package org.bookmark.pro.service.queue;
+package org.bookmark.pro.service.task;
 
 /**
  * 书签工程定时服务

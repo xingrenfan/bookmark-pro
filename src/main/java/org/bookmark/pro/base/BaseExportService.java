@@ -6,10 +6,10 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.constants.BookmarkProIcon;
 import org.bookmark.pro.context.BookmarkRunService;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
-import org.bookmark.pro.utils.CharacterUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -33,7 +33,7 @@ public interface BaseExportService {
     }
 
     default String getRoot(Project project) {
-        if (CharacterUtil.isBlank(BookmarkRunService.getBookmarkSettings().getBackUp())) {
+        if (StringUtils.isBlank(BookmarkRunService.getBookmarkSettings().getBackUp())) {
             // 项目跟目录
             String backupRoot = FileUtil.toSystemIndependentName(Objects.requireNonNull(project.getBasePath())) + File.separator + "BookmarkBackup";
             BookmarkRunService.getBookmarkSettings().setBackUP(backupRoot);

@@ -11,7 +11,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import org.bookmark.pro.context.BookmarkRunService;
 import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
-import org.bookmark.pro.utils.BookmarkProUtil;
+import org.bookmark.pro.utils.BookmarkUtil;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -35,9 +35,6 @@ public class BookmarkDeleteAction extends AnAction {
         CaretModel caretModel = editor.getCaretModel();
         // 获取添加标记的行号
         int line = caretModel.getLogicalPosition().line;
-        // 添加标记行的内容
-        String markLineContent = BookmarkProUtil.getAutoDescription(editor, line);
-        // TODO 是否要判断MD5值信息
         BookmarkTreeNode bookmarkNode = BookmarkRunService.getDocumentService(project).getBookmarkNode(project, file, line);
         if (bookmarkNode != null) {
             BookmarkRunService.getBookmarkManage(project).removeBookmarkNode(bookmarkNode);

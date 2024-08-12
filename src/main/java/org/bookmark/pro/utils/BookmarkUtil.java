@@ -22,8 +22,8 @@ import java.util.List;
  * @author Lyon
  * @date 2024/04/09
  */
-public class BookmarkProUtil {
-    private BookmarkProUtil() {
+public class BookmarkUtil {
+    private BookmarkUtil() {
     }
 
     /**
@@ -131,7 +131,7 @@ public class BookmarkProUtil {
         BookmarkTreeNode child;
         for (int i = 0; i < childCount; i++) {
             child = (BookmarkTreeNode) node.getChildAt(i);
-            children.add(BookmarkProUtil.nodeToBean(child));
+            children.add(BookmarkUtil.nodeToBean(child));
         }
         po.setChildren(children);
         return po;

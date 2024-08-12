@@ -1,9 +1,9 @@
-package org.bookmark.pro.dialogs.modify.handler;
+package org.bookmark.pro.windows.mark.handler;
 
 import com.intellij.openapi.project.Project;
 import org.bookmark.pro.context.BookmarkRunService;
-import org.bookmark.pro.dialogs.modify.BookmarkEditService;
-import org.bookmark.pro.dialogs.modify.BookmarkSelector;
+import org.bookmark.pro.windows.mark.BookmarkEditService;
+import org.bookmark.pro.windows.mark.BookmarkSelector;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.service.document.DocumentService;
 import org.bookmark.pro.service.tree.handler.BookmarkTree;

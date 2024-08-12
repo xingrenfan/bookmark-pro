@@ -5,12 +5,12 @@ import com.intellij.openapi.editor.LineExtensionInfo;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.constants.BookmarkProConstant;
 import org.bookmark.pro.constants.BookmarkProIcon;
 import org.bookmark.pro.context.BookmarkRunService;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
-import org.bookmark.pro.utils.CharacterUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,7 +41,7 @@ public class EditorFileLinePainter extends EditorLinePainter {
                 } else {
                     // 书签前缀信息
                     String bookmarkPrefix = BookmarkRunService.getBookmarkSettings().getPrefix();
-                    if (CharacterUtil.isNotEmpty(bookmarkPrefix)) {
+                    if (StringUtils.isNotBlank(bookmarkPrefix)) {
                         result.add(new LineExtensionInfo(BookmarkRunService.getBookmarkSettings().getPrefix(), new TextAttributes(null, null, BookmarkRunService.getBookmarkSettings().getPrefixColor(), null, Font.BOLD)));
                         result.add(new LineExtensionInfo(":", new TextAttributes(null, null, BookmarkRunService.getBookmarkSettings().getSeparatorColor(), null, Font.BOLD)));
                     }
@@ -62,12 +62,12 @@ public class EditorFileLinePainter extends EditorLinePainter {
      */
     private String getLineText(String name, String description) {
         String showMessage = "";
-        if (!CharacterUtil.isBlank(name)) {
+        if (StringUtils.isNotBlank(name)) {
             showMessage += name;
         }
-        if (!CharacterUtil.isBlank(showMessage) && !CharacterUtil.isBlank(description)) {
+        if (StringUtils.isNotBlank(showMessage) && StringUtils.isNotBlank(description)) {
             showMessage = showMessage + BookmarkProConstant.BOOKMARK_NAME_AND_DESC_SEPARATOR + description;
         }
-        return CharacterUtil.abbreviate(showMessage, "...", BookmarkRunService.getBookmarkSettings().getShowNum());
+        return StringUtils.abbreviate(showMessage, "...", BookmarkRunService.getBookmarkSettings().getShowNum());
     }
 }

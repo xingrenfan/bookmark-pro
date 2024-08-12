@@ -15,8 +15,7 @@ import org.bookmark.pro.service.tree.BookmarkTreeManage;
 import org.bookmark.pro.service.tree.handler.BookmarkTree;
 import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
-import org.bookmark.pro.utils.BookmarkProUtil;
-import org.bookmark.pro.utils.CharacterUtil;
+import org.bookmark.pro.utils.BookmarkUtil;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -30,10 +29,6 @@ public class PersistenceServiceHandler implements PersistenceService {
 
     public PersistenceServiceHandler(Project openProject) {
         this.openProject = openProject;
-    }
-
-    public Project getOpenProject() {
-        return openProject;
     }
 
     private <T> T getPersistentService(Project project, Class<T> clazz) {
@@ -50,7 +45,7 @@ public class PersistenceServiceHandler implements PersistenceService {
         }
         // 保存书签树
         BookmarkTreeNode rootNode = (BookmarkTreeNode) bookmarkTree.getModel().getRoot();
-        BookmarkPro bookmark = BookmarkProUtil.nodeToBean(rootNode);
+        BookmarkPro bookmark = BookmarkUtil.nodeToBean(rootNode);
         // 获取持久化书签对象
         PersistentService service = getPersistentService(project, PersistentService.class);
         service.setState(bookmark);
@@ -60,10 +55,10 @@ public class PersistenceServiceHandler implements PersistenceService {
     public boolean exportBookmark(Project project, String savePath) {
         // 获取持久化书签对象
         PersistentService service = getPersistentService(project, PersistentService.class);
-        BookmarkPro bookmarkPro = BookmarkProUtil.copyObject(service.getState(), BookmarkPro.class);
+        BookmarkPro bookmarkPro = BookmarkUtil.copyObject(service.getState(), BookmarkPro.class);
         // 替换IDEA编辑器的$PROJECT_DIR$
         String basePath = project.getBasePath();
-        if (CharacterUtil.isNotEmpty(basePath)) {
+        if (StringUtils.isNotBlank(basePath)) {
             String projectDir = FileUtil.toSystemIndependentName(basePath);
             replaceBookmarkPath(bookmarkPro, projectDir, "$PROJECT_DIR$");
         }
@@ -96,7 +91,7 @@ public class PersistenceServiceHandler implements PersistenceService {
             // TODO 导入备份文件这一行异常
             BookmarkPro bookmark = gson.fromJson(content, BookmarkPro.class);
             String basePath = project.getBasePath();
-            if (CharacterUtil.isNotEmpty(basePath)) {
+            if (StringUtils.isNotBlank(basePath)) {
                 String projectDir = FileUtil.toSystemIndependentName(basePath);
                 // 修复书签文件路径
                 replaceBookmarkPath(bookmark, "$PROJECT_DIR$", projectDir);

@@ -2,14 +2,14 @@ package org.bookmark.pro.context;
 
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.project.Project;
-import org.bookmark.pro.dialogs.BookmarkManagerPanel;
+import org.bookmark.pro.windows.BookmarkManagerPanel;
 import org.bookmark.pro.service.document.DocumentService;
 import org.bookmark.pro.service.document.handler.DocumentServiceHandler;
 import org.bookmark.pro.service.persistence.PersistenceService;
 import org.bookmark.pro.service.persistence.handler.PersistenceServiceHandler;
-import org.bookmark.pro.service.persistence.settings.BookmarkSettings;
-import org.bookmark.pro.service.queue.ScheduledService;
-import org.bookmark.pro.service.queue.handler.ScheduledServiceHandler;
+import org.bookmark.pro.service.settings.BookmarkSettings;
+import org.bookmark.pro.service.task.ScheduledService;
+import org.bookmark.pro.service.task.handler.ScheduledServiceHandler;
 import org.bookmark.pro.service.tree.BookmarkTreeManage;
 import org.bookmark.pro.service.tree.handler.BookmarkTreeManager;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;

@@ -15,7 +15,6 @@ import java.util.List;
 @XmlRootElement
 public class BookmarkPro {
     private String uuid;
-
     private int index;
     /**
      * 标记所在行
@@ -25,17 +24,14 @@ public class BookmarkPro {
      * 标记所在列
      */
     private int column;
-
     /**
      * 标记行内容 MD5值
      */
     private String markLineMd5;
-
     /**
      * 书签已失效
      */
     private Boolean invalid;
-
     /**
      * 描述
      */
@@ -45,14 +41,9 @@ public class BookmarkPro {
      */
     private String name;
     /**
-     * 图标路径
-     */
-    private String iconPath;
-    /**
      * 是书签
      */
     private boolean bookmark;
-
     /**
      * 是分组
      */
@@ -61,7 +52,6 @@ public class BookmarkPro {
      * 虚拟文件路径
      */
     private String virtualFilePath;
-
     /**
      * 子节点书签
      */
@@ -133,14 +123,6 @@ public class BookmarkPro {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getIconPath() {
-        return iconPath;
-    }
-
-    public void setIconPath(String iconPath) {
-        this.iconPath = iconPath;
     }
 
     public boolean isBookmark() {

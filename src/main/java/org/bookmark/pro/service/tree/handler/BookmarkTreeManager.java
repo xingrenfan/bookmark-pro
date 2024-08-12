@@ -14,7 +14,7 @@ import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.domain.model.GroupNodeModel;
 import org.bookmark.pro.service.tree.BookmarkTreeManage;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
-import org.bookmark.pro.utils.BookmarkProUtil;
+import org.bookmark.pro.utils.BookmarkUtil;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -198,7 +198,7 @@ public final class BookmarkTreeManager extends BookmarkMenus implements Bookmark
                         if (nodeModel.getInvalid()) {
                             // 无效书签 显示失效图标
                             setIcon(BookmarkProIcon.BOOKMARK_INVALID_ICON);
-                        } else if (nodeModel.getVirtualFile() != null && BookmarkProUtil.virtualFileExist(project, nodeModel.getVirtualFile())) {
+                        } else if (nodeModel.getVirtualFile() != null && BookmarkUtil.virtualFileExist(project, nodeModel.getVirtualFile())) {
                             // 虚拟文件有效 显示书签分组图标
                             setIcon(BookmarkProIcon.BOOKMARK_GROUP_ICON);
                         } else {
@@ -212,7 +212,7 @@ public final class BookmarkTreeManager extends BookmarkMenus implements Bookmark
                         if (nodeModel.getInvalid()) {
                             // 无效书签 显示失效图标
                             setIcon(BookmarkProIcon.BOOKMARK_INVALID_ICON);
-                        } else if (nodeModel.getVirtualFile() != null && BookmarkProUtil.virtualFileExist(project, nodeModel.getVirtualFile())) {
+                        } else if (nodeModel.getVirtualFile() != null && BookmarkUtil.virtualFileExist(project, nodeModel.getVirtualFile())) {
                             // 虚拟文件有效 显示书签图标
                             setIcon(BookmarkProIcon.BOOKMARK_ICON);
                         } else {
