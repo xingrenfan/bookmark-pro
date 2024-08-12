@@ -1,5 +1,7 @@
 package org.bookmark.pro.dialogs.setting;
 
+import org.apache.commons.lang3.StringUtils;
+import org.bookmark.pro.base.I18N;
 import org.bookmark.pro.context.BookmarkRunService;
 import org.bookmark.pro.utils.BookmarkEditorUtil;
 import org.bookmark.pro.utils.CharacterUtil;
@@ -15,12 +17,13 @@ public class GeneralSettings {
     protected JLabel noteLabSel;
     protected JLabel separatorSel;
     protected JSpinner maxCharNum;
-
     private JSpinner selectedShowNum;
-
     protected JCheckBox lineDocument;
 
-    public GeneralSettings(JTextField markText, JLabel markLabSel, JLabel noteLabSel, JLabel separatorSel, JSpinner maxCharNum, JCheckBox lineDocument, JSpinner selectedShowNum) {
+    private JLabel selectTips;
+    private JComboBox selectTipBox;
+
+    public GeneralSettings(JTextField markText, JLabel markLabSel, JLabel noteLabSel, JLabel separatorSel, JSpinner maxCharNum, JCheckBox lineDocument, JSpinner selectedShowNum, JLabel selectTips, JComboBox selectTipBox) {
         this.markText = markText;
         this.markLabSel = markLabSel;
         this.noteLabSel = noteLabSel;
@@ -28,6 +31,8 @@ public class GeneralSettings {
         this.selectedShowNum = selectedShowNum;
         this.maxCharNum = maxCharNum;
         this.lineDocument = lineDocument;
+        this.selectTips = selectTips;
+        this.selectTipBox = selectTipBox;
     }
 
     protected void initGeneralSettings() {
@@ -85,6 +90,16 @@ public class GeneralSettings {
         });
     }
 
+    private void initDefaultValue() {
+        selectTips.setText(I18N.get("setting.general.tipLabel"));
+        selectTipBox.addItem(I18N.get("setting.general.tipItem1"));
+        selectTipBox.addItem(I18N.get("setting.general.tipItem2"));
+        if (StringUtils.isNotBlank(BookmarkRunService.getBookmarkSettings().getTipType())) {
+            selectTipBox.setSelectedItem(BookmarkRunService.getBookmarkSettings().getTipType());
+        }
+
+    }
+
     /**
      * 行尾文档添加
      */
@@ -133,5 +148,7 @@ public class GeneralSettings {
         BookmarkRunService.getBookmarkSettings().setPrefix(markText.getText());
         // 行尾拓展器：在行尾显示书签内容
         BookmarkRunService.getBookmarkSettings().setLineDocument(lineDocument.isSelected());
+        // 选中提示样式
+        BookmarkRunService.getBookmarkSettings().setTipType(Objects.toString(selectTipBox.getSelectedItem()));
     }
 }

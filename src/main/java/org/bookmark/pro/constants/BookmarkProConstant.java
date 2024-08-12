@@ -77,6 +77,11 @@ public interface BookmarkProConstant {
     String BOOKMARK_LINE_DOCUMENT = "bookmark.pro:line:end:document";
 
     /**
+     * 书签选中 提示类型
+     */
+    String BOOKMARK_TIPS_TYPE = "bookmark.pro.tip.type";
+
+    /**
      * 节点数据风格
      */
     DataFlavor NODES_FLAVOR = new DataFlavor(int[].class, "Tree Rows");

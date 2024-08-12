@@ -5,6 +5,7 @@ import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.ui.awt.RelativePoint;
 import org.bookmark.pro.base.BookmarkTipPanel;
+import org.bookmark.pro.base.I18N;
 import org.bookmark.pro.constants.BookmarkProConstant;
 import org.bookmark.pro.constants.BookmarkProIcon;
 import org.bookmark.pro.context.BookmarkRunService;
@@ -231,55 +232,71 @@ public final class BookmarkTreeManager extends BookmarkMenus implements Bookmark
     }
 
     private void bookmarkTip(Project project, BookmarkTree bookmarkTree) {
-        bookmarkTree.addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                // Get the selected node
-                TreePath path = bookmarkTree.getPathForLocation(e.getX(), e.getY());
-                if (path != null) {
-                    // Show tooltip for the node
-                    showToolTip(getToolTipText(e), e);
-                } else {
+        if (I18N.get("setting.general.tipItem1").equals(BookmarkRunService.getBookmarkSettings().getTipType())){
+            bookmarkTree.addMouseMotionListener(new MouseMotionAdapter() {
+                @Override
+                public void mouseMoved(MouseEvent e) {
+                    // Get the selected node
+                    TreePath path = bookmarkTree.getPathForLocation(e.getX(), e.getY());
+                    if (path != null) {
+                        // Show tooltip for the node
+                        showToolTip(getToolTipText(e), e);
+                    } else {
+                        if (this.lastPopup != null) {
+                            lastPopup.cancel();
+                        }
+                    }
+                }
+
+                private AbstractTreeNodeModel getToolTipText(MouseEvent e) {
+                    TreePath path = bookmarkTree.getPathForLocation(e.getX(), e.getY());
+                    if (path != null) {
+                        BookmarkTreeNode selectedNode = (BookmarkTreeNode) path.getLastPathComponent();
+                        if (selectedNode != null) {
+                            return (AbstractTreeNodeModel) selectedNode.getUserObject();
+                        }
+                    }
+                    return null;
+                }
+
+                private JBPopup lastPopup;
+                private AbstractTreeNodeModel lastAbstractTreeNodeModel;
+
+                private void showToolTip(AbstractTreeNodeModel abstractTreeNodeModel, MouseEvent e) {
+                    if (abstractTreeNodeModel == null) {
+                        return;
+                    }
+                    if (lastAbstractTreeNodeModel == abstractTreeNodeModel) {
+                        return;
+                    }
                     if (this.lastPopup != null) {
                         lastPopup.cancel();
                     }
+                    lastAbstractTreeNodeModel = abstractTreeNodeModel;
+
+                    JBPopupFactory popupFactory = JBPopupFactory.getInstance();
+                    lastPopup = popupFactory.createComponentPopupBuilder(new BookmarkTipPanel(lastAbstractTreeNodeModel), null).setFocusable(true).setResizable(true).setRequestFocus(true).createPopup();
+
+                    Point adjustedLocation = new Point(e.getLocationOnScreen().x + 5, e.getLocationOnScreen().y + 10); // Adjust position
+                    lastPopup.show(RelativePoint.fromScreen(adjustedLocation));
                 }
-            }
-
-            private AbstractTreeNodeModel getToolTipText(MouseEvent e) {
-                TreePath path = bookmarkTree.getPathForLocation(e.getX(), e.getY());
-                if (path != null) {
-                    BookmarkTreeNode selectedNode = (BookmarkTreeNode) path.getLastPathComponent();
-                    if (selectedNode != null) {
-                        return (AbstractTreeNodeModel) selectedNode.getUserObject();
-                    }
-                }
-                return null;
-            }
-
-            private JBPopup lastPopup;
-            private AbstractTreeNodeModel lastAbstractTreeNodeModel;
-
-            private void showToolTip(AbstractTreeNodeModel abstractTreeNodeModel, MouseEvent e) {
-                if (abstractTreeNodeModel == null) {
+            });
+        } else {
+            // 书签选中监听
+            bookmarkTree.addTreeSelectionListener(event -> {
+                int selectionCount = bookmarkTree.getSelectionCount();
+                BookmarkTreeNode selectedNode = (BookmarkTreeNode) bookmarkTree.getLastSelectedPathComponent();
+                if (selectionCount != 1 || null == selectedNode) {
                     return;
                 }
-                if (lastAbstractTreeNodeModel == abstractTreeNodeModel) {
-                    return;
+
+                if (selectedNode.isGroup()) {
+                    this.groupNavigator.activeGroup(selectedNode);
+                } else {
+                    this.groupNavigator.activeBookmark(selectedNode);
                 }
-                if (this.lastPopup != null) {
-                    lastPopup.cancel();
-                }
-                lastAbstractTreeNodeModel = abstractTreeNodeModel;
-
-                JBPopupFactory popupFactory = JBPopupFactory.getInstance();
-                lastPopup = popupFactory.createComponentPopupBuilder(new BookmarkTipPanel(lastAbstractTreeNodeModel), null).setFocusable(true).setResizable(true).setRequestFocus(true).createPopup();
-
-                Point adjustedLocation = new Point(e.getLocationOnScreen().x + 5, e.getLocationOnScreen().y + 10); // Adjust position
-                lastPopup.show(RelativePoint.fromScreen(adjustedLocation));
-            }
-
-        });
+            });
+        }
     }
 
     /**
@@ -289,20 +306,6 @@ public final class BookmarkTreeManager extends BookmarkMenus implements Bookmark
      * @param bookmarkTree 书签树
      */
     private void addTreeListeners(Project project, BookmarkTree bookmarkTree) {
-        // 书签选中监听
-        bookmarkTree.addTreeSelectionListener(event -> {
-            int selectionCount = bookmarkTree.getSelectionCount();
-            BookmarkTreeNode selectedNode = (BookmarkTreeNode) bookmarkTree.getLastSelectedPathComponent();
-            if (selectionCount != 1 || null == selectedNode) {
-                return;
-            }
-
-            if (selectedNode.isGroup()) {
-                this.groupNavigator.activeGroup(selectedNode);
-            } else {
-                this.groupNavigator.activeBookmark(selectedNode);
-            }
-        });
         // 鼠标点击事件
         bookmarkTree.addMouseListener(new MouseAdapter() {
             @Override

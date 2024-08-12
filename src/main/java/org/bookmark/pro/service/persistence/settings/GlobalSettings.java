@@ -1,6 +1,7 @@
 package org.bookmark.pro.service.persistence.settings;
 
 import com.intellij.ide.util.PropertiesComponent;
+import org.bookmark.pro.base.I18N;
 import org.bookmark.pro.constants.BookmarkProConstant;
 import org.bookmark.pro.constants.BookmarkProIcon;
 import org.bookmark.pro.utils.BookmarkProUtil;
@@ -131,5 +132,13 @@ class GlobalSettings extends BaseSetting {
 
     public void setAutoBackup(boolean autoBackup) {
         properties.setValue(BookmarkProConstant.BOOKMARK_AUTO_BACKUP, autoBackup);
+    }
+
+    public void setTipType(String tipsType) {
+        properties.setValue(BookmarkProConstant.BOOKMARK_TIPS_TYPE, tipsType);
+    }
+
+    public String getTipType() {
+        return properties.getValue(BookmarkProConstant.BOOKMARK_TIPS_TYPE, I18N.get("setting.general.tipItem1"));
     }
 }

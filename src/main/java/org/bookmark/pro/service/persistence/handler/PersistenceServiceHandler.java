@@ -93,6 +93,7 @@ public class PersistenceServiceHandler implements PersistenceService {
             String content = new String(virtualFile.contentsToByteArray());
             // 字符串 转 书签对象
             Gson gson = new Gson();
+            // TODO 导入备份文件这一行异常
             BookmarkPro bookmark = gson.fromJson(content, BookmarkPro.class);
             String basePath = project.getBasePath();
             if (CharacterUtil.isNotEmpty(basePath)) {

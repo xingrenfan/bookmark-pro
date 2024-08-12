@@ -30,6 +30,8 @@ public class BookmarkSettingForm implements Configurable {
     private JTextField backUpPath;
     private JCheckBox autoBackup;
     private JSpinner backUpTime;
+    private JLabel selectTips;
+    private JComboBox selectTipBox;
 
     private GeneralSettings generalSettings;
     private BackupSetting backupSetting;
@@ -42,7 +44,8 @@ public class BookmarkSettingForm implements Configurable {
     @Override
     public @Nullable JComponent createComponent() {
         // 初始化全局设置
-        generalSettings = new GeneralSettings(markText, markLabSel, noteLabSel, separatorSel, maxCharNum, lineDocument, selectedShowNum);
+        generalSettings = new GeneralSettings(markText, markLabSel, noteLabSel, separatorSel, maxCharNum, lineDocument, selectedShowNum,
+                selectTips, selectTipBox);
         generalSettings.initGeneralSettings();
         backupSetting = new BackupSetting(mainPane, backupButton, backUpPath, autoBackup, backUpTime);
         backupSetting.initBackupSettings();
