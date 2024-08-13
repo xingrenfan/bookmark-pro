@@ -26,17 +26,12 @@ import java.util.stream.Collectors;
 
 @Service(Service.Level.PROJECT)
 public final class DocumentServiceHandler implements DocumentService {
-    // 书签缓存{UUID: BookmarkTreeNode}
-    protected final Map<String, BookmarkTreeNode> bookmarkNodeCache = new ConcurrentHashMap<>(64);
-
-    // 分组节点缓存{name:BookmarkTreeNode}
-    protected final Map<String, BookmarkTreeNode> groupNodeCache = new ConcurrentHashMap<>(64);
-
-    // BookmarkTreeNode 缓存: 通过 虚拟文件名 直接取到节点引用 {fileName: [UUID]}
-    protected final Map<String, Set<String>> bookmarkFileName = new HashMap<>(64);
+    private Map<Project, NodeCacheManage> nodeCacheManage = new ConcurrentHashMap<>(16);
 
     @Override
     public BookmarkTreeNode getBookmarkNode(Project project, VirtualFile virtualFile, int line) {
+        if (nodeCacheManage)
+
         String fileCanonicalPath = BookmarkUtil.virtualFileName(project, virtualFile);
         if (this.bookmarkFileName.containsKey(fileCanonicalPath)) {
             for (String uuid : this.bookmarkFileName.get(fileCanonicalPath)) {

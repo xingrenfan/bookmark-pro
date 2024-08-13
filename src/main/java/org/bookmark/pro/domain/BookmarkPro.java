@@ -14,7 +14,7 @@ import java.util.List;
  */
 @XmlRootElement
 public class BookmarkPro {
-    private String uuid;
+    private String commitHash;
     private int index;
     /**
      * 标记所在行
@@ -61,12 +61,12 @@ public class BookmarkPro {
         this.children = children;
     }
 
-    public String getUuid() {
-        return uuid;
+    public String getCommitHash() {
+        return commitHash;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public void setCommitHash(String commitHash) {
+        this.commitHash = commitHash;
     }
 
     public int getIndex() {
