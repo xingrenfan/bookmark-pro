@@ -58,7 +58,7 @@ public class BookmarkUpdateHandler extends BaseServiceUtil implements BookmarkEd
         DocumentService documentService = BookmarkRunService.getDocumentService(project);
         // 获取父级书签下拉选项书签
         JComboBox<BookmarkTreeNode> bookmarkType = new JComboBox<>();
-        BookmarkTreeNode treeNode = documentService.getBookmarkNode(node.getUuid());
+        BookmarkTreeNode treeNode = documentService.getBookmarkNode(project, node.getUuid());
         BookmarkTreeNode nodeModel = (BookmarkTreeNode) treeNode.getParent();
         // 查询所有书签和分组
         for (BookmarkTreeNode bookmarkTreeNode : documentService.getBookmarkGroup()) {

@@ -221,9 +221,6 @@ public class BookmarkManagerPanel extends JPanel {
                     // do nothing
                 }
 
-                /**
-                 * 持久性保存 TODO 待改成任务队列
-                 */
                 private void persistenceSave() {
                     new SwingWorker<Void, Void>() {
                         @Override
@@ -257,7 +254,6 @@ public class BookmarkManagerPanel extends JPanel {
                 });
                 treeLoaded = true;
                 if (enableSearch) {
-                    // 展开所有节点,这个有问题,展开之后又会自己关闭
                     expandAllNodes(bookmarkTree, 0, bookmarkTree.getRowCount());
                 }
             } catch (Exception e) {

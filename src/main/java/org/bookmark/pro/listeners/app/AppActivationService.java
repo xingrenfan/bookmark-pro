@@ -8,6 +8,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.StartupActivity;
 import org.bookmark.pro.constants.BookmarkProConstant;
 import org.bookmark.pro.constants.BookmarkProIcon;
+import org.bookmark.pro.context.BookmarkRunService;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +26,7 @@ public class AppActivationService implements StartupActivity {
     public void runActivity(@NotNull Project project) {
         // 插件启动通知
         startNotice(project);
-        new BackupScheduler(); // 启动定时备份任务
+        BookmarkRunService.getScheduledService(project).inspectionFileBookmark(); // 启动定时备份任务
     }
 
     /**

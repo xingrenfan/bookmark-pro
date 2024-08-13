@@ -12,7 +12,7 @@ public interface ScheduledService {
      *
      * @param delay 延迟
      */
-    void inspectionFileBookmark(long delay);
+    void inspectionFileBookmark();
 
     /**
      * 关闭

@@ -28,10 +28,11 @@ public interface DocumentService {
     /**
      * 根据书签UUID 获取书签节点
      *
-     * @param uuid UUID
+     * @param project
+     * @param uuid    UUID
      * @return {@link BookmarkTreeNode}
      */
-    BookmarkTreeNode getBookmarkNode(String uuid);
+    BookmarkTreeNode getBookmarkNode(Project project, String uuid);
 
     /**
      * 获取书签节点
@@ -61,9 +62,10 @@ public interface DocumentService {
     /**
      * 设置书签无效
      *
-     * @param uuid UUID
+     * @param project
+     * @param uuid    UUID
      */
-    void setBookmarkInvalid(String uuid);
+    void setBookmarkInvalid(Project project, String uuid);
 
     /**
      * 重新加载树节点

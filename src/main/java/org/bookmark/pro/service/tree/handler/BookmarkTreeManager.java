@@ -326,7 +326,7 @@ public final class BookmarkTreeManager extends BookmarkMenus implements Bookmark
                         } else {
                             // 双击不变更书签信息 否则会造成文件丢失的状态错误的显示成失效
                             // selectedNode.setInvalid(true);
-                            BookmarkRunService.getDocumentService(project).setBookmarkInvalid(bookmark.getUuid());
+                            BookmarkRunService.getDocumentService(project).setBookmarkInvalid(project, bookmark.getUuid());
                             BookmarkNoticeUtil.errorMessages(project, "Bookmark [" + bookmark.getName() + BookmarkProConstant.BOOKMARK_NAME_AND_DESC_SEPARATOR + bookmark.getDesc() + "] invalid");
                         }
                     }

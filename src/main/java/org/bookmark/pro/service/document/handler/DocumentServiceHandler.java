@@ -51,7 +51,7 @@ public final class DocumentServiceHandler implements DocumentService {
     }
 
     @Override
-    public BookmarkTreeNode getBookmarkNode(String uuid) {
+    public BookmarkTreeNode getBookmarkNode(Project project, String uuid) {
         return this.bookmarkNodeCache.get(uuid);
     }
 
@@ -141,7 +141,7 @@ public final class DocumentServiceHandler implements DocumentService {
     }
 
     @Override
-    public void setBookmarkInvalid(String uuid) {
+    public void setBookmarkInvalid(Project project, String uuid) {
         BookmarkTreeNode bookmarkExist = this.bookmarkNodeCache.get(uuid);
         if (bookmarkExist != null) {
             bookmarkExist.setInvalid(true);
