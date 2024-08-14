@@ -14,12 +14,12 @@ import org.jetbrains.annotations.NotNull;
  * @date 2023/6/5
  */
 @State(name = "SuperBookmarkState", storages = {@Storage("SuperBookmarkState.xml")})
-public class PersistentService implements PersistentStateComponent<BookmarkPro> {
+public class PersistComponent implements PersistentStateComponent<BookmarkPro> {
     private BookmarkPro state;
 
     private final Project project;
 
-    public PersistentService(Project project) {
+    public PersistComponent(Project project) {
         this.project = project;
     }
 

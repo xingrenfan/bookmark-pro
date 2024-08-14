@@ -3,10 +3,10 @@ package org.bookmark.pro.context;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.project.Project;
 import org.bookmark.pro.service.document.DocumentService;
-import org.bookmark.pro.service.document.handler.DocumentServiceHandler;
+import org.bookmark.pro.service.document.handler.DocumentServiceImpl;
 import org.bookmark.pro.service.settings.BookmarkSettings;
 import org.bookmark.pro.service.task.ScheduledService;
-import org.bookmark.pro.service.task.handler.ScheduledServiceHandler;
+import org.bookmark.pro.service.task.handler.ScheduledServiceImpl;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -54,10 +54,10 @@ public class AppProjectManage {
     }
 
     public static DocumentService getDocumentService(Project project) {
-        return getInstance(project, DocumentServiceHandler.class);
+        return getInstance(project, DocumentServiceImpl.class);
     }
 
     public static ScheduledService getScheduledService(Project project) {
-        return getInstance(project, ScheduledServiceHandler.class);
+        return getInstance(project, ScheduledServiceImpl.class);
     }
 }

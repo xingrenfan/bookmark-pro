@@ -42,17 +42,21 @@
         <applicationConfigurable instance="org.bookmark.pro.windows.setting.BookmarkSettingForm" id="bookmark.pro.config" displayName="Bookmark Pro"/>
         <!-- 左边栏设置锚点，展示窗口 -->
         <toolWindow id="Bookmark-Pro" anchor="right" icon="/icons/bookmark.svg" factoryClass="org.bookmark.pro.extensions.BookmarkWindowFactory" secondary="true"/>
-        <!-- 书签持久化 -->
-        <projectService serviceImplementation="org.bookmark.pro.service.persistence.handler.PersistentService"/>
         <!--行尾拓展：显示书签名称-->
         <editor.linePainter implementation="org.bookmark.pro.extensions.EditorFileLinePainter"/>
         <!-- 文件变化监听器 -->
         <editorFactoryDocumentListener implementation="org.bookmark.pro.listeners.BookmarkDocumentListener"/>
-        <!-- 标签 -->
-        <!--<codeInsight.lineMarkerProvider language="JAVA" implementationClass="extensions.org.bookmark.pro.BookmarkLineProvider"/>
-        <codeInsight.lineMarkerProvider language="XML" implementationClass="extensions.org.bookmark.pro.BookmarkLineProvider"/>-->
-        <!--<codeInsight.lineMarkerProvider language="JAVA" implementationClass="org.eric.bookmark.extensions.BookmarkProProvider"/>
-        <codeInsight.lineMarkerProvider language="XML" implementationClass="org.eric.bookmark.extensions.BookmarkProProvider"/>-->
+        <!-- 书签持久化 -->
+        <projectService serviceImplementation="org.bookmark.pro.service.persistence.handler.PersistComponent"/>
+        <projectService serviceInterface="org.bookmark.pro.service.persistence.PersistenceService" serviceImplementation="org.bookmark.pro.service.persistence.handler.PersistServiceImpl"/>
+        <!-- 缓存 -->
+        <projectService serviceInterface="org.bookmark.pro.service.document.DocumentService" serviceImplementation="org.bookmark.pro.service.document.handler.DocumentServiceImpl"/>
+        <!-- 配置 -->
+        <applicationService serviceImplementation="org.bookmark.pro.service.settings.GlobalSettings"/>
+        <applicationService serviceImplementation="org.bookmark.pro.service.settings.BackupSettings"/>
+        <!-- 任务 -->
+        <applicationService serviceInterface="org.bookmark.pro.service.task.ScheduledService" serviceImplementation="org.bookmark.pro.service.task.handler.ScheduledServiceImpl"/>
+
     </extensions>
 
     <applicationListeners>

@@ -4,12 +4,12 @@ import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.project.Project;
 import org.bookmark.pro.windows.BookmarkManagerPanel;
 import org.bookmark.pro.service.document.DocumentService;
-import org.bookmark.pro.service.document.handler.DocumentServiceHandler;
+import org.bookmark.pro.service.document.handler.DocumentServiceImpl;
 import org.bookmark.pro.service.persistence.PersistenceService;
-import org.bookmark.pro.service.persistence.handler.PersistenceServiceHandler;
+import org.bookmark.pro.service.persistence.handler.PersistServiceImpl;
 import org.bookmark.pro.service.settings.BookmarkSettings;
 import org.bookmark.pro.service.task.ScheduledService;
-import org.bookmark.pro.service.task.handler.ScheduledServiceHandler;
+import org.bookmark.pro.service.task.handler.ScheduledServiceImpl;
 import org.bookmark.pro.service.tree.BookmarkTreeManage;
 import org.bookmark.pro.service.tree.handler.BookmarkTreeManager;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
@@ -123,7 +123,7 @@ public class BookmarkRunService {
         if (! persistenceServiceMap.containsKey(project)) {
             if (FAIR_LOCKS.tryLock()) {
                 try {
-                    persistenceServiceMap.put(project, new PersistenceServiceHandler(project));
+                    persistenceServiceMap.put(project, new PersistServiceImpl(project));
                 } catch (Exception e) {
                     BookmarkNoticeUtil.errorMessages(project, "Bookmark persistence service initialization failed. message:" + e.getMessage());
                 } finally {
@@ -140,10 +140,10 @@ public class BookmarkRunService {
      * @return {@link DocumentService}
      */
     public static DocumentService getDocumentService(Project project) {
-        return getInstance(project, DocumentServiceHandler.class);
+        return getInstance(project, DocumentServiceImpl.class);
     }
 
     public static ScheduledService getScheduledService(Project project) {
-        return getInstance(project, ScheduledServiceHandler.class);
+        return getInstance(project, ScheduledServiceImpl.class);
     }
 }

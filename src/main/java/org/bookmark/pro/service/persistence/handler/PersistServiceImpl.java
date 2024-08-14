@@ -1,7 +1,6 @@
 package org.bookmark.pro.service.persistence.handler;
 
 import com.google.gson.Gson;
-import com.intellij.openapi.components.Service;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -25,14 +24,13 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-@Service(Service.Level.PROJECT)
-public final class PersistenceServiceHandler implements PersistenceService {
-    private Project openProject;
-
-    public PersistenceServiceHandler(Project openProject) {
-        this.openProject = openProject;
-    }
-
+/**
+ * 持久化服务实现程序
+ *
+ * @author Lyon
+ * @date 2024/08/14
+ */
+public final class PersistServiceImpl implements PersistenceService {
     private <T> T getPersistentService(Project project, Class<T> clazz) {
         return project.getService(clazz);
     }
@@ -49,14 +47,14 @@ public final class PersistenceServiceHandler implements PersistenceService {
         BookmarkTreeNode rootNode = (BookmarkTreeNode) bookmarkTree.getModel().getRoot();
         BookmarkPro bookmark = BookmarkUtil.nodeToBean(rootNode);
         // 获取持久化书签对象
-        PersistentService service = getPersistentService(project, PersistentService.class);
+        PersistComponent service = getPersistentService(project, PersistComponent.class);
         service.setState(bookmark);
     }
 
     @Override
     public boolean exportBookmark(Project project, String savePath) {
         // 获取持久化书签对象
-        PersistentService service = getPersistentService(project, PersistentService.class);
+        PersistComponent service = getPersistentService(project, PersistComponent.class);
         BookmarkPro bookmarkPro = BookmarkUtil.copyObject(service.getState(), BookmarkPro.class);
         // 替换IDEA编辑器的$PROJECT_DIR$
         String basePath = project.getBasePath();
@@ -99,7 +97,7 @@ public final class PersistenceServiceHandler implements PersistenceService {
                 replaceBookmarkPath(bookmark, "$PROJECT_DIR$", projectDir);
             }
             // 获取持久化书签对象
-            PersistentService service = getPersistentService(project, PersistentService.class);
+            PersistComponent service = getPersistentService(project, PersistComponent.class);
             service.setState(bookmark);
             // 重新加载标签书
             BookmarkRunService.getBookmarkManagerPanel(project).reloadBookmarkTree(project, BookmarkRunService.getBookmarkManage(project).getBookmarkTree());
@@ -178,8 +176,7 @@ public final class PersistenceServiceHandler implements PersistenceService {
         }
 
         // 判断当前节点是否匹配搜索文本
-        boolean isParentMatched = pattern.matcher(bookmark.getName()).find() ||
-                (bookmark.getDesc() != null && pattern.matcher(bookmark.getDesc()).find());
+        boolean isParentMatched = pattern.matcher(bookmark.getName()).find() || (bookmark.getDesc() != null && pattern.matcher(bookmark.getDesc()).find());
 
         List<BookmarkPro> childrenBookmarks = bookmark.getChildren();
         if (CollectionUtils.isEmpty(childrenBookmarks)) {
@@ -228,21 +225,21 @@ public final class PersistenceServiceHandler implements PersistenceService {
 
     @Override
     public void addOneBookmark(Project project, BookmarkPro bookmark) {
-        PersistentService service = getPersistentService(project, PersistentService.class);
+        PersistComponent service = getPersistentService(project, PersistComponent.class);
         // 添加书签对象
         service.getState().getChildren().add(bookmark);
     }
 
     @Override
     public BookmarkTreeNode getBookmarkNode(Project project) {
-        PersistentService service = getPersistentService(project, PersistentService.class);
+        PersistComponent service = getPersistentService(project, PersistComponent.class);
         return generateTreeNode(project, service.getState());
     }
 
 
     @Override
     public BookmarkTreeNode getBookmarkNodeSearch(Project project, String searchText) {
-        PersistentService service = getPersistentService(project, PersistentService.class);
+        PersistComponent service = getPersistentService(project, PersistComponent.class);
         return generateTreeNodeSearch(project, service.getState(), searchText);
     }
 }

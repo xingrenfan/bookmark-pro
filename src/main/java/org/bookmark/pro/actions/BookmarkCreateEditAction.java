@@ -14,6 +14,7 @@ import org.bookmark.pro.context.AppRunContext;
 import org.bookmark.pro.context.BookmarkRunService;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.service.document.DocumentService;
+import org.bookmark.pro.service.document.handler.DocumentServiceImpl;
 import org.bookmark.pro.service.tree.BookmarkTreeManage;
 import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
 import org.bookmark.pro.utils.BookmarkUtil;
@@ -42,7 +43,7 @@ public class BookmarkCreateEditAction extends AnAction {
         CaretModel caretModel = editor.getCaretModel();
         // 获取添加标记的行号
         int markLine = caretModel.getLogicalPosition().line;
-        BookmarkTreeNode treeNode = AppRunContext.getServiceImpl(project, DocumentService.class).getBookmarkNode(file, markLine);
+        BookmarkTreeNode treeNode = AppRunContext.getServiceImpl(project, DocumentServiceImpl.class).getBookmarkNode(file, markLine);
         if (treeNode != null) {
             updateOneBookmark(project, editor, treeNode, markLine);
         } else {

@@ -1,6 +1,5 @@
 package org.bookmark.pro.service.document.handler;
 
-import com.intellij.openapi.components.Service;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -23,9 +22,14 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-@Service(Service.Level.PROJECT)
-public final class DocumentServiceHandler implements DocumentService {
-    private static final Logger LOG = Logger.getInstance(DocumentServiceHandler.class);
+/**
+ * 文档缓存服务实现
+ *
+ * @author Lyon
+ * @date 2024/08/14
+ */
+public final class DocumentServiceImpl implements DocumentService {
+    private static final Logger LOG = Logger.getInstance(DocumentServiceImpl.class);
     // 书签缓存{commitHash: BookmarkTreeNode}
     private final Map<String, BookmarkTreeNode> bookmarkHashCache = new ConcurrentHashMap<>(64);
 
@@ -35,7 +39,7 @@ public final class DocumentServiceHandler implements DocumentService {
     // BookmarkTreeNode 缓存: 通过 虚拟文件名 直接取到节点引用 {VirtualFileHash: [UUID]}
     private final Map<Integer, Set<BookmarkTreeNode>> virtualFileCache = new HashMap<>(64);
 
-    public DocumentServiceHandler(Project project) {
+    public DocumentServiceImpl(Project project) {
         LOG.debug("Load bookmark node cache message. project:{}", project.getName());
     }
 

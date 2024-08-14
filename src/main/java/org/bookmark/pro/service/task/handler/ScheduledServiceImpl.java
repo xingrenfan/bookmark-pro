@@ -16,8 +16,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-@Service(Service.Level.PROJECT)
-public final class ScheduledServiceHandler implements ScheduledService, BaseExportService {
+public final class ScheduledServiceImpl implements ScheduledService, BaseExportService {
     private ScheduledExecutorService scheduler;
 
     @Override

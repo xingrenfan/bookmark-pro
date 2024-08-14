@@ -1,5 +1,7 @@
 package org.bookmark.pro.context;
 
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.components.ComponentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 
@@ -18,7 +20,9 @@ public class AppRunContext {
         return service;
     }
 
-    public static <T> T getAppService(Class<T> serviceType) {
+    public static <T> T getAppService(Class<?> serviceType) {
+        return ComponentManager.getService(serviceType);
+
         return getServiceImpl(ProjectManager.getInstance().getDefaultProject(), serviceType);
     }
 }
