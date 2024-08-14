@@ -39,7 +39,7 @@
         <!-- 激活监听器 -->
         <postStartupActivity implementation="org.bookmark.pro.listeners.app.AppActivationService"/>
         <!-- 配置 -->
-        <applicationConfigurable instance="org.bookmark.pro.windows.setting.BookmarkSettingForm" id="bookmark.pro.config" displayName="Bookmark Pro"/>
+        <applicationConfigurable instance="org.bookmark.pro.windows.setting.BookmarkSettingForm" id="bookmark.pro.config" displayName="BookmarkPro"/>
         <!-- 左边栏设置锚点，展示窗口 -->
         <toolWindow id="Bookmark-Pro" anchor="right" icon="/icons/bookmark.svg" factoryClass="org.bookmark.pro.extensions.BookmarkWindowFactory" secondary="true"/>
         <!--行尾拓展：显示书签名称-->
@@ -56,7 +56,6 @@
         <applicationService serviceImplementation="org.bookmark.pro.service.settings.BackupSettings"/>
         <!-- 任务 -->
         <applicationService serviceInterface="org.bookmark.pro.service.task.ScheduledService" serviceImplementation="org.bookmark.pro.service.task.handler.ScheduledServiceImpl"/>
-
     </extensions>
 
     <applicationListeners>

@@ -1,6 +1,5 @@
 package org.bookmark.pro.service.task.handler;
 
-import com.intellij.openapi.components.Service;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import org.bookmark.pro.base.BaseExportService;
@@ -16,6 +15,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 计划服务实施
+ *
+ * @author Lyon
+ * @date 2024/08/14
+ */
 public final class ScheduledServiceImpl implements ScheduledService, BaseExportService {
     private ScheduledExecutorService scheduler;
 
