@@ -7,8 +7,10 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.bookmark.pro.constants.BookmarkProIcon;
+import org.bookmark.pro.constants.BookmarkIcons;
+import org.bookmark.pro.context.AppRunContext;
 import org.bookmark.pro.context.BookmarkRunService;
+import org.bookmark.pro.service.settings.BackupSettings;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,14 +35,15 @@ public interface BaseExportService {
     }
 
     default String getRoot(Project project) {
-        if (StringUtils.isBlank(BookmarkRunService.getBookmarkSettings().getBackUp())) {
+        BackupSettings backupSettings = AppRunContext.getAppService(BackupSettings.class);
+        if (StringUtils.isBlank(backupSettings.getBackUp())) {
             // 项目跟目录
             String backupRoot = FileUtil.toSystemIndependentName(Objects.requireNonNull(project.getBasePath())) + File.separator + "BookmarkBackup";
-            BookmarkRunService.getBookmarkSettings().setBackUP(backupRoot);
+            backupSettings.setBackUP(backupRoot);
             return backupRoot;
         } else {
             // 用户自定义路径
-            return BookmarkRunService.getBookmarkSettings().getBackUp();
+            return backupSettings.getBackUp();
         }
     }
 
@@ -65,7 +68,7 @@ public interface BaseExportService {
         if (!BookmarkRunService.getPersistenceService(project).exportBookmark(project, backupFile)) {
             return;
         }
-        AnAction openExportFile = new NotificationAction(BookmarkProIcon.EYE_SIGN + "ViewFile") {
+        AnAction openExportFile = new NotificationAction(BookmarkIcons.EYE_SIGN + "ViewFile") {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e, @NotNull Notification notification) {
                 try {

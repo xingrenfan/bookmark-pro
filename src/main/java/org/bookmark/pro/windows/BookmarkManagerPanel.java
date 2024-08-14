@@ -6,11 +6,14 @@ import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.ui.JBUI;
 import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.base.I18N;
+import org.bookmark.pro.context.AppRunContext;
 import org.bookmark.pro.context.BookmarkRunService;
 import org.bookmark.pro.domain.BookmarkPro;
 import org.bookmark.pro.domain.model.BookmarkConverter;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
+import org.bookmark.pro.service.document.DocumentService;
 import org.bookmark.pro.service.persistence.PersistenceService;
+import org.bookmark.pro.service.settings.GlobalSettings;
 import org.bookmark.pro.service.tree.handler.BookmarkTree;
 import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
@@ -107,10 +110,6 @@ public class BookmarkManagerPanel extends JPanel {
         });
     }
 
-    public Project getOpenProject() {
-        return openProject;
-    }
-
     /**
      * 重新加载书签树
      *
@@ -165,7 +164,7 @@ public class BookmarkManagerPanel extends JPanel {
         }
         bookmarkModel.setIndex(treeNode.getParent().getIndex(treeNode));
         // 添加书签到缓存
-        BookmarkRunService.getDocumentService(project).addBookmarkNode(project, treeNode);
+        AppRunContext.getServiceImpl(project, DocumentService.class).addBookmarkNode(treeNode);
     }
 
     public class TreeLoadWorker extends SwingWorker<DefaultTreeModel, Void> {
@@ -241,17 +240,20 @@ public class BookmarkManagerPanel extends JPanel {
                 TreeNode treeNode = (TreeNode) treeModel.getRoot();
                 treeModel.nodeStructureChanged(treeNode);
                 // 初始化加载数据到缓存
-                BookmarkRunService.getDocumentService(project).reloadingCacheNode(project, treeNode);
+                AppRunContext.getServiceImpl(project, DocumentService.class).reloadingCacheNode(treeNode);
                 // 书签选中之后显示内容
-                this.bookmarkTree.addTreeSelectionListener(event -> {
-                    BookmarkTreeNode selectedNode = (BookmarkTreeNode) bookmarkTree.getLastSelectedPathComponent();
-                    if (selectedNode != null && selectedNode.isBookmark()) {
-                        BookmarkNodeModel bookmark = (BookmarkNodeModel) selectedNode.getUserObject();
-                        jepDesc.setText(StringUtils.abbreviate(Objects.toString(bookmark.getDesc()), "...", BookmarkRunService.getBookmarkSettings().getTreePanelShowNum()));
-                    } else {
-                        jepDesc.setText("");
-                    }
-                });
+                GlobalSettings globalSettings = AppRunContext.getServiceImpl(project, GlobalSettings.class);
+                if (I18N.get("setting.general.tipItem2").equals(globalSettings.getTipType())) {
+                    this.bookmarkTree.addTreeSelectionListener(event -> {
+                        BookmarkTreeNode selectedNode = (BookmarkTreeNode) bookmarkTree.getLastSelectedPathComponent();
+                        if (selectedNode != null && selectedNode.isBookmark()) {
+                            BookmarkNodeModel bookmark = (BookmarkNodeModel) selectedNode.getUserObject();
+                            jepDesc.setText(StringUtils.abbreviate(Objects.toString(bookmark.getDesc()), "...", globalSettings.getTreePanelShowNum()));
+                        } else {
+                            jepDesc.setText("");
+                        }
+                    });
+                }
                 treeLoaded = true;
                 if (enableSearch) {
                     expandAllNodes(bookmarkTree, 0, bookmarkTree.getRowCount());

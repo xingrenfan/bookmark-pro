@@ -6,10 +6,12 @@ import com.intellij.openapi.ui.JBMenuItem;
 import com.intellij.openapi.ui.JBPopupMenu;
 import com.intellij.openapi.ui.Messages;
 import org.apache.commons.lang3.StringUtils;
+import org.bookmark.pro.context.AppRunContext;
 import org.bookmark.pro.context.BookmarkRunService;
-import org.bookmark.pro.windows.mark.BookmarkEditDialog;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.domain.model.GroupNodeModel;
+import org.bookmark.pro.service.document.DocumentService;
+import org.bookmark.pro.windows.mark.BookmarkEditDialog;
 import org.jsoup.internal.StringUtil;
 
 import javax.swing.*;
@@ -142,6 +144,7 @@ class BookmarkMenus {
      * @return {@link JBMenuItem}
      */
     private JBMenuItem createEditMenu(final Project project, final BookmarkTree bookmarkTree) {
+        DocumentService documentService = AppRunContext.getServiceImpl(project, DocumentService.class);
         JBMenuItem editMenu = new JBMenuItem("Update");
         // 书签编辑操作
         editMenu.addActionListener(e -> {
@@ -155,7 +158,7 @@ class BookmarkMenus {
                     // 书签
                     BookmarkNodeModel nodeModel = (BookmarkNodeModel) selectedNode.getUserObject();
                     new BookmarkEditDialog(project, false).defaultNode(nodeModel, null, false).showAndCallback((name, desc, lineNum, parentNode, enableGroup) -> {
-                        BookmarkRunService.getDocumentService(project).removeBookmarkNode(project, selectedNode);
+                        documentService.removeBookmarkNode(selectedNode);
                         nodeModel.setName(name);
                         nodeModel.setDesc(desc);
                         nodeModel.setInvalid(false);
@@ -164,7 +167,7 @@ class BookmarkMenus {
                         selectedNode.setGroup(enableGroup);
                         selectedNode.setBookmark(true);
                         selectedNode.setInvalid(false);
-                        BookmarkRunService.getDocumentService(project).addBookmarkNode(project, selectedNode);
+                        documentService.addBookmarkNode(selectedNode);
                         BookmarkRunService.getBookmarkManage(project).changeBookmarkNode(selectedNode);
                     });
                 } else {
@@ -179,8 +182,8 @@ class BookmarkMenus {
                     if (StringUtils.isBlank(groupName)) {
                         return;
                     }
-                    if (StringUtils.isEmpty(nodeModel.getUuid())) {
-                        nodeModel.setUuid(UUID.randomUUID().toString());
+                    if (StringUtils.isEmpty(nodeModel.getCommitHash())) {
+                        nodeModel.setCommitHash(UUID.randomUUID().toString());
                     }
                     if (!groupName.equals(nodeModel.getName())) {
                         nodeModel.setName(groupName);
@@ -191,7 +194,7 @@ class BookmarkMenus {
                 // 书签
                 BookmarkNodeModel nodeModel = (BookmarkNodeModel) selectedNode.getUserObject();
                 new BookmarkEditDialog(project, false).defaultNode(nodeModel, null, false).showAndCallback((name, desc, lineNum, parentNode, enableGroup) -> {
-                    BookmarkRunService.getDocumentService(project).removeBookmarkNode(project, selectedNode);
+                    documentService.removeBookmarkNode(selectedNode);
                     nodeModel.setName(name);
                     nodeModel.setDesc(desc);
                     nodeModel.setInvalid(false);
@@ -200,7 +203,7 @@ class BookmarkMenus {
                     selectedNode.setGroup(enableGroup);
                     selectedNode.setBookmark(true);
                     selectedNode.setInvalid(false);
-                    BookmarkRunService.getDocumentService(project).addBookmarkNode(project, selectedNode);
+                    documentService.addBookmarkNode(selectedNode);
                     BookmarkRunService.getBookmarkManage(project).changeBookmarkNode(selectedNode);
                 });
             }
@@ -275,7 +278,7 @@ class BookmarkMenus {
             // 新的分组节点
             BookmarkTreeNode groupNode = new BookmarkTreeNode(new GroupNodeModel(groupName, UUID.randomUUID().toString()), true);
             bookmarkTree.getDefaultModel().insertNodeInto(groupNode, parent, 0);
-            BookmarkRunService.getDocumentService(project).addBookmarkNode(project, groupNode);
+            AppRunContext.getServiceImpl(project, DocumentService.class).addBookmarkNode(groupNode);
         });
     }
 }

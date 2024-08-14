@@ -6,12 +6,14 @@ import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.ui.awt.RelativePoint;
 import org.bookmark.pro.base.BookmarkTipPanel;
 import org.bookmark.pro.base.I18N;
-import org.bookmark.pro.constants.BookmarkProConstant;
-import org.bookmark.pro.constants.BookmarkProIcon;
-import org.bookmark.pro.context.BookmarkRunService;
+import org.bookmark.pro.constants.BookmarkConstants;
+import org.bookmark.pro.constants.BookmarkIcons;
+import org.bookmark.pro.context.AppRunContext;
 import org.bookmark.pro.domain.model.AbstractTreeNodeModel;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.domain.model.GroupNodeModel;
+import org.bookmark.pro.service.document.DocumentService;
+import org.bookmark.pro.service.settings.GlobalSettings;
 import org.bookmark.pro.service.tree.BookmarkTreeManage;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
 import org.bookmark.pro.utils.BookmarkUtil;
@@ -100,7 +102,7 @@ public final class BookmarkTreeManager extends BookmarkMenus implements Bookmark
             addBookmarkNode(parentNode, node);
         }
         // 更新书签缓存
-        BookmarkRunService.getDocumentService(project).addBookmarkNode(project, node);
+        AppRunContext.getAppService(DocumentService.class).addBookmarkNode(node);
     }
 
     @Override
@@ -125,7 +127,7 @@ public final class BookmarkTreeManager extends BookmarkMenus implements Bookmark
     @Override
     public void removeBookmarkNode(BookmarkTreeNode node) {
         this.bookmarkTree.removeNode(this.project, node);
-        BookmarkRunService.getDocumentService(project).removeBookmarkNode(this.project, node);
+        AppRunContext.getAppService(DocumentService.class).removeBookmarkNode(node);
     }
 
     @Override
@@ -190,40 +192,40 @@ public final class BookmarkTreeManager extends BookmarkMenus implements Bookmark
                 BookmarkTreeNode node = (BookmarkTreeNode) value;
                 if (0 == row) {
                     // 系统图标 icon = AllIcons.Nodes.Module;
-                    setIcon(BookmarkProIcon.FOLDER_ICON);
+                    setIcon(BookmarkIcons.FOLDER_ICON);
                 } else if (row > 0) {
                     // 系统文件图标 AllIcons.Nodes.Folder;
                     if (node.isBookmark() && node.isGroup()) {
                         BookmarkNodeModel nodeModel = (BookmarkNodeModel) node.getUserObject();
                         if (nodeModel.getInvalid()) {
                             // 无效书签 显示失效图标
-                            setIcon(BookmarkProIcon.BOOKMARK_INVALID_ICON);
+                            setIcon(BookmarkIcons.BOOKMARK_INVALID_ICON);
                         } else if (nodeModel.getVirtualFile() != null && BookmarkUtil.virtualFileExist(project, nodeModel.getVirtualFile())) {
                             // 虚拟文件有效 显示书签分组图标
-                            setIcon(BookmarkProIcon.BOOKMARK_GROUP_ICON);
+                            setIcon(BookmarkIcons.BOOKMARK_GROUP_ICON);
                         } else {
                             // 无效书签 显示文件丢失图标 不更新书签状态 否则会造成文件丢失的状态错误的显示成失效
                             // node.setInvalid(true);
                             // nodeModel.setInvalid(true);
-                            setIcon(BookmarkProIcon.FILE_LOSE_ICON);
+                            setIcon(BookmarkIcons.FILE_LOSE_ICON);
                         }
                     } else if (node.isBookmark()) {
                         BookmarkNodeModel nodeModel = (BookmarkNodeModel) node.getUserObject();
                         if (nodeModel.getInvalid()) {
                             // 无效书签 显示失效图标
-                            setIcon(BookmarkProIcon.BOOKMARK_INVALID_ICON);
+                            setIcon(BookmarkIcons.BOOKMARK_INVALID_ICON);
                         } else if (nodeModel.getVirtualFile() != null && BookmarkUtil.virtualFileExist(project, nodeModel.getVirtualFile())) {
                             // 虚拟文件有效 显示书签图标
-                            setIcon(BookmarkProIcon.BOOKMARK_ICON);
+                            setIcon(BookmarkIcons.BOOKMARK_ICON);
                         } else {
                             // 无效书签 显示文件丢失图标 不更新书签状态 否则会造成文件丢失的状态错误的显示成失效
                             // node.setInvalid(true);
                             // nodeModel.setInvalid(true);
-                            setIcon(BookmarkProIcon.FILE_LOSE_ICON);
+                            setIcon(BookmarkIcons.FILE_LOSE_ICON);
                         }
                     } else if (node.isGroup()) {
                         // 书签分组图标
-                        setIcon(BookmarkProIcon.GROUP_ICON);
+                        setIcon(BookmarkIcons.GROUP_ICON);
                     }
                 }
                 return this;
@@ -232,7 +234,7 @@ public final class BookmarkTreeManager extends BookmarkMenus implements Bookmark
     }
 
     private void bookmarkTip(Project project, BookmarkTree bookmarkTree) {
-        if (I18N.get("setting.general.tipItem1").equals(BookmarkRunService.getBookmarkSettings().getTipType())){
+        if (I18N.get("setting.general.tipItem1").equals(AppRunContext.getServiceImpl(project, GlobalSettings.class).getTipType())){
             bookmarkTree.addMouseMotionListener(new MouseMotionAdapter() {
                 @Override
                 public void mouseMoved(MouseEvent e) {
@@ -281,7 +283,7 @@ public final class BookmarkTreeManager extends BookmarkMenus implements Bookmark
                     lastPopup.show(RelativePoint.fromScreen(adjustedLocation));
                 }
             });
-        } else {
+        } else{
             // 书签选中监听
             bookmarkTree.addTreeSelectionListener(event -> {
                 int selectionCount = bookmarkTree.getSelectionCount();
@@ -325,9 +327,8 @@ public final class BookmarkTreeManager extends BookmarkMenus implements Bookmark
                             bookmark.openFileDescriptor(project);
                         } else {
                             // 双击不变更书签信息 否则会造成文件丢失的状态错误的显示成失效
-                            // selectedNode.setInvalid(true);
-                            BookmarkRunService.getDocumentService(project).setBookmarkInvalid(project, bookmark.getUuid());
-                            BookmarkNoticeUtil.errorMessages(project, "Bookmark [" + bookmark.getName() + BookmarkProConstant.BOOKMARK_NAME_AND_DESC_SEPARATOR + bookmark.getDesc() + "] invalid");
+                            AppRunContext.getAppService(DocumentService.class).setBookmarkInvalid(bookmark.getCommitHash());
+                            BookmarkNoticeUtil.errorMessages(project, "Bookmark [" + bookmark.getName() + BookmarkConstants.BOOKMARK_NAME_AND_DESC_SEPARATOR + bookmark.getDesc() + "] invalid");
                         }
                     }
                 }

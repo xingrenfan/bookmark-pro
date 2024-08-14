@@ -2,7 +2,7 @@ package org.bookmark.pro.windows.help;
 
 import com.intellij.openapi.ui.DialogWrapper;
 import org.bookmark.pro.base.I18N;
-import org.bookmark.pro.constants.BookmarkProConstant;
+import org.bookmark.pro.constants.BookmarkConstants;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -35,7 +35,7 @@ public class BookmarkHelpForm extends DialogWrapper {
         readme.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 try {
-                    URI uri = new URI(BookmarkProConstant.BOOKMARK_README_URI);
+                    URI uri = new URI(BookmarkConstants.BOOKMARK_README_URI);
                     Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
                     if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
                         desktop.browse(uri);

@@ -29,7 +29,7 @@ public class BookmarkConverter {
             // 书签分组模型
             GroupNodeModel nodeModel = (GroupNodeModel) model;
             BookmarkPro po = new BookmarkPro();
-            po.setCommitHash(nodeModel.getUuid());
+            po.setCommitHash(nodeModel.getCommitHash());
             po.setName(nodeModel.getName());
             po.setBookmark(false);
             return po;
@@ -38,7 +38,7 @@ public class BookmarkConverter {
 
     private static BookmarkPro getBookmarkPro(AbstractTreeNodeModel model, BookmarkNodeModel nodeModel) {
         BookmarkPro bookmarkPro = new BookmarkPro();
-        bookmarkPro.setCommitHash(nodeModel.getUuid());
+        bookmarkPro.setCommitHash(nodeModel.getCommitHash());
         bookmarkPro.setIndex(nodeModel.getIndex());
         bookmarkPro.setLine(nodeModel.getLine());
         bookmarkPro.setColumn(nodeModel.getColumn());
@@ -65,7 +65,7 @@ public class BookmarkConverter {
         if (bookmarkPro.isBookmark()) {
             // 书签模型
             BookmarkNodeModel model = new BookmarkNodeModel();
-            model.setUuid(bookmarkPro.getCommitHash());
+            model.setCommitHash(bookmarkPro.getCommitHash());
             model.setIndex(bookmarkPro.getIndex());
             model.setLine(bookmarkPro.getLine());
             model.setColumn(bookmarkPro.getColumn());
@@ -86,7 +86,7 @@ public class BookmarkConverter {
         } else {
             // 分组模型
             GroupNodeModel model = new GroupNodeModel();
-            model.setUuid(bookmarkPro.getCommitHash());
+            model.setCommitHash(bookmarkPro.getCommitHash());
             model.setName(bookmarkPro.getName());
             return model;
         }

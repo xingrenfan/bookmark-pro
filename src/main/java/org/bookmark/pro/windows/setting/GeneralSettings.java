@@ -2,7 +2,9 @@ package org.bookmark.pro.windows.setting;
 
 import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.base.I18N;
-import org.bookmark.pro.context.BookmarkRunService;
+import org.bookmark.pro.constants.BookmarkConstants;
+import org.bookmark.pro.context.AppRunContext;
+import org.bookmark.pro.service.settings.GlobalSettings;
 import org.bookmark.pro.utils.BookmarkEditorUtil;
 
 import javax.swing.*;
@@ -35,30 +37,35 @@ public class GeneralSettings {
     }
 
     protected void initGeneralSettings() {
+        GlobalSettings globalSettings = AppRunContext.getAppService(GlobalSettings.class);
+
         // 设置是否启用行尾拓展
-        lineEndDocument();
+        lineEndDocument(globalSettings);
         // 前缀
-        markLabSel.setForeground(BookmarkRunService.getBookmarkSettings().getPrefixColor());
-        String bookmarkPrefix = BookmarkRunService.getBookmarkSettings().getPrefix();
-        markLabSel.setText(bookmarkPrefix);
+        markLabSel.setForeground(globalSettings.getPrefixColor());
+        markLabSel.setText(globalSettings.getPrefix());
         // 分隔符
-        if (StringUtils.isBlank(bookmarkPrefix)) {
+        if (StringUtils.isBlank(globalSettings.getPrefix())) {
             separatorSel.setText(" ");
         } else {
             separatorSel.setText(" : ");
         }
-        separatorSel.setForeground(BookmarkRunService.getBookmarkSettings().getSeparatorColor());
+        separatorSel.setForeground(globalSettings.getSeparatorColor());
         // 内容
-        noteLabSel.setForeground(BookmarkRunService.getBookmarkSettings().getContentColor());
-        noteLabSel.setText(BookmarkRunService.getBookmarkSettings().getContent());
+        noteLabSel.setForeground(globalSettings.getContentColor());
+        noteLabSel.setText(BookmarkConstants.APP_NAME_STR);
         // 前缀
-        markText.setText(BookmarkRunService.getBookmarkSettings().getPrefix());
+        markText.setText(globalSettings.getPrefix());
         // 行尾最大显示字符数
-        SpinnerModel lineEndModel = new SpinnerNumberModel(BookmarkRunService.getBookmarkSettings().getShowNum().intValue(), 10, 1000, 5);
+        SpinnerModel lineEndModel = new SpinnerNumberModel(globalSettings.getShowNum().intValue(), 10, 1000, 5);
         BookmarkEditorUtil.addNumberFormatter(maxCharNum, lineEndModel);
         // 选中面板显示最大字符数
-        SpinnerModel treeSelectedModel = new SpinnerNumberModel(BookmarkRunService.getBookmarkSettings().getTreePanelShowNum().intValue(), 10, 1000, 10);
+        SpinnerModel treeSelectedModel = new SpinnerNumberModel(globalSettings.getTreePanelShowNum().intValue(), 10, 1000, 10);
         BookmarkEditorUtil.addNumberFormatter(selectedShowNum, treeSelectedModel);
+        if (StringUtils.isNotBlank(globalSettings.getTipType())) {
+            selectTipBox.setSelectedItem(globalSettings.getTipType());
+        }
+
         // 输入框内容变更监听
         markText.getDocument().addDocumentListener(new DocumentListener() {
             void updatePreview() {
@@ -93,16 +100,12 @@ public class GeneralSettings {
         selectTips.setText(I18N.get("setting.general.tipLabel"));
         selectTipBox.addItem(I18N.get("setting.general.tipItem1"));
         selectTipBox.addItem(I18N.get("setting.general.tipItem2"));
-        if (StringUtils.isNotBlank(BookmarkRunService.getBookmarkSettings().getTipType())) {
-            selectTipBox.setSelectedItem(BookmarkRunService.getBookmarkSettings().getTipType());
-        }
-
     }
 
     /**
      * 行尾文档添加
      */
-    private void lineEndDocument() {
+    private void lineEndDocument(GlobalSettings globalSettings) {
         lineDocument.addChangeListener(e -> {
             if (lineDocument.isSelected()) {
                 enableLabel();
@@ -110,7 +113,7 @@ public class GeneralSettings {
                 notEnableLabel();
             }
         });
-        lineDocument.setSelected(BookmarkRunService.getBookmarkSettings().getLineDocument());
+        lineDocument.setSelected(globalSettings.getLineDocument());
         if (lineDocument.isSelected()) {
             enableLabel();
         }
@@ -133,21 +136,23 @@ public class GeneralSettings {
     }
 
     protected void saveGeneralSetting() {
+        GlobalSettings globalSettings = AppRunContext.getAppService(GlobalSettings.class);
+
         // 前缀颜色
-        BookmarkRunService.getBookmarkSettings().setPrefixColor(markLabSel.getForeground());
+        globalSettings.setPrefixColor(markLabSel.getForeground());
         // 内容颜色
-        BookmarkRunService.getBookmarkSettings().setContentColor(noteLabSel.getForeground());
+        globalSettings.setContentColor(noteLabSel.getForeground());
         // 分隔符颜色
-        BookmarkRunService.getBookmarkSettings().setSeparatorColor(separatorSel.getForeground());
+        globalSettings.setSeparatorColor(separatorSel.getForeground());
         // 行尾拓展 最大字符数
-        BookmarkRunService.getBookmarkSettings().setShowNum(Objects.toString(maxCharNum.getValue(), null));
+        globalSettings.setShowNum(Objects.toString(maxCharNum.getValue(), null));
         // 书签树选中简介显示最大字符
-        BookmarkRunService.getBookmarkSettings().setTreePanelShowNum(Objects.toString(selectedShowNum.getValue(), null));
+        globalSettings.setTreePanelShowNum(Objects.toString(selectedShowNum.getValue(), null));
         // 前缀
-        BookmarkRunService.getBookmarkSettings().setPrefix(markText.getText());
+        globalSettings.setPrefix(markText.getText());
         // 行尾拓展器：在行尾显示书签内容
-        BookmarkRunService.getBookmarkSettings().setLineDocument(lineDocument.isSelected());
+        globalSettings.setLineDocument(lineDocument.isSelected());
         // 选中提示样式
-        BookmarkRunService.getBookmarkSettings().setTipType(Objects.toString(selectTipBox.getSelectedItem()));
+        globalSettings.setTipType(Objects.toString(selectTipBox.getSelectedItem()));
     }
 }

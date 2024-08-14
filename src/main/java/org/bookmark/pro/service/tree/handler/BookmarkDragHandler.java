@@ -1,6 +1,6 @@
 package org.bookmark.pro.service.tree.handler;
 
-import org.bookmark.pro.constants.BookmarkProConstant;
+import org.bookmark.pro.constants.BookmarkConstants;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
@@ -61,7 +61,7 @@ class BookmarkDragHandler extends TransferHandler {
 
         try {
             Transferable transferable = support.getTransferable();
-            int[] rows = (int[]) transferable.getTransferData(BookmarkProConstant.NODES_FLAVOR);
+            int[] rows = (int[]) transferable.getTransferData(BookmarkConstants.NODES_FLAVOR);
             DefaultTreeModel model = tree.getModel();
 
             List<BookmarkTreeNode> nodes = Arrays.stream(rows).mapToObj(tree::getNodeForRow).collect(Collectors.toList());

@@ -11,7 +11,9 @@ import java.awt.datatransfer.DataFlavor;
  * @author Lyon
  * @date 2024/03/21
  */
-public interface BookmarkProConstant {
+public interface BookmarkConstants {
+    String APP_NAME_STR = "BOOKMARK-PRO";
+
     /**
      * 问题反馈 URI
      */

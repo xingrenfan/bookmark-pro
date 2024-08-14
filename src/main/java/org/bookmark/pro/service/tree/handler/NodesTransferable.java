@@ -1,6 +1,6 @@
 package org.bookmark.pro.service.tree.handler;
 
-import org.bookmark.pro.constants.BookmarkProConstant;
+import org.bookmark.pro.constants.BookmarkConstants;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -22,13 +22,13 @@ class NodesTransferable implements Transferable {
     @Override
     public DataFlavor[] getTransferDataFlavors() {
         return new DataFlavor[]{
-                BookmarkProConstant.NODES_FLAVOR
+                BookmarkConstants.NODES_FLAVOR
         };
     }
 
     @Override
     public boolean isDataFlavorSupported(DataFlavor flavor) {
-        return flavor.equals(BookmarkProConstant.NODES_FLAVOR);
+        return flavor.equals(BookmarkConstants.NODES_FLAVOR);
     }
 
     @Override

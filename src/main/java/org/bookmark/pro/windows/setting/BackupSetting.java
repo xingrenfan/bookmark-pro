@@ -1,6 +1,7 @@
 package org.bookmark.pro.windows.setting;
 
-import org.bookmark.pro.context.BookmarkRunService;
+import org.bookmark.pro.context.AppRunContext;
+import org.bookmark.pro.service.settings.BackupSettings;
 import org.bookmark.pro.utils.BookmarkEditorUtil;
 
 import javax.swing.*;
@@ -22,10 +23,19 @@ public class BackupSetting {
     }
 
     protected void initBackupSettings() {
-        backUpPath.setText(BookmarkRunService.getBookmarkSettings().getBackUp());
-        // TODO 变更之后移动文件到新目录
-        /*backUpPath.addActionListener(e -> {
-        });*/
+        BackupSettings backupSettings = AppRunContext.getAppService(BackupSettings.class);
+
+        backUpPath.setText(backupSettings.getBackUp());
+        // 备份间隔时间
+        SpinnerModel backupTimeInterval = new SpinnerNumberModel(Integer.valueOf(backupSettings.getBackUpTime()).intValue(), 1, 720, 1);
+        BookmarkEditorUtil.addNumberFormatter(backUpTime, backupTimeInterval);
+        autoBackup.setSelected(backupSettings.getAutoBackup());
+        backUpTime.setEnabled(autoBackup.isSelected());
+        backUpTime.setValue(Integer.valueOf(backupSettings.getBackUpTime()));
+
+        autoBackup.addChangeListener(e -> {
+            backUpTime.setEnabled(autoBackup.isSelected());
+        });
         backupButton.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser(backUpPath.getText());
             fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -36,23 +46,18 @@ public class BackupSetting {
                 backUpPath.setText(dbFilePath);
             }
         });
-        // 备份间隔时间
-        SpinnerModel lineEndModel = new SpinnerNumberModel(BookmarkRunService.getBookmarkSettings().getShowNum().intValue(), 1, 720, 1);
-        BookmarkEditorUtil.addNumberFormatter(backUpTime, lineEndModel);
-        autoBackup.setSelected(BookmarkRunService.getBookmarkSettings().getAutoBackup());
-        backUpTime.setEnabled(autoBackup.isSelected());
-        backUpTime.setValue(Integer.valueOf(BookmarkRunService.getBookmarkSettings().getBackUpTime()));
-        autoBackup.addChangeListener(e -> {
-            backUpTime.setEnabled(autoBackup.isSelected());
-        });
+        // TODO 变更之后移动文件到新目录
+        /*backUpPath.addActionListener(e -> {
+        });*/
     }
 
     protected void saveBackupSetting() {
+        BackupSettings backupSettings = AppRunContext.getAppService(BackupSettings.class);
         // 备份路径
-        BookmarkRunService.getBookmarkSettings().setBackUP(backUpPath.getText());
+        backupSettings.setBackUP(backUpPath.getText());
         // 备份时间
-        BookmarkRunService.getBookmarkSettings().setBackUpTime(Objects.toString(backUpTime.getValue(), null));
+        backupSettings.setBackUpTime(Objects.toString(backUpTime.getValue(), null));
         // 自动备份
-        BookmarkRunService.getBookmarkSettings().setAutoBackup(autoBackup.isSelected());
+        backupSettings.setAutoBackup(autoBackup.isSelected());
     }
 }

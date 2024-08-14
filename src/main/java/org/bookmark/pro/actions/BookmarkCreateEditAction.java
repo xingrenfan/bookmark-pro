@@ -9,14 +9,16 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.apache.commons.lang3.StringUtils;
-import org.bookmark.pro.constants.BookmarkProIcon;
+import org.bookmark.pro.constants.BookmarkIcons;
+import org.bookmark.pro.context.AppRunContext;
 import org.bookmark.pro.context.BookmarkRunService;
-import org.bookmark.pro.windows.mark.BookmarkEditDialog;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
+import org.bookmark.pro.service.document.DocumentService;
 import org.bookmark.pro.service.tree.BookmarkTreeManage;
 import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
 import org.bookmark.pro.utils.BookmarkUtil;
 import org.bookmark.pro.utils.SignatureUtil;
+import org.bookmark.pro.windows.mark.BookmarkEditDialog;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -40,7 +42,7 @@ public class BookmarkCreateEditAction extends AnAction {
         CaretModel caretModel = editor.getCaretModel();
         // 获取添加标记的行号
         int markLine = caretModel.getLogicalPosition().line;
-        BookmarkTreeNode treeNode = BookmarkRunService.getDocumentService(project).getBookmarkNode(project, file, markLine);
+        BookmarkTreeNode treeNode = AppRunContext.getServiceImpl(project, DocumentService.class).getBookmarkNode(file, markLine);
         if (treeNode != null) {
             updateOneBookmark(project, editor, treeNode, markLine);
         } else {
@@ -93,7 +95,7 @@ public class BookmarkCreateEditAction extends AnAction {
             nodeModel.setInvalid(true);
             bookmarkManage.changeBookmarkNode(null, treeNode);
             // 更新书签操作
-            new BookmarkEditDialog(project, false).defaultNode(nodeModel, maxLineNum, true).defaultWarning(BookmarkProIcon.INVALID_SIGN).showAndCallback((name, desc, lineNum, parentNode, enableGroup) -> {
+            new BookmarkEditDialog(project, false).defaultNode(nodeModel, maxLineNum, true).defaultWarning(BookmarkIcons.INVALID_SIGN).showAndCallback((name, desc, lineNum, parentNode, enableGroup) -> {
                 bookmarkManage.removeBookmarkNode(treeNode);
                 nodeModel.setName(name);
                 nodeModel.setDesc(desc);
@@ -134,7 +136,7 @@ public class BookmarkCreateEditAction extends AnAction {
         selectedText = selectedText == null ? "" : (" " + selectedText + " ");
         // 书签唯一标识
         BookmarkNodeModel bookmarkModel = new BookmarkNodeModel();
-        bookmarkModel.setUuid(UUID.randomUUID().toString());
+        bookmarkModel.setCommitHash(UUID.randomUUID().toString());
         bookmarkModel.setLine(markLine);
         // 获取标记行内容
         bookmarkModel.setMarkLineMd5(SignatureUtil.getMd5Digest(BookmarkUtil.getAutoDescription(editor, markLine)));

@@ -1,6 +1,7 @@
 package org.bookmark.pro.service.persistence.handler;
 
 import com.google.gson.Gson;
+import com.intellij.openapi.components.Service;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -24,7 +25,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-public class PersistenceServiceHandler implements PersistenceService {
+@Service(Service.Level.PROJECT)
+public final class PersistenceServiceHandler implements PersistenceService {
     private Project openProject;
 
     public PersistenceServiceHandler(Project openProject) {

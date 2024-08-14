@@ -1,11 +1,7 @@
 package org.bookmark.pro.context;
 
 import com.intellij.openapi.project.Project;
-import org.bookmark.pro.windows.BookmarkManagerPanel;
-import org.bookmark.pro.service.persistence.PersistenceService;
-import org.bookmark.pro.service.persistence.handler.PersistenceServiceHandler;
-import org.bookmark.pro.service.tree.BookmarkTreeManage;
-import org.bookmark.pro.service.tree.handler.BookmarkTreeManager;
+import com.intellij.openapi.project.ProjectManager;
 
 /**
  * 应用运行上下文
@@ -14,37 +10,15 @@ import org.bookmark.pro.service.tree.handler.BookmarkTreeManager;
  * @date 2024/08/12
  */
 public class AppRunContext {
-    /**
-     * 书签管理器面板
-     */
-    private BookmarkManagerPanel bookmarkManagerPanel;
-
-    /**
-     * 书签树管理器
-     */
-    private BookmarkTreeManager bookmarkTreeManager;
-
-    /**
-     * 持久性服务
-     */
-    private PersistenceService persistenceService;
-
-
-    public AppRunContext(Project project) {
-        this.bookmarkManagerPanel = new BookmarkManagerPanel(project);
-        this.bookmarkTreeManager = new BookmarkTreeManager(project);
-        this.persistenceService = new PersistenceServiceHandler(project);
+    public static <T> T getServiceImpl(Project project, Class<T> serviceType) {
+        T service = project.getService(serviceType);
+        if (service == null) {
+            throw new IllegalStateException("Service " + serviceType.getName() + " not found");
+        }
+        return service;
     }
 
-    public BookmarkManagerPanel getManagePanel() {
-        return this.bookmarkManagerPanel;
-    }
-
-    public BookmarkTreeManage getTreeManage() {
-        return this.bookmarkTreeManager;
-    }
-
-    public PersistenceService getPersistenceService() {
-        return this.persistenceService;
+    public static <T> T getAppService(Class<T> serviceType) {
+        return getServiceImpl(ProjectManager.getInstance().getDefaultProject(), serviceType);
     }
 }

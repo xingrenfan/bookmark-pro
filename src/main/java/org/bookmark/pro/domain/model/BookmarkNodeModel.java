@@ -4,8 +4,8 @@ import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.bookmark.pro.constants.BookmarkProConstant;
-import org.bookmark.pro.constants.BookmarkProIcon;
+import org.bookmark.pro.constants.BookmarkConstants;
+import org.bookmark.pro.constants.BookmarkIcons;
 import org.bookmark.pro.domain.model.handler.OpenChangeFile;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
 
@@ -20,7 +20,7 @@ public class BookmarkNodeModel implements AbstractTreeNodeModel {
     /**
      * 书签唯一标识UUID
      */
-    private String uuid;
+    private String commitHash;
 
     /**
      * 索引
@@ -97,9 +97,9 @@ public class BookmarkNodeModel implements AbstractTreeNodeModel {
     @Override
     public String toString() {
         if (isBookmark() && isGroup()) {
-            return name + BookmarkProIcon.GROUP_BOOKMARK_SIGN;
+            return name + BookmarkIcons.GROUP_BOOKMARK_SIGN;
         } else {
-            return name + "[" + BookmarkProIcon.BOOKMARK_SIGN + "]";
+            return name + "[" + BookmarkIcons.BOOKMARK_SIGN + "]";
         }
     }
 
@@ -117,7 +117,7 @@ public class BookmarkNodeModel implements AbstractTreeNodeModel {
                 return;
             }
         }
-        BookmarkNoticeUtil.errorMessages(project, "Bookmark [" + name + BookmarkProConstant.BOOKMARK_NAME_AND_DESC_SEPARATOR + desc + "] file does not exist");
+        BookmarkNoticeUtil.errorMessages(project, "Bookmark [" + name + BookmarkConstants.BOOKMARK_NAME_AND_DESC_SEPARATOR + desc + "] file does not exist");
     }
 
     public Boolean getInvalid() {
@@ -127,12 +127,12 @@ public class BookmarkNodeModel implements AbstractTreeNodeModel {
         return invalid;
     }
 
-    public String getUuid() {
-        return uuid;
+    public String getCommitHash() {
+        return commitHash;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public void setCommitHash(String commitHash) {
+        this.commitHash = commitHash;
     }
 
     public int getIndex() {

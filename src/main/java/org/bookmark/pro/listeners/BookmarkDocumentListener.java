@@ -11,8 +11,10 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.apache.commons.collections.CollectionUtils;
+import org.bookmark.pro.context.AppRunContext;
 import org.bookmark.pro.context.BookmarkRunService;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
+import org.bookmark.pro.service.document.DocumentService;
 import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
 import org.jetbrains.annotations.NotNull;
@@ -45,7 +47,7 @@ public class BookmarkDocumentListener implements DocumentListener {
 
         try {
             // 查询文件中的书签
-            Set<BookmarkTreeNode> bookmarkNodes = BookmarkRunService.getDocumentService(project).getBookmarkNodes(project, virtualFile);
+            Set<BookmarkTreeNode> bookmarkNodes = AppRunContext.getServiceImpl(project, DocumentService.class).getBookmarkNodes(virtualFile);
             if (CollectionUtils.isEmpty(bookmarkNodes)) {
                 // 空的直接返回
                 return;
@@ -114,14 +116,14 @@ public class BookmarkDocumentListener implements DocumentListener {
                 BookmarkRunService.getBookmarkManage(project).removeBookmarkNode(node);
                 continue;
             }
-
+            DocumentService documentService = AppRunContext.getServiceImpl(project, DocumentService.class);
             // 移除缓存的旧书签
-            BookmarkRunService.getDocumentService(project).removeBookmarkNode(project, node);
+            documentService.removeBookmarkNode(node);
             int lineGap = lineRange.end - lineRange.start;
             nodeModel.setLine(bookmarkPositionLine + (isAddLine ? lineGap : -lineGap));
             nodeModel.setVirtualFile(virtualFile);
             node.setUserObject(nodeModel);
-            BookmarkRunService.getDocumentService(project).addBookmarkNode(project, node);
+            documentService.addBookmarkNode(node);
             BookmarkRunService.getBookmarkManage(project).getBookmarkTree().getModel().nodeChanged(node);
             BookmarkRunService.getPersistenceService(project).saveBookmark(project);
         }

@@ -1,6 +1,6 @@
 package org.bookmark.pro.windows.mark.handler;
 
-import org.bookmark.pro.constants.BookmarkProConstant;
+import org.bookmark.pro.constants.BookmarkConstants;
 import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
 
 import javax.swing.*;
@@ -23,7 +23,7 @@ class BaseServiceUtil {
         constraints.weightx = 0;
         constraints.weighty = rowNum;
         panel.add(warningLabel, constraints);
-        warningLabel.setForeground(BookmarkProConstant.WARNING_COLOR);
+        warningLabel.setForeground(BookmarkConstants.WARNING_COLOR);
 
         // 第四行 第二列 警告展示信息
         JLabel warningMessage = new JLabel(message);
@@ -32,7 +32,7 @@ class BaseServiceUtil {
         constraints.weightx = 1;
         constraints.weighty = rowNum;
         panel.add(warningMessage, constraints);
-        warningMessage.setForeground(BookmarkProConstant.WARNING_COLOR);
+        warningMessage.setForeground(BookmarkConstants.WARNING_COLOR);
     }
 
     /**
@@ -51,7 +51,7 @@ class BaseServiceUtil {
         constraints.weightx = 0;
         constraints.weighty = rowNum;
         panel.add(lbName, constraints);
-        lbName.setForeground(BookmarkProConstant.CUE_COLOR);
+        lbName.setForeground(BookmarkConstants.CUE_COLOR);
         // 第四行 第二列
         JLabel number = new JLabel("The bookmark Line number max is " + maxValue + ".");
         constraints.gridx = 1;
@@ -59,7 +59,7 @@ class BaseServiceUtil {
         constraints.weightx = 1;
         constraints.weighty = rowNum;
         panel.add(number, constraints);
-        number.setForeground(BookmarkProConstant.CUE_COLOR);
+        number.setForeground(BookmarkConstants.CUE_COLOR);
     }
 
     /**
@@ -78,7 +78,7 @@ class BaseServiceUtil {
         constraints.weightx = 0;
         constraints.weighty = rowNum;
         panel.add(lbName, constraints);
-        lbName.setForeground(BookmarkProConstant.CUE_COLOR);
+        lbName.setForeground(BookmarkConstants.CUE_COLOR);
 
         // 第四行 第二列
         constraints.gridx = 1;
@@ -86,7 +86,7 @@ class BaseServiceUtil {
         constraints.weightx = 1;
         constraints.weighty = rowNum;
         panel.add(bookmarkType, constraints);
-        bookmarkType.setForeground(BookmarkProConstant.CUE_COLOR);
+        bookmarkType.setForeground(BookmarkConstants.CUE_COLOR);
     }
 
 
@@ -106,7 +106,7 @@ class BaseServiceUtil {
         constraints.weightx = 0;
         constraints.weighty = rowNum;
         panel.add(lbName, constraints);
-        lbName.setForeground(BookmarkProConstant.GREEN_COLOR);
+        lbName.setForeground(BookmarkConstants.GREEN_COLOR);
 
         // 第四行 第二列
         constraints.gridx = 1;
@@ -114,6 +114,6 @@ class BaseServiceUtil {
         constraints.weightx = 1;
         constraints.weighty = rowNum;
         panel.add(enableGroup, constraints);
-        enableGroup.setForeground(BookmarkProConstant.GREEN_COLOR);
+        enableGroup.setForeground(BookmarkConstants.GREEN_COLOR);
     }
 }

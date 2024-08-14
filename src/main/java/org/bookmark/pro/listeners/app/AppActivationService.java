@@ -6,8 +6,8 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.StartupActivity;
-import org.bookmark.pro.constants.BookmarkProConstant;
-import org.bookmark.pro.constants.BookmarkProIcon;
+import org.bookmark.pro.constants.BookmarkConstants;
+import org.bookmark.pro.constants.BookmarkIcons;
 import org.bookmark.pro.context.BookmarkRunService;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
 import org.jetbrains.annotations.NotNull;
@@ -36,26 +36,26 @@ public class AppActivationService implements StartupActivity {
      */
     private void startNotice(Project project) {
         // 反馈
-        AnAction issueAction = new NotificationAction(BookmarkProIcon.ISSUE_SIGN + "Feedback") {
+        AnAction issueAction = new NotificationAction(BookmarkIcons.ISSUE_SIGN + "Feedback") {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e, @NotNull Notification notification) {
                 try {
                     Desktop desktop = Desktop.getDesktop();
                     if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                        desktop.browse(new URI(BookmarkProConstant.BOOKMARK_ISSUES_URI));
+                        desktop.browse(new URI(BookmarkConstants.BOOKMARK_ISSUES_URI));
                     }
                 } catch (Exception ex) {
                 }
             }
         };
         // 评价
-        AnAction supportSign = new NotificationAction(BookmarkProIcon.SUPPORT_SIGN + "Appraise") {
+        AnAction supportSign = new NotificationAction(BookmarkIcons.SUPPORT_SIGN + "Appraise") {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e, @NotNull Notification notification) {
                 try {
                     Desktop desktop = Desktop.getDesktop();
                     if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                        desktop.browse(new URI(BookmarkProConstant.IDEA_PLUGIN_URI));
+                        desktop.browse(new URI(BookmarkConstants.IDEA_PLUGIN_URI));
                     }
                 } catch (Exception ex) {
                 }

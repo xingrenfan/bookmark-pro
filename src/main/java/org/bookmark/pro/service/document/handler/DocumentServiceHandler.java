@@ -1,16 +1,15 @@
 package org.bookmark.pro.service.document.handler;
 
 import com.intellij.openapi.components.Service;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.domain.model.AbstractTreeNodeModel;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.domain.model.GroupNodeModel;
 import org.bookmark.pro.service.document.DocumentService;
 import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
-import org.bookmark.pro.utils.BookmarkUtil;
 
 import javax.swing.tree.TreeNode;
 import java.util.Enumeration;
@@ -26,19 +25,49 @@ import java.util.stream.Collectors;
 
 @Service(Service.Level.PROJECT)
 public final class DocumentServiceHandler implements DocumentService {
-    private Map<Project, NodeCacheManage> nodeCacheManage = new ConcurrentHashMap<>(16);
+    private static final Logger LOG = Logger.getInstance(DocumentServiceHandler.class);
+    // 书签缓存{commitHash: BookmarkTreeNode}
+    private final Map<String, BookmarkTreeNode> bookmarkHashCache = new ConcurrentHashMap<>(64);
+
+    // 分组节点缓存{bookmarkName:BookmarkTreeNode}
+    private final Map<String, BookmarkTreeNode> bookmarkNameCache = new ConcurrentHashMap<>(64);
+
+    // BookmarkTreeNode 缓存: 通过 虚拟文件名 直接取到节点引用 {VirtualFileHash: [UUID]}
+    private final Map<Integer, Set<BookmarkTreeNode>> virtualFileCache = new HashMap<>(64);
+
+    public DocumentServiceHandler(Project project) {
+        LOG.debug("Load bookmark node cache message. project:{}", project.getName());
+    }
+
+    private void setVirtualFileCache(VirtualFile virtualFile, BookmarkTreeNode bookmarkNode) {
+        Integer hash = Objects.hashCode(virtualFile);
+        Set<BookmarkTreeNode> treeNodes = this.virtualFileCache.get(hash);
+        if (CollectionUtils.isNotEmpty(treeNodes)) {
+            treeNodes.add(bookmarkNode);
+        } else {
+            treeNodes = new HashSet<>(64);
+            treeNodes.add(bookmarkNode);
+        }
+        this.virtualFileCache.put(hash, treeNodes);
+    }
+
+    private void removeVirtualFileCache(VirtualFile virtualFile, BookmarkTreeNode bookmarkNode) {
+        Integer hash = Objects.hashCode(virtualFile);
+        Set<BookmarkTreeNode> treeNodes = this.virtualFileCache.get(hash);
+        if (CollectionUtils.isNotEmpty(treeNodes)) {
+            treeNodes.remove(bookmarkNode);
+            this.virtualFileCache.put(hash, treeNodes);
+        }
+    }
 
     @Override
-    public BookmarkTreeNode getBookmarkNode(Project project, VirtualFile virtualFile, int line) {
-        if (nodeCacheManage)
-
-        String fileCanonicalPath = BookmarkUtil.virtualFileName(project, virtualFile);
-        if (this.bookmarkFileName.containsKey(fileCanonicalPath)) {
-            for (String uuid : this.bookmarkFileName.get(fileCanonicalPath)) {
-                BookmarkTreeNode bookmarkNode = this.bookmarkNodeCache.get(uuid);
-                BookmarkNodeModel nodeModel = (BookmarkNodeModel) bookmarkNode.getUserObject();
+    public BookmarkTreeNode getBookmarkNode(VirtualFile virtualFile, int line) {
+        Integer hash = Objects.hashCode(virtualFile);
+        if (this.virtualFileCache.containsKey(hash)) {
+            for (BookmarkTreeNode treeNode : this.virtualFileCache.get(hash)) {
+                BookmarkNodeModel nodeModel = (BookmarkNodeModel) treeNode.getUserObject();
                 if (nodeModel.getLine() == line) {
-                    return bookmarkNode;
+                    return treeNode;
                 }
             }
         }
@@ -46,129 +75,88 @@ public final class DocumentServiceHandler implements DocumentService {
     }
 
     @Override
-    public BookmarkTreeNode getBookmarkNode(Project project, String uuid) {
-        return this.bookmarkNodeCache.get(uuid);
+    public BookmarkTreeNode getBookmarkNode(String commitHash) {
+        return this.bookmarkHashCache.get(commitHash);
     }
 
     @Override
-    public Set<BookmarkTreeNode> getBookmarkNodes(Project project, VirtualFile virtualFile) {
-        String fileCanonicalPath = BookmarkUtil.virtualFileName(project, virtualFile);
-        return Optional.ofNullable(this.bookmarkFileName.get(fileCanonicalPath)).orElse(new HashSet<>()).stream().map(this.bookmarkNodeCache::get).filter(Objects::nonNull).collect(Collectors.toSet());
+    public Set<BookmarkTreeNode> getBookmarkNodes(VirtualFile virtualFile) {
+        Integer hash = Objects.hashCode(virtualFile);
+        return Optional.ofNullable(virtualFileCache.get(hash)).orElse(new HashSet<>());
     }
 
     @Override
-    public void addBookmarkNode(Project project, BookmarkTreeNode bookmarkNode) {
+    public void addBookmarkNode(BookmarkTreeNode bookmarkNode) {
         AbstractTreeNodeModel abstractTreeNodeModel = (AbstractTreeNodeModel) bookmarkNode.getUserObject();
         if (bookmarkNode.isBookmark()) {
-            BookmarkNodeModel nodeModel = (BookmarkNodeModel) abstractTreeNodeModel;
-            if (this.bookmarkNodeCache.containsKey(nodeModel.getUuid())) {
-                this.bookmarkNodeCache.remove(nodeModel.getUuid());
-            }
-            // 添加书签缓存
-            this.bookmarkNodeCache.put(nodeModel.getUuid(), bookmarkNode);
-            // 获取虚拟文件
-            if (nodeModel.getVirtualFile() != null) {
-                // 文件名
-                String fileName = BookmarkUtil.virtualFileName(project, nodeModel.getVirtualFile());
-                Set<String> cacheUuid;
-                if (this.bookmarkFileName.containsKey(fileName)) {
-                    cacheUuid = this.bookmarkFileName.get(fileName);
-                } else {
-                    cacheUuid = new HashSet<>(64);
-                }
-                cacheUuid.add(nodeModel.getUuid());
-                this.bookmarkFileName.put(fileName, cacheUuid);
+            BookmarkNodeModel markNodeModel = (BookmarkNodeModel) abstractTreeNodeModel;
+            this.bookmarkHashCache.put(markNodeModel.getCommitHash(), bookmarkNode);
+            this.bookmarkNameCache.put(markNodeModel.getName(), bookmarkNode);
+            if (markNodeModel.getVirtualFile() != null) {
+                this.setVirtualFileCache(markNodeModel.getVirtualFile(), bookmarkNode);
             } else {
                 // 书签置为无效
                 bookmarkNode.setInvalid(true);
-                nodeModel.setInvalid(true);
+                markNodeModel.setInvalid(true);
             }
-        }
-        if (bookmarkNode.isGroup()) {
-            if (bookmarkNode.isBookmark()) {
-                BookmarkNodeModel nodeModel = (BookmarkNodeModel) abstractTreeNodeModel;
-                this.groupNodeCache.put(nodeModel.getUuid(), bookmarkNode);
-            } else {
-                GroupNodeModel nodeModel = (GroupNodeModel) abstractTreeNodeModel;
-                if (StringUtils.isBlank(nodeModel.getUuid())) {
-                    // 添加书签缓存
-                    this.groupNodeCache.put(nodeModel.getName(), bookmarkNode);
-                } else {
-                    this.groupNodeCache.put(nodeModel.getUuid(), bookmarkNode);
-                }
-            }
+        } else {
+            GroupNodeModel groupNodeModel = (GroupNodeModel) abstractTreeNodeModel;
+            this.bookmarkHashCache.put(groupNodeModel.getCommitHash(), bookmarkNode);
+            this.bookmarkNameCache.put(groupNodeModel.getName(), bookmarkNode);
         }
     }
 
     @Override
-    public void removeBookmarkNode(Project project, BookmarkTreeNode bookmarkNode) {
-        AbstractTreeNodeModel nodeModel = (AbstractTreeNodeModel) bookmarkNode.getUserObject();
-        String uuid = nodeModel.getUuid();
-        // 删除书签节点缓存
-        this.bookmarkNodeCache.remove(uuid);
+    public void removeBookmarkNode(BookmarkTreeNode bookmarkNode) {
+        AbstractTreeNodeModel abstractTreeNodeModel = (AbstractTreeNodeModel) bookmarkNode.getUserObject();
         if (bookmarkNode.isBookmark()) {
-            BookmarkNodeModel bookmarkNodeModel = (BookmarkNodeModel) nodeModel;
-            VirtualFile virtualFile = bookmarkNodeModel.getVirtualFile();
-            // 获取虚拟文件
-            if (virtualFile != null) {
-                // 文件名
-                String fileName = BookmarkUtil.virtualFileName(project, virtualFile);
-                if (this.bookmarkFileName.containsKey(fileName)) {
-                    // 根据文件名获取所有书签
-                    Set<String> cacheUuid = this.bookmarkFileName.get(fileName);
-                    cacheUuid.remove(uuid);
-                    if (CollectionUtils.isEmpty(cacheUuid)) {
-                        this.bookmarkFileName.remove(fileName);
-                    } else {
-                        this.bookmarkFileName.put(fileName, cacheUuid);
-                    }
-                }
+            BookmarkNodeModel markNodeModel = (BookmarkNodeModel) abstractTreeNodeModel;
+            this.bookmarkHashCache.remove(markNodeModel.getCommitHash());
+            this.bookmarkNameCache.remove(markNodeModel.getName());
+            if (markNodeModel.getVirtualFile() != null) {
+                this.removeVirtualFileCache(markNodeModel.getVirtualFile(), bookmarkNode);
             }
-        }
-        if (bookmarkNode.isGroup()) {
-            bookmarkNode.children().asIterator().forEachRemaining(treeNode -> {
-                if (treeNode instanceof BookmarkTreeNode bookmarkTreeNode) {
-                    removeBookmarkNode(project, bookmarkTreeNode);
-                }
-            });
-            this.groupNodeCache.remove(uuid);
+        } else {
+            GroupNodeModel groupNodeModel = (GroupNodeModel) abstractTreeNodeModel;
+            this.bookmarkHashCache.remove(groupNodeModel.getCommitHash(), bookmarkNode);
+            this.bookmarkNameCache.remove(groupNodeModel.getName(), bookmarkNode);
         }
     }
 
     @Override
-    public void setBookmarkInvalid(Project project, String uuid) {
-        BookmarkTreeNode bookmarkExist = this.bookmarkNodeCache.get(uuid);
-        if (bookmarkExist != null) {
-            bookmarkExist.setInvalid(true);
+    public void setBookmarkInvalid(String commitHash) {
+        BookmarkTreeNode markNode = this.bookmarkHashCache.get(commitHash);
+        if (markNode != null) {
+            markNode.setInvalid(true);
         }
     }
 
     @Override
-    public void reloadingCacheNode(Project project, TreeNode treeNode) {
+    public void reloadingCacheNode(TreeNode treeNode) {
         if (treeNode instanceof BookmarkTreeNode) {
             BookmarkTreeNode bookmarkNode = (BookmarkTreeNode) treeNode;
-            addBookmarkNode(project, bookmarkNode);
+            addBookmarkNode(bookmarkNode);
             if (bookmarkNode.isBookmark() && !bookmarkNode.isGroup()) {
+                // 纯书签-没有子节点 跳过后续处理
                 return;
             }
-            // 判断并加载子集菜单
             Enumeration<TreeNode> children = bookmarkNode.children();
             if (children == null) {
+                // 子节点为空 跳过后续处理
                 return;
             }
-            children.asIterator().forEachRemaining(dto -> reloadingCacheNode(project, dto));
+            children.asIterator().forEachRemaining(dto -> reloadingCacheNode(dto));
         }
     }
 
     @Override
     public List<BookmarkTreeNode> getBookmarkGroup() {
-        List<BookmarkTreeNode> treeNodes = this.groupNodeCache.entrySet().stream().map(dto -> dto.getValue()).collect(Collectors.toList());
-//        treeNodes.addAll(this.bookmarkNodeCache.entrySet().stream().map(dto -> dto.getValue()).collect(Collectors.toList()));
+        List<BookmarkTreeNode> treeNodes = this.bookmarkHashCache.entrySet().stream().map(dto -> dto.getValue()).collect(Collectors.toList());
         return treeNodes;
     }
 
     @Override
     public BookmarkTreeNode getGroupNode(String nodeName) {
-        return this.groupNodeCache.get(nodeName);
+        return this.bookmarkNameCache.get(nodeName);
     }
 }
