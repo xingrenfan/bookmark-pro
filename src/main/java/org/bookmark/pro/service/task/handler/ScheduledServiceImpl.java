@@ -25,7 +25,7 @@ public final class ScheduledServiceImpl implements ScheduledService, BaseExportS
     private ScheduledExecutorService scheduler;
 
     @Override
-    public void inspectionFileBookmark() {
+    public void initScheduledService() {
         scheduler = Executors.newScheduledThreadPool(1);
         BackupSettings globalSettings = AppRunContext.getAppService(BackupSettings.class);
         // 获取备份间隔，时间为小时 默认12个小时备份一次

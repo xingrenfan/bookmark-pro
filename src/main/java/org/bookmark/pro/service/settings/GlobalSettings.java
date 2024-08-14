@@ -1,6 +1,7 @@
 package org.bookmark.pro.service.settings;
 
 import com.intellij.ide.util.PropertiesComponent;
+import com.intellij.openapi.application.ApplicationManager;
 import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.base.I18N;
 import org.bookmark.pro.constants.BookmarkConstants;
@@ -19,6 +20,10 @@ import java.util.Objects;
 public final class GlobalSettings extends BaseSetting {
     public GlobalSettings() {
         super(PropertiesComponent.getInstance());
+    }
+
+    public static GlobalSettings getInstance() {
+        return ApplicationManager.getApplication().getService(GlobalSettings.class);
     }
 
     public Integer getShowNum() {

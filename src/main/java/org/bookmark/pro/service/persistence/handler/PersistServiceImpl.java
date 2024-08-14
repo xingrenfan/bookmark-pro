@@ -10,7 +10,7 @@ import org.bookmark.pro.context.BookmarkRunService;
 import org.bookmark.pro.domain.BookmarkPro;
 import org.bookmark.pro.domain.model.AbstractTreeNodeModel;
 import org.bookmark.pro.domain.model.BookmarkConverter;
-import org.bookmark.pro.service.persistence.PersistenceService;
+import org.bookmark.pro.service.persistence.PersistService;
 import org.bookmark.pro.service.tree.BookmarkTreeManage;
 import org.bookmark.pro.service.tree.handler.BookmarkTree;
 import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
@@ -30,7 +30,7 @@ import java.util.regex.PatternSyntaxException;
  * @author Lyon
  * @date 2024/08/14
  */
-public final class PersistServiceImpl implements PersistenceService {
+public final class PersistServiceImpl implements PersistService {
     private <T> T getPersistentService(Project project, Class<T> clazz) {
         return project.getService(clazz);
     }
@@ -135,7 +135,7 @@ public final class PersistServiceImpl implements PersistenceService {
      * @return {@link BookmarkTreeNode}
      */
     private BookmarkTreeNode generateTreeNode(Project project, BookmarkPro bookmark) {
-        AbstractTreeNodeModel model = BookmarkConverter.beanToModel(project, bookmark);
+        AbstractTreeNodeModel model = BookmarkConverter.beanToModel(bookmark);
         if (bookmark.isBookmark() && !bookmark.isGroup()) {
             // 纯书签不支持分组
             return new BookmarkTreeNode(model);
@@ -163,7 +163,7 @@ public final class PersistServiceImpl implements PersistenceService {
      * @return {@link BookmarkTreeNode}
      */
     private BookmarkTreeNode generateTreeNodeSearch(Project project, BookmarkPro bookmark, String searchText) {
-        AbstractTreeNodeModel model = BookmarkConverter.beanToModel(project, bookmark);
+        AbstractTreeNodeModel model = BookmarkConverter.beanToModel(bookmark);
         BookmarkTreeNode treeNode = new BookmarkTreeNode(model, !bookmark.isBookmark());
 
         // 编译正则表达式
@@ -186,7 +186,7 @@ public final class PersistServiceImpl implements PersistenceService {
         // 如果父节点匹配，则添加所有子节点
         if (isParentMatched) {
             for (BookmarkPro childrenBookmark : childrenBookmarks) {
-                BookmarkTreeNode childNode = new BookmarkTreeNode(BookmarkConverter.beanToModel(project, childrenBookmark));
+                BookmarkTreeNode childNode = new BookmarkTreeNode(BookmarkConverter.beanToModel(childrenBookmark));
                 treeNode.add(childNode);
                 addAllChildren(childNode, childrenBookmark, project);
             }
@@ -215,7 +215,7 @@ public final class PersistServiceImpl implements PersistenceService {
         List<BookmarkPro> childrenBookmarks = bookmark.getChildren();
         if (CollectionUtils.isNotEmpty(childrenBookmarks)) {
             for (BookmarkPro child : childrenBookmarks) {
-                BookmarkTreeNode childNode = new BookmarkTreeNode(BookmarkConverter.beanToModel(project, child));
+                BookmarkTreeNode childNode = new BookmarkTreeNode(BookmarkConverter.beanToModel(child));
                 parentNode.add(childNode);
                 addAllChildren(childNode, child, project);
             }

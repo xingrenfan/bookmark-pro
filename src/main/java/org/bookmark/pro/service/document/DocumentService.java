@@ -1,6 +1,8 @@
 package org.bookmark.pro.service.document;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import org.bookmark.pro.service.document.handler.DocumentServiceImpl;
 import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
 
 import javax.swing.tree.TreeNode;
@@ -81,4 +83,8 @@ public interface DocumentService {
      * @return {@link BookmarkTreeNode}
      */
     BookmarkTreeNode getGroupNode(String nodeName);
+
+    static DocumentService getInstance(Project project) {
+        return project.getService(DocumentServiceImpl.class);
+    }
 }

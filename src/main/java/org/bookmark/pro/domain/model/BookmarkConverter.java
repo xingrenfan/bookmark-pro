@@ -61,7 +61,7 @@ public class BookmarkConverter {
      * @param bookmarkPro 持久化对象
      * @return {@link AbstractTreeNodeModel}
      */
-    public static AbstractTreeNodeModel beanToModel(Project project, BookmarkPro bookmarkPro) {
+    public static AbstractTreeNodeModel beanToModel(BookmarkPro bookmarkPro) {
         if (bookmarkPro.isBookmark()) {
             // 书签模型
             BookmarkNodeModel model = new BookmarkNodeModel();

@@ -1,6 +1,7 @@
 package org.bookmark.pro.service.settings;
 
 import com.intellij.ide.util.PropertiesComponent;
+import com.intellij.openapi.application.ApplicationManager;
 import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.constants.BookmarkConstants;
 
@@ -15,6 +16,10 @@ import java.util.Objects;
 public final class BackupSettings extends BaseSetting {
     public BackupSettings() {
         super(PropertiesComponent.getInstance());
+    }
+
+    public static BackupSettings getInstance() {
+        return ApplicationManager.getApplication().getService(BackupSettings.class);
     }
 
 

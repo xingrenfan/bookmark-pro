@@ -48,7 +48,7 @@
         <editorFactoryDocumentListener implementation="org.bookmark.pro.listeners.BookmarkDocumentListener"/>
         <!-- 书签持久化 -->
         <projectService serviceImplementation="org.bookmark.pro.service.persistence.handler.PersistComponent"/>
-        <projectService serviceInterface="org.bookmark.pro.service.persistence.PersistenceService" serviceImplementation="org.bookmark.pro.service.persistence.handler.PersistServiceImpl"/>
+        <projectService serviceInterface="org.bookmark.pro.service.persistence.PersistService" serviceImplementation="org.bookmark.pro.service.persistence.handler.PersistServiceImpl"/>
         <!-- 缓存 -->
         <projectService serviceInterface="org.bookmark.pro.service.document.DocumentService" serviceImplementation="org.bookmark.pro.service.document.handler.DocumentServiceImpl"/>
         <!-- 配置 -->

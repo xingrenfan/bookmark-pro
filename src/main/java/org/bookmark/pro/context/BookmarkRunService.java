@@ -5,7 +5,7 @@ import com.intellij.openapi.project.Project;
 import org.bookmark.pro.windows.BookmarkManagerPanel;
 import org.bookmark.pro.service.document.DocumentService;
 import org.bookmark.pro.service.document.handler.DocumentServiceImpl;
-import org.bookmark.pro.service.persistence.PersistenceService;
+import org.bookmark.pro.service.persistence.PersistService;
 import org.bookmark.pro.service.persistence.handler.PersistServiceImpl;
 import org.bookmark.pro.service.settings.BookmarkSettings;
 import org.bookmark.pro.service.task.ScheduledService;
@@ -45,11 +45,6 @@ public class BookmarkRunService {
      * 书签树管理
      */
     private static final Map<Project, BookmarkTreeManager> bookmarkTreeManagerMap = new ConcurrentHashMap<>();
-
-    /**
-     * 持久性服务
-     */
-    private static final Map<Project, PersistenceService> persistenceServiceMap = new ConcurrentHashMap<>();
 
     /**
      * 获取书签设置
@@ -117,9 +112,9 @@ public class BookmarkRunService {
      * 获取持久性服务
      *
      * @param project 项目
-     * @return {@link PersistenceService}
+     * @return {@link PersistService}
      */
-    public static PersistenceService getPersistenceService(Project project) {
+    public static PersistService getPersistenceService(Project project) {
         if (! persistenceServiceMap.containsKey(project)) {
             if (FAIR_LOCKS.tryLock()) {
                 try {

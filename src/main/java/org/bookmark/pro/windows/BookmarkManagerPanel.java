@@ -12,7 +12,7 @@ import org.bookmark.pro.domain.BookmarkPro;
 import org.bookmark.pro.domain.model.BookmarkConverter;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.service.document.DocumentService;
-import org.bookmark.pro.service.persistence.PersistenceService;
+import org.bookmark.pro.service.persistence.PersistService;
 import org.bookmark.pro.service.settings.GlobalSettings;
 import org.bookmark.pro.service.tree.handler.BookmarkTree;
 import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
@@ -182,7 +182,7 @@ public class BookmarkManagerPanel extends JPanel {
 
         @Override
         protected DefaultTreeModel doInBackground() throws Exception {
-            PersistenceService service = BookmarkRunService.getPersistenceService(openProject);
+            PersistService service = BookmarkRunService.getPersistenceService(openProject);
             if (enableSearch) {
                 return new DefaultTreeModel(service.getBookmarkNodeSearch(openProject, searchText));
             }

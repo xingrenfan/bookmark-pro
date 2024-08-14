@@ -3,6 +3,7 @@ package org.bookmark.pro.listeners.app;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManagerListener;
 import org.bookmark.pro.context.BookmarkRunService;
+import org.bookmark.pro.service.task.ScheduledService;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -17,6 +18,6 @@ public class AppCloseService implements ProjectManagerListener {
         // 处理项目关闭事件
         BookmarkRunService.getPersistenceService(project).saveBookmark(project);
         // 关闭线程池
-        BookmarkRunService.getScheduledService(project).shutdown();
+        ScheduledService.getInstance().shutdown();
     }
 }
