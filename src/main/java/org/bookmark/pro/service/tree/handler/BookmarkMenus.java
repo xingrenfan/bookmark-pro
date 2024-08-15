@@ -31,7 +31,6 @@ class BookmarkMenus {
     protected BookmarkMenus() {
     }
 
-
     /**
      * 添加树菜单
      *

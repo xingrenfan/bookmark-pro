@@ -10,6 +10,7 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.bookmark.pro.context.AppRunContext;
 import org.bookmark.pro.context.BookmarkRunService;
+import org.bookmark.pro.service.document.DocumentService;
 import org.bookmark.pro.service.document.handler.DocumentServiceImpl;
 import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
@@ -36,9 +37,9 @@ public class BookmarkDeleteAction extends AnAction {
         CaretModel caretModel = editor.getCaretModel();
         // 获取添加标记的行号
         int line = caretModel.getLogicalPosition().line;
-        BookmarkTreeNode bookmarkNode = AppRunContext.getServiceImpl(project, DocumentServiceImpl.class).getBookmarkNode(file, line);
+        BookmarkTreeNode bookmarkNode = DocumentService.getInstance(project).getBookmarkNode(file, line);
         if (bookmarkNode != null) {
-            BookmarkRunService.getBookmarkManage(project).removeBookmarkNode(bookmarkNode);
+            BookmarkTreeManager.removeBookmarkNode(bookmarkNode);
         }
         BookmarkNoticeUtil.warningMessages(project, "This line not found bookmark");
     }

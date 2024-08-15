@@ -38,7 +38,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- 激活监听器 -->
         <postStartupActivity implementation="org.bookmark.pro.listeners.app.AppActivationService"/>
-        <!-- 配置 -->
+        <!-- Setting 配置 -->
         <applicationConfigurable instance="org.bookmark.pro.windows.setting.BookmarkSettingForm" id="bookmark.pro.config" displayName="BookmarkPro"/>
         <!-- 左边栏设置锚点，展示窗口 -->
         <toolWindow id="Bookmark-Pro" anchor="right" icon="/icons/bookmark.svg" factoryClass="org.bookmark.pro.extensions.BookmarkWindowFactory" secondary="true"/>
@@ -47,7 +47,9 @@
         <!-- 文件变化监听器 -->
         <editorFactoryDocumentListener implementation="org.bookmark.pro.listeners.BookmarkDocumentListener"/>
         <!-- 书签管理面板 -->
-        <projectService serviceImplementation="org.bookmark.pro.windows.BookmarkManagerPanel"/>
+        <projectService serviceImplementation="org.bookmark.pro.windows.BookmarkPanel"/>
+        <!-- 书签树管理器 -->
+        <projectService serviceInterface="org.bookmark.pro.service.tree.TreeService" serviceImplementation="org.bookmark.pro.service.tree.handler.TreeServiceImpl"/>
         <!-- 书签持久化 -->
         <projectService serviceImplementation="org.bookmark.pro.service.persistence.handler.PersistComponent"/>
         <projectService serviceInterface="org.bookmark.pro.service.persistence.PersistService" serviceImplementation="org.bookmark.pro.service.persistence.handler.PersistServiceImpl"/>

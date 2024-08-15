@@ -11,7 +11,7 @@ import org.bookmark.pro.domain.BookmarkPro;
 import org.bookmark.pro.domain.model.AbstractTreeNodeModel;
 import org.bookmark.pro.domain.model.BookmarkConverter;
 import org.bookmark.pro.service.persistence.PersistService;
-import org.bookmark.pro.service.tree.BookmarkTreeManage;
+import org.bookmark.pro.service.tree.TreeService;
 import org.bookmark.pro.service.tree.handler.BookmarkTree;
 import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
@@ -37,9 +37,9 @@ public final class PersistServiceImpl implements PersistService {
 
     @Override
     public void saveBookmark(Project project) {
-        BookmarkTreeManage bookmarkTreeManage = BookmarkRunService.getBookmarkManage(project);
+        TreeService treeService = BookmarkRunService.getBookmarkManage(project);
         // 获取书签树
-        BookmarkTree bookmarkTree = bookmarkTreeManage.getBookmarkTree();
+        BookmarkTree bookmarkTree = treeService.getBookmarkTree();
         if (bookmarkTree == null) {
             return;
         }

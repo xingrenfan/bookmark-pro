@@ -66,6 +66,11 @@ Bookmark-Pro借鉴[Bookmark-X](https://plugins.jetbrains.com/plugin/22013-bookma
 
 # 更新历史记录
 
+[]
+
+- 优化项目结构
+- 添加国际化
+
 [212-222.01.05/223-241.01.02]
 
 - 优化书签树管理窗口：书签右键编辑菜单

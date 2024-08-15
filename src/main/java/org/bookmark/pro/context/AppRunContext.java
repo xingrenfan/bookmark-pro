@@ -12,17 +12,4 @@ import com.intellij.openapi.project.ProjectManager;
  * @date 2024/08/12
  */
 public class AppRunContext {
-    public static <T> T getServiceImpl(Project project, Class<T> serviceType) {
-        T service = project.getService(serviceType);
-        if (service == null) {
-            throw new IllegalStateException("Service " + serviceType.getName() + " not found");
-        }
-        return service;
-    }
-
-    public static <T> T getAppService(Class<?> serviceType) {
-        return ComponentManager.getService(serviceType);
-
-        return getServiceImpl(ProjectManager.getInstance().getDefaultProject(), serviceType);
-    }
 }

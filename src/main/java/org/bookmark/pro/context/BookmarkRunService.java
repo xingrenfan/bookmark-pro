@@ -1,18 +1,12 @@
 package org.bookmark.pro.context;
 
-import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.project.Project;
-import org.bookmark.pro.windows.BookmarkManagerPanel;
+import org.bookmark.pro.windows.BookmarkPanel;
 import org.bookmark.pro.service.document.DocumentService;
-import org.bookmark.pro.service.document.handler.DocumentServiceImpl;
 import org.bookmark.pro.service.persistence.PersistService;
-import org.bookmark.pro.service.persistence.handler.PersistServiceImpl;
 import org.bookmark.pro.service.settings.BookmarkSettings;
-import org.bookmark.pro.service.task.ScheduledService;
-import org.bookmark.pro.service.task.handler.ScheduledServiceImpl;
-import org.bookmark.pro.service.tree.BookmarkTreeManage;
-import org.bookmark.pro.service.tree.handler.BookmarkTreeManager;
-import org.bookmark.pro.utils.BookmarkNoticeUtil;
+import org.bookmark.pro.service.tree.TreeService;
+import org.bookmark.pro.service.tree.handler.TreeServiceImpl;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,18 +33,18 @@ public class BookmarkRunService {
     /**
      * 书签管理器面板
      */
-    private static final Map<Project, BookmarkManagerPanel> bookmarkManagerPanelMap = new ConcurrentHashMap<>();
+    private static final Map<Project, BookmarkPanel> bookmarkManagerPanelMap = new ConcurrentHashMap<>();
 
     /**
      * 书签树管理
      */
-    private static final Map<Project, BookmarkTreeManager> bookmarkTreeManagerMap = new ConcurrentHashMap<>();
-
-    /**
+    private static final Map<Project, TreeServiceImpl> bookmarkTreeManagerMap = new ConcurrentHashMap<>();
+/*
+    *//**
      * 获取书签设置
      *
      * @return {@link BookmarkSettings}
-     */
+     *//*
     public static BookmarkSettings getBookmarkSettings() {
         if (settings == null) {
             settings = new BookmarkSettings(PropertiesComponent.getInstance());
@@ -66,17 +60,17 @@ public class BookmarkRunService {
         return service;
     }
 
-    /**
+    *//**
      * 获取书签管理器面板
      *
      * @param project 项目
-     * @return {@link BookmarkManagerPanel}
-     */
-    public static BookmarkManagerPanel getBookmarkManagerPanel(Project project) {
+     * @return {@link BookmarkPanel}
+     *//*
+    public static BookmarkPanel getBookmarkManagerPanel(Project project) {
         if (! bookmarkManagerPanelMap.containsKey(project)) {
             if (FAIR_LOCKS.tryLock()) {
                 try {
-                    bookmarkManagerPanelMap.put(project, new BookmarkManagerPanel(project));
+                    bookmarkManagerPanelMap.put(project, new BookmarkPanel(project));
                 } catch (Exception e) {
                     BookmarkNoticeUtil.errorMessages(project, "Bookmark tree manager panel initialization failed. message:" + e.getMessage());
                 } finally {
@@ -87,12 +81,12 @@ public class BookmarkRunService {
         return bookmarkManagerPanelMap.getOrDefault(project, null);
     }
 
-    /**
+    *//**
      * 获取书签树管理
      *
      * @param project 项目
-     * @return {@link BookmarkTreeManage}
-     */
+     * @return {@link TreeService}
+     *//*
     public static BookmarkTreeManage getBookmarkManage(Project project) {
         if (!bookmarkTreeManagerMap.containsKey(project)) {
             if (FAIR_LOCKS.tryLock()) {
@@ -108,12 +102,12 @@ public class BookmarkRunService {
         return bookmarkTreeManagerMap.getOrDefault(project, null);
     }
 
-    /**
+    *//**
      * 获取持久性服务
      *
      * @param project 项目
      * @return {@link PersistService}
-     */
+     *//*
     public static PersistService getPersistenceService(Project project) {
         if (! persistenceServiceMap.containsKey(project)) {
             if (FAIR_LOCKS.tryLock()) {
@@ -129,16 +123,16 @@ public class BookmarkRunService {
         return persistenceServiceMap.getOrDefault(project, null);
     }
 
-    /**
+    *//**
      * 获取文档服务
      *
      * @return {@link DocumentService}
-     */
+     *//*
     public static DocumentService getDocumentService(Project project) {
         return getInstance(project, DocumentServiceImpl.class);
     }
 
     public static ScheduledService getScheduledService(Project project) {
         return getInstance(project, ScheduledServiceImpl.class);
-    }
+    }*/
 }

@@ -3,6 +3,7 @@ package org.bookmark.pro.service.tree;
 import com.intellij.openapi.project.Project;
 import org.bookmark.pro.service.tree.handler.BookmarkTree;
 import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
+import org.bookmark.pro.service.tree.handler.TreeServiceImpl;
 
 /**
  * 书签树管理器
@@ -10,22 +11,13 @@ import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
  * @author Lyon
  * @date 2024/04/19
  */
-public interface BookmarkTreeManage {
-    Project getOpenProject();
-
+public interface TreeService {
     /**
      * 获取书签树
      *
      * @return {@link BookmarkTree}
      */
     BookmarkTree getBookmarkTree();
-
-    /**
-     * 添加书签树节点 - 不指定父节点，添加到根目录
-     *
-     * @param node 节点
-     */
-    void addBookmarkNode(BookmarkTreeNode node);
 
     /**
      * 添加书签树节点 - 指定父节点
@@ -76,4 +68,8 @@ public interface BookmarkTreeManage {
      * @param project 项目
      */
     void preBookmark(Project project);
+
+    static TreeService getInstance(Project project) {
+        return project.getService(TreeServiceImpl.class);
+    }
 }

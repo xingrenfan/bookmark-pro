@@ -8,13 +8,12 @@ import org.bookmark.pro.base.BookmarkTipPanel;
 import org.bookmark.pro.base.I18N;
 import org.bookmark.pro.constants.BookmarkConstants;
 import org.bookmark.pro.constants.BookmarkIcons;
-import org.bookmark.pro.context.AppRunContext;
 import org.bookmark.pro.domain.model.AbstractTreeNodeModel;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.domain.model.GroupNodeModel;
 import org.bookmark.pro.service.document.DocumentService;
 import org.bookmark.pro.service.settings.GlobalSettings;
-import org.bookmark.pro.service.tree.BookmarkTreeManage;
+import org.bookmark.pro.service.tree.TreeService;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
 import org.bookmark.pro.utils.BookmarkUtil;
 
@@ -36,36 +35,35 @@ import java.util.UUID;
  * @author Lyon
  * @date 2024/04/17
  */
-public final class BookmarkTreeManager extends BookmarkMenus implements BookmarkTreeManage {
+public final class TreeServiceImpl implements TreeService {
+    private BookmarkMenus menus;
+
     private BookmarkGroupNavigator groupNavigator;
 
     private BookmarkTree bookmarkTree;
 
-    private Project project;
+    private Project openProject;
 
-    public BookmarkTreeManager(Project project) {
-        this.project = project;
+    public TreeServiceImpl(Project openProject) {
+        this.openProject = openProject;
         // 初始化书签树
         this.bookmarkTree = new BookmarkTree();
         // 初始化分组导航
-        this.groupNavigator = new BookmarkGroupNavigator(project, this.bookmarkTree);
+        this.groupNavigator = new BookmarkGroupNavigator(openProject, this.bookmarkTree);
+        this.menus = new BookmarkMenus();
+
         // 添加Root节点
-        addProjectNode(project, this.bookmarkTree, this.groupNavigator);
-        // 添加Ctrl+F搜索功能
-//        addTreeSearch(this.bookmarkTree);
-        bookmarkTip(project, bookmarkTree);
+        addProjectNode(openProject, this.bookmarkTree, this.groupNavigator);
+        // 添加搜索提示
+        bookmarkTip(openProject, bookmarkTree);
         // 添加拖拽处理方案
         addDragHandler(this.bookmarkTree);
         // 书签图标渲染
-        bookmarkRendering(project, this.bookmarkTree);
+        bookmarkRendering(openProject, this.bookmarkTree);
         // 增加选中和点击事件
-        addTreeListeners(project, this.bookmarkTree);
+        addTreeListeners(openProject, this.bookmarkTree);
         // 书签书菜单初始化
-        addTreeMenus(project, this.bookmarkTree);
-    }
-
-    public Project getOpenProject() {
-        return project;
+        this.menus.addTreeMenus(openProject, this.bookmarkTree);
     }
 
     @Override
@@ -74,17 +72,10 @@ public final class BookmarkTreeManager extends BookmarkMenus implements Bookmark
     }
 
     @Override
-    public void addBookmarkNode(BookmarkTreeNode node) {
-        // 获取父节点
-        BookmarkTreeNode parent = this.groupNavigator.ensureActivatedGroup();
-        addBookmarkNode(parent, node);
-    }
-
-    @Override
     public void addBookmarkNode(BookmarkTreeNode parentNode, BookmarkTreeNode node) {
         this.groupNavigator.setActivatedBookmark(node);
         // 父节点添加书签节点
-        this.bookmarkTree.addNode(this.project, parentNode, node);
+        this.bookmarkTree.addNode(this.openProject, parentNode, node);
     }
 
     @Override
@@ -102,7 +93,7 @@ public final class BookmarkTreeManager extends BookmarkMenus implements Bookmark
             addBookmarkNode(parentNode, node);
         }
         // 更新书签缓存
-        AppRunContext.getAppService(DocumentService.class).addBookmarkNode(node);
+        DocumentService.getInstance(this.openProject).addBookmarkNode(node);
     }
 
     @Override
@@ -126,8 +117,8 @@ public final class BookmarkTreeManager extends BookmarkMenus implements Bookmark
 
     @Override
     public void removeBookmarkNode(BookmarkTreeNode node) {
-        this.bookmarkTree.removeNode(this.project, node);
-        AppRunContext.getAppService(DocumentService.class).removeBookmarkNode(node);
+        this.bookmarkTree.removeNode(this.openProject, node);
+        DocumentService.getInstance(this.openProject).removeBookmarkNode(node);
     }
 
     @Override
@@ -154,17 +145,6 @@ public final class BookmarkTreeManager extends BookmarkMenus implements Bookmark
         bookmarkTree.getSelectionModel().setSelectionMode(TreeSelectionModel.CONTIGUOUS_TREE_SELECTION);
         this.groupNavigator.setActivatedGroup(root);
     }
-
-    /**
-     * 添加书签树搜索功能
-     *
-     * @param bookmarkTree 书签树
-     */
-    /*private void addTreeSearch(BookmarkTree bookmarkTree) {
-        TreeSpeedSearch treeSpeedSearch = new TreeSpeedSearch(bookmarkTree);
-        treeSpeedSearch.setCanExpand(true);
-        bookmarkTree.setShowsRootHandles(true);
-    }*/
 
     /**
      * 添加拖动处理程序
@@ -234,7 +214,7 @@ public final class BookmarkTreeManager extends BookmarkMenus implements Bookmark
     }
 
     private void bookmarkTip(Project project, BookmarkTree bookmarkTree) {
-        if (I18N.get("setting.general.tipItem1").equals(AppRunContext.getServiceImpl(project, GlobalSettings.class).getTipType())){
+        if (I18N.get("setting.general.tipItem1").equals(GlobalSettings.getInstance().getTipType())) {
             bookmarkTree.addMouseMotionListener(new MouseMotionAdapter() {
                 @Override
                 public void mouseMoved(MouseEvent e) {
@@ -283,7 +263,7 @@ public final class BookmarkTreeManager extends BookmarkMenus implements Bookmark
                     lastPopup.show(RelativePoint.fromScreen(adjustedLocation));
                 }
             });
-        } else{
+        } else {
             // 书签选中监听
             bookmarkTree.addTreeSelectionListener(event -> {
                 int selectionCount = bookmarkTree.getSelectionCount();
@@ -327,7 +307,7 @@ public final class BookmarkTreeManager extends BookmarkMenus implements Bookmark
                             bookmark.openFileDescriptor(project);
                         } else {
                             // 双击不变更书签信息 否则会造成文件丢失的状态错误的显示成失效
-                            AppRunContext.getAppService(DocumentService.class).setBookmarkInvalid(bookmark.getCommitHash());
+                            DocumentService.getInstance(project).setBookmarkInvalid(bookmark.getCommitHash());
                             BookmarkNoticeUtil.errorMessages(project, "Bookmark [" + bookmark.getName() + BookmarkConstants.BOOKMARK_NAME_AND_DESC_SEPARATOR + bookmark.getDesc() + "] invalid");
                         }
                     }

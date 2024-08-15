@@ -14,6 +14,7 @@ import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.service.document.DocumentService;
 import org.bookmark.pro.service.persistence.PersistService;
 import org.bookmark.pro.service.settings.GlobalSettings;
+import org.bookmark.pro.service.tree.TreeService;
 import org.bookmark.pro.service.tree.handler.BookmarkTree;
 import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
@@ -36,18 +37,30 @@ import java.util.concurrent.ExecutionException;
  * @author Nonoas
  * @date 2023/6/1
  */
-public class BookmarkManagerPanel extends JPanel {
-
+public class BookmarkPanel extends JPanel {
     /**
      * 标记 tree 是否已经从持久化文件加载完成
      */
     private volatile boolean treeLoaded = false;
+    private Project openProject;
 
     private final JEditorPane jepDesc = new JEditorPane();
     private final JTextField searchField = new JTextField(20); // 添加搜索框
 
-    private Project openProject;
+    public BookmarkPanel(Project project) {
+        this.openProject = project;
+        BookmarkTree bookmarkTree = TreeService.getInstance(this.openProject).getBookmarkTree();
+        // 初始化配置
+        initSettings(bookmarkTree);
+        // 加载书签树
+        reloadBookmarkTree(project, bookmarkTree);
+        // 添加搜索框监听器
+        addSearchListener(project, bookmarkTree);
+    }
 
+    public static BookmarkPanel getInstance(Project project) {
+        return project.getService(BookmarkPanel.class);
+    }
 
     private void initSettings(BookmarkTree bookmarkTree) {
         // 设置书签树滚动窗口 鼠标滚轮滑动
@@ -69,19 +82,6 @@ public class BookmarkManagerPanel extends JPanel {
         setBorder(JBUI.Borders.empty(2));
         // 设置背景色
         setBackground(JBColor.WHITE);
-    }
-
-    public BookmarkManagerPanel(Project project) {
-        this.openProject = project;
-        BookmarkTree bookmarkTree = BookmarkRunService.getBookmarkManage(project).getBookmarkTree();
-
-        initSettings(bookmarkTree);
-
-
-        reloadBookmarkTree(project, bookmarkTree);
-
-        // 添加搜索框监听器
-        addSearchListener(project, bookmarkTree);
     }
 
     private void addSearchListener(Project project, BookmarkTree bookmarkTree) {

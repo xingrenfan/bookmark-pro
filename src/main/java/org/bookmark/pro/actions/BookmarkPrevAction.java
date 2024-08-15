@@ -4,7 +4,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import org.bookmark.pro.context.BookmarkRunService;
-import org.bookmark.pro.service.tree.BookmarkTreeManage;
+import org.bookmark.pro.service.tree.TreeService;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -21,7 +21,7 @@ public class BookmarkPrevAction extends AnAction {
             return;
         }
         // 上一个书签
-        BookmarkTreeManage bookmarkTreeManage = BookmarkRunService.getBookmarkManage(project);
-        bookmarkTreeManage.preBookmark(project);
+        TreeService treeService = BookmarkRunService.getBookmarkManage(project);
+        treeService.preBookmark(project);
     }
 }
