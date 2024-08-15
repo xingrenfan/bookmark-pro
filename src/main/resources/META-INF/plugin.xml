@@ -46,6 +46,8 @@
         <editor.linePainter implementation="org.bookmark.pro.extensions.EditorFileLinePainter"/>
         <!-- 文件变化监听器 -->
         <editorFactoryDocumentListener implementation="org.bookmark.pro.listeners.BookmarkDocumentListener"/>
+        <!-- 书签管理面板 -->
+        <projectService serviceImplementation="org.bookmark.pro.windows.BookmarkManagerPanel"/>
         <!-- 书签持久化 -->
         <projectService serviceImplementation="org.bookmark.pro.service.persistence.handler.PersistComponent"/>
         <projectService serviceInterface="org.bookmark.pro.service.persistence.PersistService" serviceImplementation="org.bookmark.pro.service.persistence.handler.PersistServiceImpl"/>

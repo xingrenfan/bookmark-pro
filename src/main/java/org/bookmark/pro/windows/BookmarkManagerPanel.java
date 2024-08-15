@@ -48,33 +48,35 @@ public class BookmarkManagerPanel extends JPanel {
 
     private Project openProject;
 
-    public BookmarkManagerPanel(Project project) {
-        this.openProject = project;
-        BookmarkTree bookmarkTree = BookmarkRunService.getBookmarkManage(project).getBookmarkTree();
-        // 布局
-        setLayout(new BorderLayout());
+
+    private void initSettings(BookmarkTree bookmarkTree) {
         // 设置书签树滚动窗口 鼠标滚轮滑动
         JBScrollPane scrollPane = new JBScrollPane(bookmarkTree);
-
         // 设置区域不可编辑
         jepDesc.setEditable(false);
         scrollPane.setBorder(JBUI.Borders.empty());
-
+        // 布局
+        setLayout(new BorderLayout());
         // 居中显示书签树
         add(scrollPane, BorderLayout.CENTER);
         add(jepDesc, BorderLayout.SOUTH);
-
         // 添加搜索框到顶部
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.add(new JLabel(I18N.get("manager.panel.search")), BorderLayout.WEST);
         topPanel.add(searchField, BorderLayout.CENTER);
         add(topPanel, BorderLayout.NORTH);
-
         // 设置边框样式
         setBorder(JBUI.Borders.empty(2));
-
         // 设置背景色
         setBackground(JBColor.WHITE);
+    }
+
+    public BookmarkManagerPanel(Project project) {
+        this.openProject = project;
+        BookmarkTree bookmarkTree = BookmarkRunService.getBookmarkManage(project).getBookmarkTree();
+
+        initSettings(bookmarkTree);
+
 
         reloadBookmarkTree(project, bookmarkTree);
 
