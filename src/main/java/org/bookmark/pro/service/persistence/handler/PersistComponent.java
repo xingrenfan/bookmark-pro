@@ -19,6 +19,10 @@ public class PersistComponent implements PersistentStateComponent<BookmarkPro> {
 
     private final Project project;
 
+    public static PersistComponent getInstance(Project project) {
+        return project.getService(PersistComponent.class);
+    }
+
     public PersistComponent(Project project) {
         this.project = project;
     }

@@ -9,7 +9,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import org.bookmark.pro.domain.BookmarkPro;
 import org.bookmark.pro.domain.model.AbstractTreeNodeModel;
 import org.bookmark.pro.domain.model.BookmarkConverter;
-import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
+import org.bookmark.pro.service.tree.component.BookmarkTreeNode;
 
 import java.awt.*;
 import java.nio.file.FileSystemNotFoundException;

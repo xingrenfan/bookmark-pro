@@ -9,7 +9,7 @@ import org.bookmark.pro.actions.BookmarkExportAction;
 import org.bookmark.pro.actions.BookmarkHelpAction;
 import org.bookmark.pro.actions.BookmarkImportAction;
 import org.bookmark.pro.actions.BookmarkIssueAction;
-import org.bookmark.pro.context.BookmarkRunService;
+import org.bookmark.pro.windows.BookmarkPanel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -27,7 +27,7 @@ public class BookmarkWindowFactory implements ToolWindowFactory {
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
         initTopMenus(toolWindow);
         ContentFactory contentFactory = ContentFactory.getInstance();
-        Content regularRetention = contentFactory.createContent(BookmarkRunService.getBookmarkManagerPanel(project), null, false);
+        Content regularRetention = contentFactory.createContent(BookmarkPanel.getInstance(project), null, false);
         toolWindow.getContentManager().addContent(regularRetention);
     }
 

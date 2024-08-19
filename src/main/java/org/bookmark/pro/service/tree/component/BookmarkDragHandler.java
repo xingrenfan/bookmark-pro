@@ -1,4 +1,4 @@
-package org.bookmark.pro.service.tree.handler;
+package org.bookmark.pro.service.tree.component;
 
 import org.bookmark.pro.constants.BookmarkConstants;
 
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * @author Lyon
  * @date 2024/03/27
  */
-class BookmarkDragHandler extends TransferHandler {
+public class BookmarkDragHandler extends TransferHandler {
     @Override
     public int getSourceActions(JComponent c) {
         return MOVE;

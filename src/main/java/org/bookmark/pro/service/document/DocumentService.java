@@ -3,7 +3,7 @@ package org.bookmark.pro.service.document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.bookmark.pro.service.document.handler.DocumentServiceImpl;
-import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
+import org.bookmark.pro.service.tree.component.BookmarkTreeNode;
 
 import javax.swing.tree.TreeNode;
 import java.util.List;

@@ -1,30 +1,36 @@
-package org.bookmark.pro.service.tree.handler;
+package org.bookmark.pro.service.tree.component;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.treeStructure.Tree;
-import org.bookmark.pro.context.BookmarkRunService;
-import org.bookmark.pro.domain.model.GroupNodeModel;
+import org.bookmark.pro.service.document.DocumentService;
 
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 /**
- * 书签树
+ * 书签插件 树结构
  *
  * @author Lyon
  * @date 2024/04/18
  */
 public class BookmarkTree extends Tree {
+    public static BookmarkTree getInstance(Project project) {
+        return project.getService(BookmarkTree.class);
+    }
+
     private BookmarkGroupNavigator groupNavigator;
 
     private DefaultTreeModel model;
 
-    protected BookmarkTree() {
+    private Project openProject;
+
+    public BookmarkTree(Project project) {
         super();
+        this.openProject = project;
     }
 
-    protected void setDefaultModel(DefaultTreeModel model, BookmarkGroupNavigator groupNavigator) {
+    public void setDefaultModel(DefaultTreeModel model, BookmarkGroupNavigator groupNavigator) {
         this.groupNavigator = groupNavigator;
         this.model = model;
         setModel(model);
@@ -55,12 +61,12 @@ public class BookmarkTree extends Tree {
      * @param parent 父节点
      * @param node   要添加的节点
      */
-    protected void addNode(Project project, BookmarkTreeNode parent, BookmarkTreeNode node) {
+    public void addNode(BookmarkTreeNode parent, BookmarkTreeNode node) {
         model.insertNodeInto(node, parent, parent.getChildCount());
         // 定位到新增的节点并使其可见
         scrollPathToVisible(new TreePath(node.getPath()));
         // 缓存书签树
-        BookmarkRunService.getDocumentService(project).addBookmarkNode(project, node);
+        DocumentService.getInstance(this.openProject).addBookmarkNode(node);
     }
 
     /**
@@ -68,10 +74,10 @@ public class BookmarkTree extends Tree {
      *
      * @param node 要删除的节点
      */
-    protected void removeNode(Project project, BookmarkTreeNode node) {
+    public void removeNode(BookmarkTreeNode node) {
         model.removeNodeFromParent(node);
         // 删除缓存书签树
-        BookmarkRunService.getDocumentService(project).removeBookmarkNode(project, node);
+        DocumentService.getInstance(this.openProject).removeBookmarkNode(node);
     }
 
     /**

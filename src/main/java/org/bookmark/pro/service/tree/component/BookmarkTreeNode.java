@@ -1,4 +1,4 @@
-package org.bookmark.pro.service.tree.handler;
+package org.bookmark.pro.service.tree.component;
 
 import org.bookmark.pro.domain.model.AbstractTreeNodeModel;
 

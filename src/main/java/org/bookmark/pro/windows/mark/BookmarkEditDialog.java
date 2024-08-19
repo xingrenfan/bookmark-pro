@@ -11,11 +11,11 @@ import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.ui.JBDimension;
 import com.intellij.util.ui.JBUI;
 import org.bookmark.pro.base.I18N;
+import org.bookmark.pro.domain.model.BookmarkNodeModel;
+import org.bookmark.pro.service.tree.component.BookmarkTreeNode;
+import org.bookmark.pro.utils.BookmarkNoticeUtil;
 import org.bookmark.pro.windows.mark.handler.BookmarkCreateHandler;
 import org.bookmark.pro.windows.mark.handler.BookmarkUpdateHandler;
-import org.bookmark.pro.domain.model.BookmarkNodeModel;
-import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
-import org.bookmark.pro.utils.BookmarkNoticeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,18 +52,18 @@ public class BookmarkEditDialog extends DialogWrapper {
      */
     private BookmarkEditService bookmarkEditService;
 
-    private Project project;
+    private Project openProject;
 
-    public BookmarkEditDialog(Project project, boolean createBookmark) {
+    public BookmarkEditDialog(Project openProject, boolean createBookmark) {
         super(true);
-        this.project = project;
+        this.openProject = openProject;
         this.bookmarkLineNum = new JSpinner();
         if (createBookmark) {
             setTitle(I18N.get("bookmark.windows.create"));
-            this.bookmarkEditService = new BookmarkCreateHandler();
+            this.bookmarkEditService = new BookmarkCreateHandler(openProject);
         } else {
             setTitle(I18N.get("bookmark.windows.edit"));
-            this.bookmarkEditService = new BookmarkUpdateHandler();
+            this.bookmarkEditService = new BookmarkUpdateHandler(openProject);
         }
         init();
     }
@@ -89,7 +89,7 @@ public class BookmarkEditDialog extends DialogWrapper {
         this.bookmarkEditService.showBookmarkEnable(panel, constraints, nodeModel);
         if (showMaxLine) {
             // 显示书签父级菜单
-            this.bookmarkEditService.showBookmarkParent(project, panel, constraints, nodeModel);
+            this.bookmarkEditService.showBookmarkParent(openProject, panel, constraints, nodeModel);
         }
         return this;
     }
@@ -106,7 +106,7 @@ public class BookmarkEditDialog extends DialogWrapper {
         tfDesc.setOneLineMode(false);
         tfDesc.setBorder(JBUI.Borders.empty());
         // 设置必输项检查
-        setInputInspect(project, tfName);
+        setInputInspect(openProject, tfName);
 
         constraints.fill = GridBagConstraints.BOTH;
         constraints.insets = JBUI.insets(5);
@@ -207,7 +207,7 @@ public class BookmarkEditDialog extends DialogWrapper {
             if ((parentNode == null || parentNode.isGroup()) && null != oKAction) {
                 oKAction.onAction(name, desc, lineNum, parentNode, enableGroup);
             } else {
-                BookmarkNoticeUtil.errorMessages(project, "Bookmark parent is not group, Please select again.");
+                BookmarkNoticeUtil.errorMessages(openProject, "Bookmark parent is not group, Please select again.");
             }
         });
     }

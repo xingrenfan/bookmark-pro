@@ -3,7 +3,6 @@ package org.bookmark.pro.windows.setting;
 import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.base.I18N;
 import org.bookmark.pro.constants.BookmarkConstants;
-import org.bookmark.pro.context.AppRunContext;
 import org.bookmark.pro.service.settings.GlobalSettings;
 import org.bookmark.pro.utils.BookmarkEditorUtil;
 
@@ -37,7 +36,7 @@ public class GeneralSettings {
     }
 
     protected void initGeneralSettings() {
-        GlobalSettings globalSettings = AppRunContext.getAppService(GlobalSettings.class);
+        GlobalSettings globalSettings = GlobalSettings.getInstance();
 
         // 设置是否启用行尾拓展
         lineEndDocument(globalSettings);
@@ -136,7 +135,7 @@ public class GeneralSettings {
     }
 
     protected void saveGeneralSetting() {
-        GlobalSettings globalSettings = AppRunContext.getAppService(GlobalSettings.class);
+        GlobalSettings globalSettings = GlobalSettings.getInstance();
 
         // 前缀颜色
         globalSettings.setPrefixColor(markLabSel.getForeground());

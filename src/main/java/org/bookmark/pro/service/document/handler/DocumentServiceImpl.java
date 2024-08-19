@@ -8,7 +8,7 @@ import org.bookmark.pro.domain.model.AbstractTreeNodeModel;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.domain.model.GroupNodeModel;
 import org.bookmark.pro.service.document.DocumentService;
-import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
+import org.bookmark.pro.service.tree.component.BookmarkTreeNode;
 
 import javax.swing.tree.TreeNode;
 import java.util.Enumeration;

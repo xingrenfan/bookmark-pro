@@ -11,11 +11,11 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.apache.commons.collections.CollectionUtils;
-import org.bookmark.pro.context.AppRunContext;
-import org.bookmark.pro.context.BookmarkRunService;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.service.document.DocumentService;
-import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
+import org.bookmark.pro.service.persistence.PersistService;
+import org.bookmark.pro.service.tree.TreeService;
+import org.bookmark.pro.service.tree.component.BookmarkTreeNode;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -47,7 +47,7 @@ public class BookmarkDocumentListener implements DocumentListener {
 
         try {
             // 查询文件中的书签
-            Set<BookmarkTreeNode> bookmarkNodes = AppRunContext.getServiceImpl(project, DocumentService.class).getBookmarkNodes(virtualFile);
+            Set<BookmarkTreeNode> bookmarkNodes = DocumentService.getInstance(project).getBookmarkNodes(virtualFile);
             if (CollectionUtils.isEmpty(bookmarkNodes)) {
                 // 空的直接返回
                 return;
@@ -113,10 +113,10 @@ public class BookmarkDocumentListener implements DocumentListener {
 
             if (!isAddLine && (bookmarkPositionLine == lineRange.start || bookmarkPositionLine < lineRange.end)) {
                 // 管理器中删除书签
-                BookmarkRunService.getBookmarkManage(project).removeBookmarkNode(node);
+                TreeService.getInstance(project).removeBookmarkNode(node);
                 continue;
             }
-            DocumentService documentService = AppRunContext.getServiceImpl(project, DocumentService.class);
+            DocumentService documentService = DocumentService.getInstance(project);
             // 移除缓存的旧书签
             documentService.removeBookmarkNode(node);
             int lineGap = lineRange.end - lineRange.start;
@@ -124,8 +124,8 @@ public class BookmarkDocumentListener implements DocumentListener {
             nodeModel.setVirtualFile(virtualFile);
             node.setUserObject(nodeModel);
             documentService.addBookmarkNode(node);
-            BookmarkRunService.getBookmarkManage(project).getBookmarkTree().getModel().nodeChanged(node);
-            BookmarkRunService.getPersistenceService(project).saveBookmark(project);
+            TreeService.getInstance(project).getBookmarkTree().getModel().nodeChanged(node);
+            PersistService.getInstance(project).saveBookmark();
         }
     }
 

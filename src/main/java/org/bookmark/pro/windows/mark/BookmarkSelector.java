@@ -1,6 +1,6 @@
 package org.bookmark.pro.windows.mark;
 
-import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
+import org.bookmark.pro.service.tree.component.BookmarkTreeNode;
 
 /**
  * 书签选择器

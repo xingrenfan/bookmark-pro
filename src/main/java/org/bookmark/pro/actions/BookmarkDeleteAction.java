@@ -8,11 +8,9 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.bookmark.pro.context.AppRunContext;
-import org.bookmark.pro.context.BookmarkRunService;
 import org.bookmark.pro.service.document.DocumentService;
-import org.bookmark.pro.service.document.handler.DocumentServiceImpl;
-import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
+import org.bookmark.pro.service.tree.TreeService;
+import org.bookmark.pro.service.tree.component.BookmarkTreeNode;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,7 +37,7 @@ public class BookmarkDeleteAction extends AnAction {
         int line = caretModel.getLogicalPosition().line;
         BookmarkTreeNode bookmarkNode = DocumentService.getInstance(project).getBookmarkNode(file, line);
         if (bookmarkNode != null) {
-            BookmarkTreeManager.removeBookmarkNode(bookmarkNode);
+            TreeService.getInstance(project).removeBookmarkNode(bookmarkNode);
         }
         BookmarkNoticeUtil.warningMessages(project, "This line not found bookmark");
     }

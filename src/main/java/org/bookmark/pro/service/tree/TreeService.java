@@ -1,8 +1,8 @@
 package org.bookmark.pro.service.tree;
 
 import com.intellij.openapi.project.Project;
-import org.bookmark.pro.service.tree.handler.BookmarkTree;
-import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
+import org.bookmark.pro.service.tree.component.BookmarkTree;
+import org.bookmark.pro.service.tree.component.BookmarkTreeNode;
 import org.bookmark.pro.service.tree.handler.TreeServiceImpl;
 
 /**
@@ -18,6 +18,13 @@ public interface TreeService {
      * @return {@link BookmarkTree}
      */
     BookmarkTree getBookmarkTree();
+
+    /**
+     * 添加书签树节点 - 不指定父节点，添加到根目录
+     *
+     * @param node 节点
+     */
+    void addBookmarkNode(BookmarkTreeNode node);
 
     /**
      * 添加书签树节点 - 指定父节点

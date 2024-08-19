@@ -2,7 +2,7 @@ package org.bookmark.pro.windows.mark;
 
 import com.intellij.openapi.project.Project;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
-import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
+import org.bookmark.pro.service.tree.component.BookmarkTreeNode;
 
 import javax.swing.*;
 import java.awt.*;

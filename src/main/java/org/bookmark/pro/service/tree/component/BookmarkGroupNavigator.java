@@ -1,4 +1,4 @@
-package org.bookmark.pro.service.tree.handler;
+package org.bookmark.pro.service.tree.component;
 
 import com.intellij.openapi.project.Project;
 import org.apache.commons.lang3.Validate;
@@ -13,7 +13,7 @@ import javax.swing.tree.TreePath;
  * @author Lyon
  * @date 2024/03/27
  */
-class BookmarkGroupNavigator {
+public class BookmarkGroupNavigator {
     private final BookmarkTree bookmarkTree;
 
     private BookmarkTreeNode activatedGroup;
@@ -22,17 +22,17 @@ class BookmarkGroupNavigator {
 
     private Project openProject;
 
-    protected BookmarkGroupNavigator(Project project, BookmarkTree bookmarkTree) {
+    public BookmarkGroupNavigator(Project project, BookmarkTree bookmarkTree) {
         this.openProject = project;
         this.bookmarkTree = bookmarkTree;
     }
 
-    protected void setActivatedGroup(BookmarkTreeNode groupTreeNode) {
+    public void setActivatedGroup(BookmarkTreeNode groupTreeNode) {
         this.activatedGroup = groupTreeNode;
     }
 
 
-    protected void setActivatedBookmark(BookmarkTreeNode bookmarkNode) {
+    public void setActivatedBookmark(BookmarkTreeNode bookmarkNode) {
         this.activatedBookmark = bookmarkNode;
     }
 
@@ -63,7 +63,7 @@ class BookmarkGroupNavigator {
      *
      * @param node 节点
      */
-    protected void activeGroup(BookmarkTreeNode node) {
+    public void activeGroup(BookmarkTreeNode node) {
         activatedGroup = node;
         if (node.getChildCount() > 0) {
             activatedBookmark = (BookmarkTreeNode) node.getChildAt(0);
@@ -77,7 +77,7 @@ class BookmarkGroupNavigator {
      *
      * @param node 节点
      */
-    protected void activeBookmark(BookmarkTreeNode node) {
+    public void activeBookmark(BookmarkTreeNode node) {
         activatedBookmark = node;
         activatedGroup = (BookmarkTreeNode) node.getParent();
 
@@ -96,7 +96,7 @@ class BookmarkGroupNavigator {
      *
      * @return 激活的节点或者根节点
      */
-    protected BookmarkTreeNode ensureActivatedGroup() {
+    public BookmarkTreeNode ensureActivatedGroup() {
         if (null == activatedGroup) {
             return (BookmarkTreeNode) this.bookmarkTree.getModel().getRoot();
         }

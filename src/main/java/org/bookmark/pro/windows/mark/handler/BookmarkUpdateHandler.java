@@ -1,13 +1,12 @@
 package org.bookmark.pro.windows.mark.handler;
 
 import com.intellij.openapi.project.Project;
-import org.bookmark.pro.context.BookmarkRunService;
-import org.bookmark.pro.windows.mark.BookmarkEditService;
-import org.bookmark.pro.windows.mark.BookmarkSelector;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.service.document.DocumentService;
-import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
+import org.bookmark.pro.service.tree.component.BookmarkTreeNode;
 import org.bookmark.pro.utils.BookmarkEditorUtil;
+import org.bookmark.pro.windows.mark.BookmarkEditService;
+import org.bookmark.pro.windows.mark.BookmarkSelector;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,6 +20,8 @@ import java.awt.event.ActionListener;
  * @date 2024/04/26
  */
 public class BookmarkUpdateHandler extends BaseServiceUtil implements BookmarkEditService {
+    private Project openProject;
+
     // 行号
     private int nowLineNumber = 3;
 
@@ -31,6 +32,11 @@ public class BookmarkUpdateHandler extends BaseServiceUtil implements BookmarkEd
      * 书签启用分组
      */
     private JCheckBox enableGroup;
+
+    public BookmarkUpdateHandler(Project project) {
+        super();
+        this.openProject = project;
+    }
 
     @Override
     public void lineNumInspect(JPanel panel, GridBagConstraints constraints, JSpinner bookmarkLineNum, int value, Integer maxValue, boolean showMaxLine) {
@@ -55,10 +61,10 @@ public class BookmarkUpdateHandler extends BaseServiceUtil implements BookmarkEd
 
     @Override
     public void showBookmarkParent(Project project, JPanel panel, GridBagConstraints constraints, BookmarkNodeModel node) {
-        DocumentService documentService = BookmarkRunService.getDocumentService(project);
+        DocumentService documentService = DocumentService.getInstance(this.openProject);
         // 获取父级书签下拉选项书签
         JComboBox<BookmarkTreeNode> bookmarkType = new JComboBox<>();
-        BookmarkTreeNode treeNode = documentService.getBookmarkNode(project, node.getCommitHash());
+        BookmarkTreeNode treeNode = documentService.getBookmarkNode(node.getCommitHash());
         BookmarkTreeNode nodeModel = (BookmarkTreeNode) treeNode.getParent();
         // 查询所有书签和分组
         for (BookmarkTreeNode bookmarkTreeNode : documentService.getBookmarkGroup()) {

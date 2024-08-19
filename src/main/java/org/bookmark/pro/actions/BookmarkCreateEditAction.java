@@ -13,7 +13,7 @@ import org.bookmark.pro.constants.BookmarkIcons;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.service.document.DocumentService;
 import org.bookmark.pro.service.tree.TreeService;
-import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
+import org.bookmark.pro.service.tree.component.BookmarkTreeNode;
 import org.bookmark.pro.utils.BookmarkUtil;
 import org.bookmark.pro.utils.SignatureUtil;
 import org.bookmark.pro.windows.BookmarkPanel;
@@ -159,7 +159,7 @@ public class BookmarkCreateEditAction extends AnAction {
             bookmarkModel.setBookmark(true);
             bookmarkModel.setDesc(desc);
             // 添加书签记录
-            BookmarkPanel.getInstance(project).addOneBookmark(project, parentNode, bookmarkModel);
+            BookmarkPanel.getInstance(project).addOneBookmark(parentNode, bookmarkModel);
         });
     }
 

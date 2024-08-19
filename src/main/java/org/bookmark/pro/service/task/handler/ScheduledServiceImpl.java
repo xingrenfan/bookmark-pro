@@ -3,8 +3,7 @@ package org.bookmark.pro.service.task.handler;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import org.bookmark.pro.base.BaseExportService;
-import org.bookmark.pro.context.AppRunContext;
-import org.bookmark.pro.context.BookmarkRunService;
+import org.bookmark.pro.service.persistence.PersistService;
 import org.bookmark.pro.service.settings.BackupSettings;
 import org.bookmark.pro.service.task.ScheduledService;
 
@@ -27,7 +26,7 @@ public final class ScheduledServiceImpl implements ScheduledService, BaseExportS
     @Override
     public void initScheduledService() {
         scheduler = Executors.newScheduledThreadPool(1);
-        BackupSettings globalSettings = AppRunContext.getAppService(BackupSettings.class);
+        BackupSettings globalSettings = BackupSettings.getInstance();
         // 获取备份间隔，时间为小时 默认12个小时备份一次
         long backupInterval = Integer.parseInt(globalSettings.getBackUpTime());
         // 设置初始延迟时间为备份间隔时间
@@ -41,7 +40,7 @@ public final class ScheduledServiceImpl implements ScheduledService, BaseExportS
                 if (project != null) {
                     File autoBackupFile = getAutoBackupRootPath(project);
                     String fileName = project.getName() + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmmss")) + ".json";
-                    BookmarkRunService.getPersistenceService(project).exportBookmark(project, autoBackupFile.getPath() + File.separator + fileName);
+                    PersistService.getInstance(project).exportBookmark(autoBackupFile.getPath() + File.separator + fileName);
                 }
             }
         }

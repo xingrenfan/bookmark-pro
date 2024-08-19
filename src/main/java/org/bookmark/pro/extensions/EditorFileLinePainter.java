@@ -8,11 +8,10 @@ import com.intellij.openapi.vfs.VirtualFile;
 import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.constants.BookmarkConstants;
 import org.bookmark.pro.constants.BookmarkIcons;
-import org.bookmark.pro.context.AppRunContext;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.service.document.DocumentService;
 import org.bookmark.pro.service.settings.GlobalSettings;
-import org.bookmark.pro.service.tree.handler.BookmarkTreeNode;
+import org.bookmark.pro.service.tree.component.BookmarkTreeNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,12 +29,12 @@ import java.util.List;
 public class EditorFileLinePainter extends EditorLinePainter {
     @Override
     public @Nullable Collection<LineExtensionInfo> getLineExtensions(@NotNull Project project, @NotNull VirtualFile file, int lineNumber) {
-        GlobalSettings globalSettings = AppRunContext.getAppService(GlobalSettings.class);
+        GlobalSettings globalSettings = GlobalSettings.getInstance();
 
         List<LineExtensionInfo> result = new ArrayList<>();
         if (globalSettings.getLineDocument()) {
             // 根据相对路径获取
-            BookmarkTreeNode node = AppRunContext.getServiceImpl(project, DocumentService.class).getBookmarkNode(file, lineNumber);
+            BookmarkTreeNode node = DocumentService.getInstance(project).getBookmarkNode(file, lineNumber);
             if (node != null && node.isBookmark()) {
                 // 已经添加书签 则在行末尾追加显示书签内容
                 BookmarkNodeModel bookmark = (BookmarkNodeModel) node.getUserObject();

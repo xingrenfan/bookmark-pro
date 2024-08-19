@@ -18,6 +18,8 @@ public class BookmarkHelpForm extends DialogWrapper {
     private JLabel others;
     private JLabel delete;
     private JLabel addUpdate;
+    private JLabel deleteLabel;
+    private JLabel aeLabel;
 
     public BookmarkHelpForm() {
         super(true); // use current window as parent
@@ -25,7 +27,9 @@ public class BookmarkHelpForm extends DialogWrapper {
         settings.setText(I18N.get("help.settings"));
         others.setText(I18N.get("help.others"));
         delete.setText(I18N.get("help.delete"));
+        deleteLabel.setText(I18N.get("help.document.delete"));
         addUpdate.setText(I18N.get("help.addUpdate"));
+        aeLabel.setText(I18N.get("help.document.ae"));
         init();
     }
 

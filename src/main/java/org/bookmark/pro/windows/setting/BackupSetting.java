@@ -1,6 +1,5 @@
 package org.bookmark.pro.windows.setting;
 
-import org.bookmark.pro.context.AppRunContext;
 import org.bookmark.pro.service.settings.BackupSettings;
 import org.bookmark.pro.utils.BookmarkEditorUtil;
 
@@ -23,7 +22,7 @@ public class BackupSetting {
     }
 
     protected void initBackupSettings() {
-        BackupSettings backupSettings = AppRunContext.getAppService(BackupSettings.class);
+        BackupSettings backupSettings = BackupSettings.getInstance();
 
         backUpPath.setText(backupSettings.getBackUp());
         // 备份间隔时间
@@ -52,7 +51,7 @@ public class BackupSetting {
     }
 
     protected void saveBackupSetting() {
-        BackupSettings backupSettings = AppRunContext.getAppService(BackupSettings.class);
+        BackupSettings backupSettings = BackupSettings.getInstance();
         // 备份路径
         backupSettings.setBackUP(backUpPath.getText());
         // 备份时间

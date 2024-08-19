@@ -1,4 +1,4 @@
-package org.bookmark.pro.service.tree.handler;
+package org.bookmark.pro.service.tree.component;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.InputValidatorEx;
@@ -6,11 +6,10 @@ import com.intellij.openapi.ui.JBMenuItem;
 import com.intellij.openapi.ui.JBPopupMenu;
 import com.intellij.openapi.ui.Messages;
 import org.apache.commons.lang3.StringUtils;
-import org.bookmark.pro.context.AppRunContext;
-import org.bookmark.pro.context.BookmarkRunService;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.domain.model.GroupNodeModel;
 import org.bookmark.pro.service.document.DocumentService;
+import org.bookmark.pro.service.tree.TreeService;
 import org.bookmark.pro.windows.mark.BookmarkEditDialog;
 import org.jsoup.internal.StringUtil;
 
@@ -27,20 +26,26 @@ import java.util.UUID;
  * @author Lyon
  * @date 2024/04/17
  */
-class BookmarkMenus {
-    protected BookmarkMenus() {
+public class BookmarkMenus {
+    private Project openProject;
+
+    public static BookmarkMenus getInstance(Project project) {
+        return project.getService(BookmarkMenus.class);
+    }
+
+    public BookmarkMenus(Project project) {
+        this.openProject = project;
     }
 
     /**
      * 添加树菜单
      *
-     * @param project      项目
      * @param bookmarkTree
      */
-    protected void addTreeMenus(Project project, BookmarkTree bookmarkTree) {
-        JBPopupMenu addGroupMenu = createGroupMenu(project, bookmarkTree);
-        JBPopupMenu treeMenus = createTreeMenus(project, bookmarkTree);
-        JBPopupMenu deleteMenus = createDeleteMenus(project, bookmarkTree);
+    public void addTreeMenus(BookmarkTree bookmarkTree) {
+        JBPopupMenu addGroupMenu = createGroupMenu(this.openProject, bookmarkTree);
+        JBPopupMenu treeMenus = createTreeMenus(this.openProject, bookmarkTree);
+        JBPopupMenu deleteMenus = createDeleteMenus(this.openProject, bookmarkTree);
 
         bookmarkTree.addMouseListener(new MouseAdapter() {
             @Override
@@ -143,7 +148,7 @@ class BookmarkMenus {
      * @return {@link JBMenuItem}
      */
     private JBMenuItem createEditMenu(final Project project, final BookmarkTree bookmarkTree) {
-        DocumentService documentService = AppRunContext.getServiceImpl(project, DocumentService.class);
+        DocumentService documentService = DocumentService.getInstance(project);
         JBMenuItem editMenu = new JBMenuItem("Update");
         // 书签编辑操作
         editMenu.addActionListener(e -> {
@@ -167,7 +172,7 @@ class BookmarkMenus {
                         selectedNode.setBookmark(true);
                         selectedNode.setInvalid(false);
                         documentService.addBookmarkNode(selectedNode);
-                        BookmarkRunService.getBookmarkManage(project).changeBookmarkNode(selectedNode);
+                        TreeService.getInstance(this.openProject).changeBookmarkNode(selectedNode);
                     });
                 } else {
                     // 修改书签分组
@@ -187,7 +192,7 @@ class BookmarkMenus {
                     if (!groupName.equals(nodeModel.getName())) {
                         nodeModel.setName(groupName);
                     }
-                    BookmarkRunService.getBookmarkManage(project).getBookmarkTree().getModel().nodeChanged(selectedNode);
+                    TreeService.getInstance(this.openProject).getBookmarkTree().getModel().nodeChanged(selectedNode);
                 }
             } else {
                 // 书签
@@ -203,7 +208,7 @@ class BookmarkMenus {
                     selectedNode.setBookmark(true);
                     selectedNode.setInvalid(false);
                     documentService.addBookmarkNode(selectedNode);
-                    BookmarkRunService.getBookmarkManage(project).changeBookmarkNode(selectedNode);
+                    TreeService.getInstance(this.openProject).changeBookmarkNode(selectedNode);
                 });
             }
         });
@@ -236,7 +241,7 @@ class BookmarkMenus {
                 if (null == parent) {
                     continue;
                 }
-                bookmarkTree.removeNode(project, node);
+                bookmarkTree.removeNode(node);
             }
         });
         return deleteMenu;
@@ -277,7 +282,7 @@ class BookmarkMenus {
             // 新的分组节点
             BookmarkTreeNode groupNode = new BookmarkTreeNode(new GroupNodeModel(groupName, UUID.randomUUID().toString()), true);
             bookmarkTree.getDefaultModel().insertNodeInto(groupNode, parent, 0);
-            AppRunContext.getServiceImpl(project, DocumentService.class).addBookmarkNode(groupNode);
+            DocumentService.getInstance(project).addBookmarkNode(groupNode);
         });
     }
 }

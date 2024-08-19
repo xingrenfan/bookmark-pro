@@ -14,6 +14,11 @@ import org.bookmark.pro.domain.model.GroupNodeModel;
 import org.bookmark.pro.service.document.DocumentService;
 import org.bookmark.pro.service.settings.GlobalSettings;
 import org.bookmark.pro.service.tree.TreeService;
+import org.bookmark.pro.service.tree.component.BookmarkDragHandler;
+import org.bookmark.pro.service.tree.component.BookmarkGroupNavigator;
+import org.bookmark.pro.service.tree.component.BookmarkMenus;
+import org.bookmark.pro.service.tree.component.BookmarkTree;
+import org.bookmark.pro.service.tree.component.BookmarkTreeNode;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
 import org.bookmark.pro.utils.BookmarkUtil;
 
@@ -36,46 +41,45 @@ import java.util.UUID;
  * @date 2024/04/17
  */
 public final class TreeServiceImpl implements TreeService {
-    private BookmarkMenus menus;
-
     private BookmarkGroupNavigator groupNavigator;
-
-    private BookmarkTree bookmarkTree;
 
     private Project openProject;
 
     public TreeServiceImpl(Project openProject) {
         this.openProject = openProject;
-        // 初始化书签树
-        this.bookmarkTree = new BookmarkTree();
         // 初始化分组导航
-        this.groupNavigator = new BookmarkGroupNavigator(openProject, this.bookmarkTree);
-        this.menus = new BookmarkMenus();
-
+        this.groupNavigator = new BookmarkGroupNavigator(openProject, BookmarkTree.getInstance(openProject));
         // 添加Root节点
-        addProjectNode(openProject, this.bookmarkTree, this.groupNavigator);
+        addProjectNode(openProject, BookmarkTree.getInstance(openProject), this.groupNavigator);
         // 添加搜索提示
-        bookmarkTip(openProject, bookmarkTree);
+        bookmarkTip(openProject, BookmarkTree.getInstance(openProject));
         // 添加拖拽处理方案
-        addDragHandler(this.bookmarkTree);
+        addDragHandler(BookmarkTree.getInstance(openProject));
         // 书签图标渲染
-        bookmarkRendering(openProject, this.bookmarkTree);
+        bookmarkRendering(openProject, BookmarkTree.getInstance(openProject));
         // 增加选中和点击事件
-        addTreeListeners(openProject, this.bookmarkTree);
+        addTreeListeners(openProject, BookmarkTree.getInstance(openProject));
         // 书签书菜单初始化
-        this.menus.addTreeMenus(openProject, this.bookmarkTree);
+        BookmarkMenus.getInstance(this.openProject).addTreeMenus(BookmarkTree.getInstance(openProject));
     }
 
     @Override
     public BookmarkTree getBookmarkTree() {
-        return this.bookmarkTree;
+        return BookmarkTree.getInstance(this.openProject);
+    }
+
+    @Override
+    public void addBookmarkNode(BookmarkTreeNode node) {
+        // 获取父节点
+        BookmarkTreeNode parent = this.groupNavigator.ensureActivatedGroup();
+        addBookmarkNode(parent, node);
     }
 
     @Override
     public void addBookmarkNode(BookmarkTreeNode parentNode, BookmarkTreeNode node) {
         this.groupNavigator.setActivatedBookmark(node);
         // 父节点添加书签节点
-        this.bookmarkTree.addNode(this.openProject, parentNode, node);
+        BookmarkTree.getInstance(openProject).addNode(parentNode, node);
     }
 
     @Override
@@ -85,7 +89,7 @@ public final class TreeServiceImpl implements TreeService {
         }
         if (parentNode == null) {
             // 不指定父节点直接更新
-            bookmarkTree.getModel().nodeChanged(node);
+            BookmarkTree.getInstance(this.openProject).getModel().nodeChanged(node);
         } else {
             // 先移除
             removeBookmarkNode(node);
@@ -117,7 +121,7 @@ public final class TreeServiceImpl implements TreeService {
 
     @Override
     public void removeBookmarkNode(BookmarkTreeNode node) {
-        this.bookmarkTree.removeNode(this.openProject, node);
+        BookmarkTree.getInstance(this.openProject).removeNode(node);
         DocumentService.getInstance(this.openProject).removeBookmarkNode(node);
     }
 

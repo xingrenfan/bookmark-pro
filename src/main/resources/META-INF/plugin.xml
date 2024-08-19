@@ -46,6 +46,10 @@
         <editor.linePainter implementation="org.bookmark.pro.extensions.EditorFileLinePainter"/>
         <!-- 文件变化监听器 -->
         <editorFactoryDocumentListener implementation="org.bookmark.pro.listeners.BookmarkDocumentListener"/>
+        <!-- 书签树 -->
+        <projectService serviceImplementation="org.bookmark.pro.service.tree.component.BookmarkTree"/>
+        <!-- 书签菜单集合 -->
+        <projectService serviceImplementation="org.bookmark.pro.service.tree.component.BookmarkMenus"/>
         <!-- 书签管理面板 -->
         <projectService serviceImplementation="org.bookmark.pro.windows.BookmarkPanel"/>
         <!-- 书签树管理器 -->

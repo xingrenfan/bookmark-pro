@@ -8,7 +8,7 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.bookmark.pro.context.BookmarkRunService;
+import org.bookmark.pro.service.persistence.PersistService;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,7 +39,7 @@ public final class BookmarkImportAction extends AnAction {
         if (result == Messages.CANCEL) {
             return;
         }
-        if (BookmarkRunService.getPersistenceService(project).importBookmark(project, virtualFile)) {
+        if (PersistService.getInstance(project).importBookmark(virtualFile)) {
             BookmarkNoticeUtil.projectNotice(project, "Bookmark import success.");
         }
     }
