@@ -1,6 +1,7 @@
 package org.bookmark.pro.service.tree;
 
 import com.intellij.openapi.project.Project;
+import org.bookmark.pro.service.ServiceContext;
 import org.bookmark.pro.service.tree.component.BookmarkTree;
 import org.bookmark.pro.service.tree.component.BookmarkTreeNode;
 import org.bookmark.pro.service.tree.handler.TreeServiceImpl;
@@ -77,6 +78,6 @@ public interface TreeService {
     void preBookmark(Project project);
 
     static TreeService getInstance(Project project) {
-        return project.getService(TreeServiceImpl.class);
+        return ServiceContext.getContextAttribute(project).getTreeService();
     }
 }

@@ -2,6 +2,7 @@ package org.bookmark.pro.service.tree.component;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.treeStructure.Tree;
+import org.bookmark.pro.service.ServiceContext;
 import org.bookmark.pro.service.document.DocumentService;
 
 import javax.swing.tree.DefaultTreeModel;
@@ -16,7 +17,7 @@ import javax.swing.tree.TreePath;
  */
 public class BookmarkTree extends Tree {
     public static BookmarkTree getInstance(Project project) {
-        return project.getService(BookmarkTree.class);
+        return ServiceContext.getContextAttribute(project).getBookmarkTree();
     }
 
     private BookmarkGroupNavigator groupNavigator;

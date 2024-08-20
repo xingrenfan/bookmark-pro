@@ -6,7 +6,10 @@ import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.ui.JBUI;
 import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.base.I18N;
+import org.bookmark.pro.domain.BookmarkPro;
+import org.bookmark.pro.domain.model.BookmarkConverter;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
+import org.bookmark.pro.service.ServiceContext;
 import org.bookmark.pro.service.document.DocumentService;
 import org.bookmark.pro.service.persistence.PersistService;
 import org.bookmark.pro.service.settings.GlobalSettings;
@@ -35,7 +38,7 @@ import java.util.concurrent.ExecutionException;
  */
 public class BookmarkPanel extends JPanel {
     public static BookmarkPanel getInstance(Project project) {
-        return project.getService(BookmarkPanel.class);
+        return ServiceContext.getContextAttribute(project).getBookmarkPanel();
     }
 
     /**
@@ -140,16 +143,16 @@ public class BookmarkPanel extends JPanel {
      */
     public void addOneBookmark(BookmarkTreeNode parentNode, BookmarkNodeModel bookmarkModel) {
         // TODO 一次都没有创建过项目
-        /*if (BookmarkRunService.getBookmarkManagerPanel(project) == null) {
+        if (!treeLoaded) {
             BookmarkPro bookmark = BookmarkConverter.modelToBean(bookmarkModel);
             // 获取持久化书签对象
             PersistService.getInstance(this.openProject).addOneBookmark(bookmark);
             return;
-        }*/
-        // 添加书签
-        if (!treeLoaded) {
-            return;
         }
+        // 添加书签
+        /*if (!treeLoaded) {
+            return;
+        }*/
         BookmarkTreeNode treeNode = new BookmarkTreeNode(bookmarkModel, true);
         if (parentNode == null) {
             // 书签管理窗口添加书签

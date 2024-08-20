@@ -47,18 +47,18 @@
         <!-- 文件变化监听器 -->
         <editorFactoryDocumentListener implementation="org.bookmark.pro.listeners.BookmarkDocumentListener"/>
         <!-- 书签树 -->
-        <projectService serviceImplementation="org.bookmark.pro.service.tree.component.BookmarkTree"/>
+        <!--<projectService serviceImplementation="org.bookmark.pro.service.tree.component.BookmarkTree"/>-->
         <!-- 书签菜单集合 -->
-        <projectService serviceImplementation="org.bookmark.pro.service.tree.component.BookmarkMenus"/>
+        <!--<projectService serviceImplementation="org.bookmark.pro.service.tree.component.BookmarkMenus"/>-->
         <!-- 书签管理面板 -->
-        <projectService serviceImplementation="org.bookmark.pro.windows.BookmarkPanel"/>
+        <!--<projectService serviceImplementation="org.bookmark.pro.windows.BookmarkPanel"/>-->
         <!-- 书签树管理器 -->
-        <projectService serviceInterface="org.bookmark.pro.service.tree.TreeService" serviceImplementation="org.bookmark.pro.service.tree.handler.TreeServiceImpl"/>
+        <!--<projectService serviceInterface="org.bookmark.pro.service.tree.TreeService" serviceImplementation="org.bookmark.pro.service.tree.handler.TreeServiceImpl"/>-->
         <!-- 书签持久化 -->
         <projectService serviceImplementation="org.bookmark.pro.service.persistence.handler.PersistComponent"/>
-        <projectService serviceInterface="org.bookmark.pro.service.persistence.PersistService" serviceImplementation="org.bookmark.pro.service.persistence.handler.PersistServiceImpl"/>
+        <!--<projectService serviceInterface="org.bookmark.pro.service.persistence.PersistService" serviceImplementation="org.bookmark.pro.service.persistence.handler.PersistServiceImpl"/>-->
         <!-- 缓存 -->
-        <projectService serviceInterface="org.bookmark.pro.service.document.DocumentService" serviceImplementation="org.bookmark.pro.service.document.handler.DocumentServiceImpl"/>
+        <!--<projectService serviceInterface="org.bookmark.pro.service.document.DocumentService" serviceImplementation="org.bookmark.pro.service.document.handler.DocumentServiceImpl"/>-->
         <!-- 配置 -->
         <applicationService serviceImplementation="org.bookmark.pro.service.settings.GlobalSettings"/>
         <applicationService serviceImplementation="org.bookmark.pro.service.settings.BackupSettings"/>

@@ -8,6 +8,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.StartupActivity;
 import org.bookmark.pro.constants.BookmarkConstants;
 import org.bookmark.pro.constants.BookmarkIcons;
+import org.bookmark.pro.service.ServiceContext;
 import org.bookmark.pro.service.task.ScheduledService;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
 import org.jetbrains.annotations.NotNull;
@@ -24,9 +25,11 @@ import java.net.URI;
 public class AppActivationService implements StartupActivity {
     @Override
     public void runActivity(@NotNull Project project) {
+        new ServiceContext(project);
         // 插件启动通知
         startNotice(project);
-        ScheduledService.getInstance().initScheduledService(); // 启动定时备份任务
+        // 启动定时任务
+        ScheduledService.getInstance(project).initScheduledService(); // 启动定时备份任务
     }
 
     /**

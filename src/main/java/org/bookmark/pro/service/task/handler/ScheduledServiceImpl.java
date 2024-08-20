@@ -23,6 +23,12 @@ import java.util.concurrent.TimeUnit;
 public final class ScheduledServiceImpl implements ScheduledService, BaseExportService {
     private ScheduledExecutorService scheduler;
 
+    private Project openProject;
+
+    public ScheduledServiceImpl(Project openProject) {
+        this.openProject = openProject;
+    }
+
     @Override
     public void initScheduledService() {
         scheduler = Executors.newScheduledThreadPool(1);

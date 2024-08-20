@@ -1,7 +1,7 @@
 package org.bookmark.pro.service.task;
 
-import com.intellij.openapi.application.ApplicationManager;
-import org.bookmark.pro.service.task.handler.ScheduledServiceImpl;
+import com.intellij.openapi.project.Project;
+import org.bookmark.pro.service.ServiceContext;
 
 /**
  * 书签工程定时服务
@@ -20,7 +20,7 @@ public interface ScheduledService {
      */
     void shutdown();
 
-    static ScheduledService getInstance() {
-        return ApplicationManager.getApplication().getService(ScheduledServiceImpl.class);
+    static ScheduledService getInstance(Project project) {
+        return ServiceContext.getContextAttribute(project).getScheduledService();
     }
 }

@@ -8,6 +8,7 @@ import com.intellij.openapi.ui.Messages;
 import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.domain.model.GroupNodeModel;
+import org.bookmark.pro.service.ServiceContext;
 import org.bookmark.pro.service.document.DocumentService;
 import org.bookmark.pro.service.tree.TreeService;
 import org.bookmark.pro.windows.mark.BookmarkEditDialog;
@@ -30,7 +31,7 @@ public class BookmarkMenus {
     private Project openProject;
 
     public static BookmarkMenus getInstance(Project project) {
-        return project.getService(BookmarkMenus.class);
+        return ServiceContext.getContextAttribute(project).getBookmarkMenus();
     }
 
     public BookmarkMenus(Project project) {

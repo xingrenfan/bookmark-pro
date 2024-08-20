@@ -18,6 +18,6 @@ public class AppCloseService implements ProjectManagerListener {
         // 处理项目关闭事件
         PersistService.getInstance(project).saveBookmark();
         // 关闭线程池
-        ScheduledService.getInstance().shutdown();
+        ScheduledService.getInstance(project).shutdown();
     }
 }

@@ -3,6 +3,7 @@ package org.bookmark.pro.service.persistence;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.bookmark.pro.domain.BookmarkPro;
+import org.bookmark.pro.service.ServiceContext;
 import org.bookmark.pro.service.persistence.handler.PersistServiceImpl;
 import org.bookmark.pro.service.tree.component.BookmarkTreeNode;
 
@@ -63,6 +64,6 @@ public interface PersistService {
     BookmarkTreeNode getBookmarkNodeSearch(String searchText);
 
     static PersistService getInstance(Project project) {
-        return project.getService(PersistServiceImpl.class);
+        return ServiceContext.getContextAttribute(project).getPersistService();
     }
 }
