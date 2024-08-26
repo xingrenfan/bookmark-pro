@@ -1,4 +1,4 @@
-package org.bookmark.pro.service.settings;
+package org.bookmark.pro.service.base.settings;
 
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.application.ApplicationManager;

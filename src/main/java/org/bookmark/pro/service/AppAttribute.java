@@ -1,12 +1,12 @@
 package org.bookmark.pro.service;
 
 import com.intellij.openapi.project.Project;
-import org.bookmark.pro.service.document.DocumentService;
-import org.bookmark.pro.service.document.handler.DocumentServiceImpl;
-import org.bookmark.pro.service.persistence.PersistService;
-import org.bookmark.pro.service.persistence.handler.PersistServiceImpl;
-import org.bookmark.pro.service.task.ScheduledService;
-import org.bookmark.pro.service.task.handler.ScheduledServiceImpl;
+import org.bookmark.pro.service.base.document.DocumentService;
+import org.bookmark.pro.service.base.document.handler.DocumentServiceImpl;
+import org.bookmark.pro.service.base.persistence.PersistService;
+import org.bookmark.pro.service.base.persistence.handler.PersistServiceImpl;
+import org.bookmark.pro.service.base.task.ScheduledService;
+import org.bookmark.pro.service.base.task.handler.ScheduledServiceImpl;
 import org.bookmark.pro.service.tree.TreeService;
 import org.bookmark.pro.service.tree.component.BookmarkMenus;
 import org.bookmark.pro.service.tree.component.BookmarkTree;
@@ -45,6 +45,7 @@ public class AppAttribute {
         this.bookmarkMenus = new BookmarkMenus(project);
         this.persistService = new PersistServiceImpl(project);
         this.documentService = new DocumentServiceImpl(project);
+        this.bookmarkTree = new BookmarkTree(project);
     }
 
     public BookmarkTree getBookmarkTree() {

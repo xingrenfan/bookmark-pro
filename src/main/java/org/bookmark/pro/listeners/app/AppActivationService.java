@@ -9,7 +9,7 @@ import com.intellij.openapi.startup.StartupActivity;
 import org.bookmark.pro.constants.BookmarkConstants;
 import org.bookmark.pro.constants.BookmarkIcons;
 import org.bookmark.pro.service.ServiceContext;
-import org.bookmark.pro.service.task.ScheduledService;
+import org.bookmark.pro.service.base.task.ScheduledService;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
 import org.jetbrains.annotations.NotNull;
 

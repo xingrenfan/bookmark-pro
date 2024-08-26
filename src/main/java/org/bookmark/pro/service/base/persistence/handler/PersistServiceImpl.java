@@ -1,4 +1,4 @@
-package org.bookmark.pro.service.persistence.handler;
+package org.bookmark.pro.service.base.persistence.handler;
 
 import com.google.gson.Gson;
 import com.intellij.openapi.project.Project;
@@ -9,13 +9,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.domain.BookmarkPro;
 import org.bookmark.pro.domain.model.AbstractTreeNodeModel;
 import org.bookmark.pro.domain.model.BookmarkConverter;
-import org.bookmark.pro.service.persistence.PersistService;
-import org.bookmark.pro.service.tree.TreeService;
+import org.bookmark.pro.service.base.persistence.PersistService;
 import org.bookmark.pro.service.tree.component.BookmarkTree;
 import org.bookmark.pro.service.tree.component.BookmarkTreeNode;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
 import org.bookmark.pro.utils.BookmarkUtil;
-import org.bookmark.pro.windows.BookmarkPanel;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -37,10 +35,12 @@ public final class PersistServiceImpl implements PersistService {
         this.openProject = project;
     }
 
+    private PersistComponent getPersistComponent() {
+        return this.openProject.getService(PersistComponent.class);
+    }
+
     @Override
-    public void saveBookmark() {
-        // 获取书签树
-        BookmarkTree bookmarkTree = TreeService.getInstance(this.openProject).getBookmarkTree();
+    public void saveBookmark(BookmarkTree bookmarkTree) {
         if (bookmarkTree == null) {
             return;
         }
@@ -48,13 +48,13 @@ public final class PersistServiceImpl implements PersistService {
         BookmarkTreeNode rootNode = (BookmarkTreeNode) bookmarkTree.getModel().getRoot();
         BookmarkPro bookmark = BookmarkUtil.nodeToBean(rootNode);
         // 获取持久化书签对象
-        PersistComponent.getInstance(this.openProject).setState(bookmark);
+        getPersistComponent().setState(bookmark);
     }
 
     @Override
     public boolean exportBookmark(String savePath) {
         // 获取持久化书签对象
-        BookmarkPro bookmarkPro = BookmarkUtil.copyObject(PersistComponent.getInstance(this.openProject).getState(), BookmarkPro.class);
+        BookmarkPro bookmarkPro = BookmarkUtil.copyObject(getPersistComponent().getState(), BookmarkPro.class);
         // 替换IDEA编辑器的$PROJECT_DIR$
         String basePath = this.openProject.getBasePath();
         if (StringUtils.isNotBlank(basePath)) {
@@ -96,9 +96,7 @@ public final class PersistServiceImpl implements PersistService {
                 replaceBookmarkPath(bookmark, "$PROJECT_DIR$", projectDir);
             }
             // 重新设置持久化数据
-            PersistComponent.getInstance(this.openProject).setState(bookmark);
-            // 重新加载标签书
-            BookmarkPanel.getInstance(this.openProject).reloadBookmarkTree(TreeService.getInstance(this.openProject).getBookmarkTree());
+            getPersistComponent().setState(bookmark);
             return true;
         } catch (IOException e) {
             BookmarkNoticeUtil.errorMessages(this.openProject, "Import bookmark fail, message: " + e.getMessage());
@@ -220,21 +218,21 @@ public final class PersistServiceImpl implements PersistService {
 
     @Override
     public void addOneBookmark(BookmarkPro bookmark) {
-        PersistComponent service = PersistComponent.getInstance(this.openProject);
+        PersistComponent service = getPersistComponent();
         // 添加书签对象
         service.getState().getChildren().add(bookmark);
     }
 
     @Override
     public BookmarkTreeNode getBookmarkNode() {
-        PersistComponent service = PersistComponent.getInstance(this.openProject);
+        PersistComponent service = getPersistComponent();
         return generateTreeNode(service.getState());
     }
 
 
     @Override
     public BookmarkTreeNode getBookmarkNodeSearch(String searchText) {
-        PersistComponent service = PersistComponent.getInstance(this.openProject);
+        PersistComponent service = getPersistComponent();
         return generateTreeNodeSearch(service.getState(), searchText);
     }
 }

@@ -1,4 +1,4 @@
-package org.bookmark.pro.service.task;
+package org.bookmark.pro.service.base.task;
 
 import com.intellij.openapi.project.Project;
 import org.bookmark.pro.service.ServiceContext;

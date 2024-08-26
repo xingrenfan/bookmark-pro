@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.domain.model.GroupNodeModel;
 import org.bookmark.pro.service.ServiceContext;
-import org.bookmark.pro.service.document.DocumentService;
+import org.bookmark.pro.service.base.document.DocumentService;
 import org.bookmark.pro.service.tree.TreeService;
 import org.bookmark.pro.windows.mark.BookmarkEditDialog;
 import org.jsoup.internal.StringUtil;

@@ -1,6 +1,6 @@
 package org.bookmark.pro.windows.setting;
 
-import org.bookmark.pro.service.settings.BackupSettings;
+import org.bookmark.pro.service.base.settings.BackupSettings;
 import org.bookmark.pro.utils.BookmarkEditorUtil;
 
 import javax.swing.*;

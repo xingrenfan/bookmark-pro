@@ -8,8 +8,10 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.bookmark.pro.service.persistence.PersistService;
+import org.bookmark.pro.service.base.persistence.PersistService;
+import org.bookmark.pro.service.tree.TreeService;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
+import org.bookmark.pro.windows.BookmarkPanel;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -40,6 +42,8 @@ public final class BookmarkImportAction extends AnAction {
             return;
         }
         if (PersistService.getInstance(project).importBookmark(virtualFile)) {
+            // 重新加载标签书
+            BookmarkPanel.getInstance(project).reloadBookmarkTree(TreeService.getInstance(project).getBookmarkTree());
             BookmarkNoticeUtil.projectNotice(project, "Bookmark import success.");
         }
     }

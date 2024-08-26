@@ -3,7 +3,7 @@ package org.bookmark.pro.windows.setting;
 import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.base.I18N;
 import org.bookmark.pro.constants.BookmarkConstants;
-import org.bookmark.pro.service.settings.GlobalSettings;
+import org.bookmark.pro.service.base.settings.GlobalSettings;
 import org.bookmark.pro.utils.BookmarkEditorUtil;
 
 import javax.swing.*;

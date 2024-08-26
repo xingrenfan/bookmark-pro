@@ -1,4 +1,4 @@
-package org.bookmark.pro.service.document.handler;
+package org.bookmark.pro.service.base.document.handler;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -7,7 +7,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.bookmark.pro.domain.model.AbstractTreeNodeModel;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.domain.model.GroupNodeModel;
-import org.bookmark.pro.service.document.DocumentService;
+import org.bookmark.pro.service.base.document.DocumentService;
 import org.bookmark.pro.service.tree.component.BookmarkTreeNode;
 
 import javax.swing.tree.TreeNode;
@@ -139,6 +139,7 @@ public final class DocumentServiceImpl implements DocumentService {
     public void reloadingCacheNode(TreeNode treeNode) {
         if (treeNode instanceof BookmarkTreeNode) {
             BookmarkTreeNode bookmarkNode = (BookmarkTreeNode) treeNode;
+            if (Objects.isNull(bookmarkNode)) return;
             addBookmarkNode(bookmarkNode);
             if (bookmarkNode.isBookmark() && !bookmarkNode.isGroup()) {
                 // 纯书签-没有子节点 跳过后续处理

@@ -1,10 +1,10 @@
-package org.bookmark.pro.service.persistence;
+package org.bookmark.pro.service.base.persistence;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.bookmark.pro.domain.BookmarkPro;
 import org.bookmark.pro.service.ServiceContext;
-import org.bookmark.pro.service.persistence.handler.PersistServiceImpl;
+import org.bookmark.pro.service.tree.component.BookmarkTree;
 import org.bookmark.pro.service.tree.component.BookmarkTreeNode;
 
 /**
@@ -19,7 +19,7 @@ public interface PersistService {
      *
      * @param project 项目
      */
-    void saveBookmark();
+    void saveBookmark(BookmarkTree bookmarkTree);
 
     /**
      * 导出书签

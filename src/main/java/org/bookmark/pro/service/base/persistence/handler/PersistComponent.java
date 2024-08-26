@@ -1,4 +1,4 @@
-package org.bookmark.pro.service.persistence.handler;
+package org.bookmark.pro.service.base.persistence.handler;
 
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
@@ -8,7 +8,7 @@ import org.bookmark.pro.domain.BookmarkPro;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 书签持久化
+ * 书签持久化 -- 基础
  *
  * @author Nonoas
  * @date 2023/6/5
@@ -18,10 +18,6 @@ public class PersistComponent implements PersistentStateComponent<BookmarkPro> {
     private BookmarkPro state;
 
     private final Project project;
-
-    public static PersistComponent getInstance(Project project) {
-        return project.getService(PersistComponent.class);
-    }
 
     public PersistComponent(Project project) {
         this.project = project;

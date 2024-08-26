@@ -55,15 +55,15 @@
         <!-- 书签树管理器 -->
         <!--<projectService serviceInterface="org.bookmark.pro.service.tree.TreeService" serviceImplementation="org.bookmark.pro.service.tree.handler.TreeServiceImpl"/>-->
         <!-- 书签持久化 -->
-        <projectService serviceImplementation="org.bookmark.pro.service.persistence.handler.PersistComponent"/>
+        <projectService serviceImplementation="org.bookmark.pro.service.base.persistence.handler.PersistComponent"/>
         <!--<projectService serviceInterface="org.bookmark.pro.service.persistence.PersistService" serviceImplementation="org.bookmark.pro.service.persistence.handler.PersistServiceImpl"/>-->
         <!-- 缓存 -->
         <!--<projectService serviceInterface="org.bookmark.pro.service.document.DocumentService" serviceImplementation="org.bookmark.pro.service.document.handler.DocumentServiceImpl"/>-->
         <!-- 配置 -->
-        <applicationService serviceImplementation="org.bookmark.pro.service.settings.GlobalSettings"/>
-        <applicationService serviceImplementation="org.bookmark.pro.service.settings.BackupSettings"/>
+        <applicationService serviceImplementation="org.bookmark.pro.service.base.settings.GlobalSettings"/>
+        <applicationService serviceImplementation="org.bookmark.pro.service.base.settings.BackupSettings"/>
         <!-- 任务 -->
-        <applicationService serviceInterface="org.bookmark.pro.service.task.ScheduledService" serviceImplementation="org.bookmark.pro.service.task.handler.ScheduledServiceImpl"/>
+        <applicationService serviceInterface="org.bookmark.pro.service.base.task.ScheduledService" serviceImplementation="org.bookmark.pro.service.base.task.handler.ScheduledServiceImpl"/>
     </extensions>
 
     <applicationListeners>

@@ -2,7 +2,7 @@ package org.bookmark.pro.windows.mark.handler;
 
 import com.intellij.openapi.project.Project;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
-import org.bookmark.pro.service.document.DocumentService;
+import org.bookmark.pro.service.base.document.DocumentService;
 import org.bookmark.pro.service.tree.component.BookmarkTreeNode;
 import org.bookmark.pro.utils.BookmarkEditorUtil;
 import org.bookmark.pro.windows.mark.BookmarkEditService;

@@ -12,9 +12,10 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.apache.commons.collections.CollectionUtils;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
-import org.bookmark.pro.service.document.DocumentService;
-import org.bookmark.pro.service.persistence.PersistService;
+import org.bookmark.pro.service.base.document.DocumentService;
+import org.bookmark.pro.service.base.persistence.PersistService;
 import org.bookmark.pro.service.tree.TreeService;
+import org.bookmark.pro.service.tree.component.BookmarkTree;
 import org.bookmark.pro.service.tree.component.BookmarkTreeNode;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
 import org.jetbrains.annotations.NotNull;
@@ -125,7 +126,9 @@ public class BookmarkDocumentListener implements DocumentListener {
             node.setUserObject(nodeModel);
             documentService.addBookmarkNode(node);
             TreeService.getInstance(project).getBookmarkTree().getModel().nodeChanged(node);
-            PersistService.getInstance(project).saveBookmark();
+            // 获取书签树
+            BookmarkTree bookmarkTree = TreeService.getInstance(project).getBookmarkTree();
+            PersistService.getInstance(project).saveBookmark(bookmarkTree);
         }
     }
 

@@ -10,9 +10,9 @@ import org.bookmark.pro.domain.BookmarkPro;
 import org.bookmark.pro.domain.model.BookmarkConverter;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.service.ServiceContext;
-import org.bookmark.pro.service.document.DocumentService;
-import org.bookmark.pro.service.persistence.PersistService;
-import org.bookmark.pro.service.settings.GlobalSettings;
+import org.bookmark.pro.service.base.document.DocumentService;
+import org.bookmark.pro.service.base.persistence.PersistService;
+import org.bookmark.pro.service.base.settings.GlobalSettings;
 import org.bookmark.pro.service.tree.TreeService;
 import org.bookmark.pro.service.tree.component.BookmarkTree;
 import org.bookmark.pro.service.tree.component.BookmarkTreeNode;
@@ -224,7 +224,9 @@ public class BookmarkPanel extends JPanel {
                         @Override
                         protected Void doInBackground() throws Exception {
                             try {
-                                PersistService.getInstance(project).saveBookmark();
+                                // 获取书签树
+                                BookmarkTree bookmarkTree = TreeService.getInstance(project).getBookmarkTree();
+                                PersistService.getInstance(project).saveBookmark(bookmarkTree);
                             } catch (Exception e) {
                                 BookmarkNoticeUtil.projectNotice(project, "出现异常" + e.getMessage());
                             }

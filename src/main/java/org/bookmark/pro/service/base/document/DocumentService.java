@@ -1,4 +1,4 @@
-package org.bookmark.pro.service.document;
+package org.bookmark.pro.service.base.document;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;

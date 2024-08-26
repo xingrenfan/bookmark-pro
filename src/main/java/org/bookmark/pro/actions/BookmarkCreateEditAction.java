@@ -11,7 +11,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.constants.BookmarkIcons;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
-import org.bookmark.pro.service.document.DocumentService;
+import org.bookmark.pro.service.base.document.DocumentService;
 import org.bookmark.pro.service.tree.TreeService;
 import org.bookmark.pro.service.tree.component.BookmarkTreeNode;
 import org.bookmark.pro.utils.BookmarkUtil;

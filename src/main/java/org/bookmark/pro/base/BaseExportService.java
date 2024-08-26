@@ -8,8 +8,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.constants.BookmarkIcons;
-import org.bookmark.pro.service.persistence.PersistService;
-import org.bookmark.pro.service.settings.BackupSettings;
+import org.bookmark.pro.service.base.persistence.PersistService;
+import org.bookmark.pro.service.base.settings.BackupSettings;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
 import org.jetbrains.annotations.NotNull;
 

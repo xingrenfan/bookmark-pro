@@ -2,6 +2,8 @@ package org.bookmark.pro.domain.model;
 
 import org.bookmark.pro.constants.BookmarkIcons;
 
+import java.util.Objects;
+
 /**
  * 书签分组模型
  *
@@ -56,7 +58,7 @@ public class GroupNodeModel implements AbstractTreeNodeModel {
     }
 
     public String getCommitHash() {
-        return commitHash;
+        return Objects.toString(commitHash, "");
     }
 
     public void setCommitHash(String commitHash) {
