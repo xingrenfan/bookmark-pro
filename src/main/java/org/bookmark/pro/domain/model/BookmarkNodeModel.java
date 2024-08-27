@@ -9,6 +9,8 @@ import org.bookmark.pro.constants.BookmarkIcons;
 import org.bookmark.pro.domain.model.handler.OpenChangeFile;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
 
+import java.util.Objects;
+
 /**
  * 书签数据模型
  *
@@ -128,7 +130,7 @@ public class BookmarkNodeModel implements AbstractTreeNodeModel {
     }
 
     public String getCommitHash() {
-        return commitHash;
+        return Objects.toString(commitHash, "");
     }
 
     public void setCommitHash(String commitHash) {

@@ -30,6 +30,16 @@ public interface BookmarkConstants {
     String IDEA_PLUGIN_URI = "https://plugins.jetbrains.com/plugin/24476-markbook-pro";
 
     /**
+     * 弹窗提示框
+     */
+    String TIPS_FOR_TOOL = "Tooltip";
+
+    /**
+     * Panel窗口
+     */
+    String TIPS_FOR_WINDOW = "Window";
+
+    /**
      * 书签前缀
      */
     String BOOKMARK_PREFIX = "bookmark.pro:prefix";

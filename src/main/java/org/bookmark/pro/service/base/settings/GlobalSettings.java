@@ -107,6 +107,6 @@ public final class GlobalSettings extends BaseSetting {
     }
 
     public String getTipType() {
-        return properties.getValue(BookmarkConstants.BOOKMARK_TIPS_TYPE, I18N.get("setting.general.tipItem1"));
+        return properties.getValue(BookmarkConstants.BOOKMARK_TIPS_TYPE, BookmarkConstants.TIPS_FOR_TOOL);
     }
 }

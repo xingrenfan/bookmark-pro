@@ -37,7 +37,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- 激活监听器 -->
-        <postStartupActivity implementation="org.bookmark.pro.listeners.app.AppActivationService"/>
+        <postStartupActivity implementation="org.bookmark.pro.listeners.StartedListener"/>
         <!-- Setting 配置 -->
         <applicationConfigurable instance="org.bookmark.pro.windows.setting.BookmarkSettingForm" id="bookmark.pro.config" displayName="BookmarkPro"/>
         <!-- 左边栏设置锚点，展示窗口 -->
@@ -68,7 +68,7 @@
 
     <applicationListeners>
         <!-- 项目关闭监听器 -->
-        <listener class="org.bookmark.pro.listeners.app.AppCloseService" topic="com.intellij.openapi.project.ProjectManagerListener"/>
+        <listener class="org.bookmark.pro.listeners.ClosedListener" topic="com.intellij.openapi.project.ProjectManagerListener"/>
         <!-- 监听工具窗口的注册和显示事件 -->
         <listener class="org.bookmark.pro.listeners.BookmarkWindowListener" topic="com.intellij.openapi.wm.ex.ToolWindowManagerListener"/>
     </applicationListeners>

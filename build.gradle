@@ -1,10 +1,13 @@
 plugins {
     id 'java'
     id 'org.jetbrains.intellij' version '1.17.2'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.23'
 }
 
 group pluginGroup
 version pluginVersion
+def javaVersion = JavaVersion.VERSION_17
+def kotlinJvmTarget = 17
 
 repositories {
     maven { url 'https://maven.aliyun.com/repository/public/' }
@@ -27,6 +30,16 @@ repositories {
     }
     mavenLocal()
     mavenCentral()
+}
+
+// Kotlin编译设置
+kotlin {
+    java {
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
+    }
+    jvmToolchain(kotlinJvmTarget) // 设置Kotlin使用的JVM工具链版本，应与Java的兼容性设置保持一致
+    // 其他Kotlin编译选项可根据需要添加
 }
 
 allprojects {

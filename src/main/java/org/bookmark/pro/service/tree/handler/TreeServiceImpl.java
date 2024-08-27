@@ -218,7 +218,7 @@ public final class TreeServiceImpl implements TreeService {
     }
 
     private void bookmarkTip(Project project, BookmarkTree bookmarkTree) {
-        if (I18N.get("setting.general.tipItem1").equals(GlobalSettings.getInstance().getTipType())) {
+        if (BookmarkConstants.TIPS_FOR_TOOL.equals(GlobalSettings.getInstance().getTipType())) {
             bookmarkTree.addMouseMotionListener(new MouseMotionAdapter() {
                 @Override
                 public void mouseMoved(MouseEvent e) {

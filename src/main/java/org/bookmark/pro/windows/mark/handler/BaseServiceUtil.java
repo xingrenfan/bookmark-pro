@@ -1,5 +1,6 @@
 package org.bookmark.pro.windows.mark.handler;
 
+import org.bookmark.pro.base.I18N;
 import org.bookmark.pro.constants.BookmarkConstants;
 import org.bookmark.pro.service.tree.component.BookmarkTreeNode;
 
@@ -17,7 +18,7 @@ class BaseServiceUtil {
      */
     protected void bookmarkWarning(JPanel panel, GridBagConstraints constraints, String message, int rowNum) {
         // 第四行 第一列 预警信息
-        JLabel warningLabel = new JLabel("Bookmark Warning:");
+        JLabel warningLabel = new JLabel(I18N.get("bookmark.windows.warning"));
         constraints.gridx = 0;
         constraints.gridy = rowNum;
         constraints.weightx = 0;
@@ -45,7 +46,7 @@ class BaseServiceUtil {
      */
     protected void bookmarkLineNum(JPanel panel, GridBagConstraints constraints, Integer maxValue, int rowNum) {
         // 第四行 第一列
-        JLabel lbName = new JLabel("Bookmark Line Limit:");
+        JLabel lbName = new JLabel(I18N.get("bookmark.windows.mark.line.limit"));
         constraints.gridx = 0;
         constraints.gridy = rowNum;
         constraints.weightx = 0;
@@ -53,7 +54,7 @@ class BaseServiceUtil {
         panel.add(lbName, constraints);
         lbName.setForeground(BookmarkConstants.CUE_COLOR);
         // 第四行 第二列
-        JLabel number = new JLabel("The bookmark Line number max is " + maxValue + ".");
+        JLabel number = new JLabel(I18N.get("bookmark.windows.mark.line.max") + " " + maxValue);
         constraints.gridx = 1;
         constraints.gridy = rowNum;
         constraints.weightx = 1;
@@ -72,7 +73,7 @@ class BaseServiceUtil {
      */
     protected void bookmarkParent(JPanel panel, GridBagConstraints constraints, int rowNum, JComboBox<BookmarkTreeNode> bookmarkType) {
         // 第四行 第一列
-        JLabel lbName = new JLabel("Bookmark Parent:");
+        JLabel lbName = new JLabel("bookmark.windows.parent");
         constraints.gridx = 0;
         constraints.gridy = rowNum;
         constraints.weightx = 0;
@@ -100,7 +101,7 @@ class BaseServiceUtil {
      */
     protected void bookmarkEnableGroup(JPanel panel, GridBagConstraints constraints, int rowNum, JCheckBox enableGroup) {
         // 第四行 第一列
-        JLabel lbName = new JLabel("Bookmark Enable Group:");
+        JLabel lbName = new JLabel(I18N.get("bookmark.windows.mark.enable.group"));
         constraints.gridx = 0;
         constraints.gridy = rowNum;
         constraints.weightx = 0;

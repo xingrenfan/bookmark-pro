@@ -6,6 +6,7 @@ import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.ui.JBUI;
 import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.base.I18N;
+import org.bookmark.pro.constants.BookmarkConstants;
 import org.bookmark.pro.domain.BookmarkPro;
 import org.bookmark.pro.domain.model.BookmarkConverter;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
@@ -244,7 +245,7 @@ public class BookmarkPanel extends JPanel {
                 DocumentService.getInstance(project).reloadingCacheNode(treeNode);
                 // 书签选中之后显示内容
                 GlobalSettings globalSettings = GlobalSettings.getInstance();
-                if (I18N.get("setting.general.tipItem2").equals(globalSettings.getTipType())) {
+                if (BookmarkConstants.TIPS_FOR_WINDOW.equals(globalSettings.getTipType())) {
                     this.bookmarkTree.addTreeSelectionListener(event -> {
                         BookmarkTreeNode selectedNode = (BookmarkTreeNode) bookmarkTree.getLastSelectedPathComponent();
                         if (selectedNode != null && selectedNode.isBookmark()) {

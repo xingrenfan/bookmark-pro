@@ -36,6 +36,8 @@ public class GeneralSettings {
     }
 
     protected void initGeneralSettings() {
+        initDefaultValue();
+
         GlobalSettings globalSettings = GlobalSettings.getInstance();
 
         // 设置是否启用行尾拓展
@@ -97,8 +99,8 @@ public class GeneralSettings {
 
     private void initDefaultValue() {
         selectTips.setText(I18N.get("setting.general.tipLabel"));
-        selectTipBox.addItem(I18N.get("setting.general.tipItem1"));
-        selectTipBox.addItem(I18N.get("setting.general.tipItem2"));
+        selectTipBox.addItem(BookmarkConstants.TIPS_FOR_TOOL);
+        selectTipBox.addItem(BookmarkConstants.TIPS_FOR_WINDOW);
     }
 
     /**

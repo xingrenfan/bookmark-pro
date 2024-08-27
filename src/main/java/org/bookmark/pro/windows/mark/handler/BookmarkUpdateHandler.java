@@ -1,6 +1,7 @@
 package org.bookmark.pro.windows.mark.handler;
 
 import com.intellij.openapi.project.Project;
+import org.bookmark.pro.base.I18N;
 import org.bookmark.pro.domain.model.BookmarkNodeModel;
 import org.bookmark.pro.service.base.document.DocumentService;
 import org.bookmark.pro.service.tree.component.BookmarkTreeNode;
@@ -94,7 +95,7 @@ public class BookmarkUpdateHandler extends BaseServiceUtil implements BookmarkEd
 
     @Override
     public void showBookmarkEnable(JPanel panel, GridBagConstraints constraints, BookmarkNodeModel nodeModel) {
-        this.enableGroup = new JCheckBox("Bookmark can be used as group");
+        this.enableGroup = new JCheckBox(I18N.get("bookmark.windows.mark.as.group"));
         this.enableGroup.setSelected(nodeModel.isGroup());
         bookmarkEnableGroup(panel, constraints, this.nowLineNumber, this.enableGroup);
         this.nowLineNumber = this.nowLineNumber + 1;

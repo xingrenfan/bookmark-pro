@@ -87,10 +87,8 @@ public class BookmarkEditDialog extends DialogWrapper {
         this.bookmarkEditService.lineNumInspect(panel, constraints, this.bookmarkLineNum, nodeModel.getLine() + 1, documentMaxLine, showMaxLine);
         // 显示书签是否可以做分组
         this.bookmarkEditService.showBookmarkEnable(panel, constraints, nodeModel);
-        if (showMaxLine) {
-            // 显示书签父级菜单
-            this.bookmarkEditService.showBookmarkParent(openProject, panel, constraints, nodeModel);
-        }
+        // 显示书签父级菜单
+        this.bookmarkEditService.showBookmarkParent(openProject, panel, constraints, nodeModel);
         return this;
     }
 

@@ -20,10 +20,12 @@ public class BookmarkHelpForm extends DialogWrapper {
     private JLabel addUpdate;
     private JLabel deleteLabel;
     private JLabel aeLabel;
+    private JTabbedPane helpTab;
 
     public BookmarkHelpForm() {
         super(true); // use current window as parent
-        setTitle("bookmark Helper");
+        setTitle(I18N.get("help.title"));
+        helpTab.setToolTipText(I18N.get("help.general"));
         settings.setText(I18N.get("help.settings"));
         others.setText(I18N.get("help.others"));
         delete.setText(I18N.get("help.delete"));

@@ -1,6 +1,7 @@
 package org.bookmark.pro.constants;
 
 import com.intellij.openapi.util.IconLoader;
+import org.bookmark.pro.base.I18N;
 
 import javax.swing.*;
 
@@ -69,7 +70,7 @@ public interface BookmarkIcons {
     /**
      * 无效书签标记
      */
-    String INVALID_SIGN = "(❌ Invalid Bookmark)";
+    String INVALID_SIGN = "(❌ " + I18N.get("bookmark.windows.invalid") + ")";
 
 
     /**
