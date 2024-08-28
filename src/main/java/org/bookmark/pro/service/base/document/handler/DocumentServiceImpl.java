@@ -139,7 +139,6 @@ public final class DocumentServiceImpl implements DocumentService {
     public void reloadingCacheNode(TreeNode treeNode) {
         if (treeNode instanceof BookmarkTreeNode) {
             BookmarkTreeNode bookmarkNode = (BookmarkTreeNode) treeNode;
-            if (Objects.isNull(bookmarkNode)) return;
             addBookmarkNode(bookmarkNode);
             if (bookmarkNode.isBookmark() && !bookmarkNode.isGroup()) {
                 // 纯书签-没有子节点 跳过后续处理
@@ -156,8 +155,9 @@ public final class DocumentServiceImpl implements DocumentService {
 
     @Override
     public List<BookmarkTreeNode> getBookmarkGroup() {
-        List<BookmarkTreeNode> treeNodes = this.bookmarkHashCache.entrySet().stream().map(dto -> dto.getValue()).collect(Collectors.toList());
-        return treeNodes;
+        return this.bookmarkHashCache.entrySet().stream().map(
+                dto -> dto.getValue()
+        ).filter(BookmarkTreeNode::isGroup).collect(Collectors.toList());
     }
 
     @Override

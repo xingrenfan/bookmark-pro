@@ -5,7 +5,6 @@ import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.ui.awt.RelativePoint;
 import org.bookmark.pro.base.BookmarkTipPanel;
-import org.bookmark.pro.base.I18N;
 import org.bookmark.pro.constants.BookmarkConstants;
 import org.bookmark.pro.constants.BookmarkIcons;
 import org.bookmark.pro.domain.model.AbstractTreeNodeModel;
@@ -126,12 +125,12 @@ public final class TreeServiceImpl implements TreeService {
     }
 
     @Override
-    public void nextBookmark(Project project) {
+    public void nextBookmark() {
         this.groupNavigator.next();
     }
 
     @Override
-    public void preBookmark(Project project) {
+    public void preBookmark() {
         this.groupNavigator.pre();
     }
 
@@ -248,17 +247,20 @@ public final class TreeServiceImpl implements TreeService {
                 private JBPopup lastPopup;
                 private AbstractTreeNodeModel lastAbstractTreeNodeModel;
 
-                private void showToolTip(AbstractTreeNodeModel abstractTreeNodeModel, MouseEvent e) {
-                    if (abstractTreeNodeModel == null) {
+                private void showToolTip(AbstractTreeNodeModel nodeModel, MouseEvent e) {
+                    if (nodeModel == null) {
                         return;
                     }
-                    if (lastAbstractTreeNodeModel == abstractTreeNodeModel) {
+                    if (nodeModel.isGroup()){
+                        return;
+                    }
+                    if (lastAbstractTreeNodeModel == nodeModel) {
                         return;
                     }
                     if (this.lastPopup != null) {
                         lastPopup.cancel();
                     }
-                    lastAbstractTreeNodeModel = abstractTreeNodeModel;
+                    lastAbstractTreeNodeModel = nodeModel;
 
                     JBPopupFactory popupFactory = JBPopupFactory.getInstance();
                     lastPopup = popupFactory.createComponentPopupBuilder(new BookmarkTipPanel(lastAbstractTreeNodeModel), null).setFocusable(true).setResizable(true).setRequestFocus(true).createPopup();

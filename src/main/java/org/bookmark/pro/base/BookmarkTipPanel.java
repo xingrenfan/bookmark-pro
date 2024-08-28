@@ -40,7 +40,7 @@ public class BookmarkTipPanel extends JBPanel<BookmarkTipPanel> {
         public TipHtmlPanel(@NotNull AbstractTreeNodeModel nodeModel) {
             StringBuilder sb = new StringBuilder();
             sb.append("<h3>" + nodeModel.getName() + "</h3>");
-            String desc = StringUtils.isNotBlank(nodeModel.getDesc()) ? nodeModel.getDesc() : "no description";
+            String desc = StringUtils.isNotBlank(nodeModel.getDesc()) ? nodeModel.getDesc() : I18N.get("tips.not.desc");
             sb.append(desc);
             setBody(sb.toString());
             Border borderWithPadding = JBUI.Borders.empty(0, 10, 10, 10);

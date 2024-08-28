@@ -20,6 +20,6 @@ public class BookmarkPrevAction extends AnAction {
             return;
         }
         // 上一个书签
-        TreeService.getInstance(project).preBookmark(project);
+        TreeService.getInstance(project).preBookmark();
     }
 }
