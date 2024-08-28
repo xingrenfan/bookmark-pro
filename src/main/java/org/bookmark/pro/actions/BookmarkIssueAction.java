@@ -3,6 +3,7 @@ package org.bookmark.pro.actions;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import org.bookmark.pro.base.I18N;
 import org.bookmark.pro.constants.BookmarkConstants;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +19,7 @@ import java.net.URI;
 public class BookmarkIssueAction extends AnAction {
 
     public BookmarkIssueAction() {
-        super("Bookmark Issue", null, AllIcons.Actions.QuickfixBulb);
+        super(I18N.get("issue.title"), null, AllIcons.Actions.QuickfixBulb);
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
+import org.bookmark.pro.base.I18N;
 import org.bookmark.pro.service.base.persistence.PersistService;
 import org.bookmark.pro.service.tree.TreeService;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
@@ -22,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class BookmarkImportAction extends AnAction {
     public BookmarkImportAction() {
-        super("Bookmark Import", null, AllIcons.ToolbarDecorator.Import);
+        super(I18N.get("import.title"), null, AllIcons.ToolbarDecorator.Import);
     }
 
     @Override

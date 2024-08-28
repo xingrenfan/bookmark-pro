@@ -251,22 +251,21 @@ public final class TreeServiceImpl implements TreeService {
                     if (nodeModel == null) {
                         return;
                     }
-                    if (nodeModel.isGroup()){
-                        return;
-                    }
                     if (lastAbstractTreeNodeModel == nodeModel) {
                         return;
                     }
                     if (this.lastPopup != null) {
                         lastPopup.cancel();
                     }
-                    lastAbstractTreeNodeModel = nodeModel;
+                    if (nodeModel.isBookmark()) {
+                        lastAbstractTreeNodeModel = nodeModel;
 
-                    JBPopupFactory popupFactory = JBPopupFactory.getInstance();
-                    lastPopup = popupFactory.createComponentPopupBuilder(new BookmarkTipPanel(lastAbstractTreeNodeModel), null).setFocusable(true).setResizable(true).setRequestFocus(true).createPopup();
+                        JBPopupFactory popupFactory = JBPopupFactory.getInstance();
+                        lastPopup = popupFactory.createComponentPopupBuilder(new BookmarkTipPanel(lastAbstractTreeNodeModel), null).setFocusable(true).setResizable(true).setRequestFocus(true).createPopup();
 
-                    Point adjustedLocation = new Point(e.getLocationOnScreen().x + 5, e.getLocationOnScreen().y + 10); // Adjust position
-                    lastPopup.show(RelativePoint.fromScreen(adjustedLocation));
+                        Point adjustedLocation = new Point(e.getLocationOnScreen().x + 5, e.getLocationOnScreen().y + 10); // Adjust position
+                        lastPopup.show(RelativePoint.fromScreen(adjustedLocation));
+                    }
                 }
             });
         } else {
