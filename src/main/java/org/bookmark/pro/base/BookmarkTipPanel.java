@@ -6,7 +6,6 @@ import com.intellij.util.ui.HtmlPanel;
 import com.intellij.util.ui.JBUI;
 import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.domain.model.AbstractTreeNodeModel;
-import org.bookmark.pro.utils.HtmlUtil;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,19 +37,14 @@ public class BookmarkTipPanel extends JBPanel<BookmarkTipPanel> {
     }
 
     protected static class TipHtmlPanel extends HtmlPanel {
-        private final String TITLE_TAG = "h3";
-        private final String DESC_TAG = "";
-
         public TipHtmlPanel(@NotNull AbstractTreeNodeModel nodeModel) {
             StringBuilder sb = new StringBuilder();
-            String name = HtmlUtil.wrapText(TITLE_TAG, nodeModel.getName());
-            sb.append(name);
-            String desc = StringUtils.isNotBlank(nodeModel.getDesc()) ? nodeModel.getDesc() : "no description";
+            sb.append("<h3>" + nodeModel.getName() + "</h3>");
+            String desc = StringUtils.isNotBlank(nodeModel.getDesc()) ? nodeModel.getDesc() : I18N.get("tips.not.desc");
             sb.append(desc);
             setBody(sb.toString());
             Border borderWithPadding = JBUI.Borders.empty(0, 10, 10, 10);
             setBorder(borderWithPadding);
-
         }
 
         @Override

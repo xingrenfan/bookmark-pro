@@ -2,7 +2,7 @@
 <idea-plugin require-restart="true">
     <id>org.bookmark.pro.id</id>
     <name>MarkBook-Pro</name>
-    <version>212-222.01.07</version>
+    <version>212-222.01.08</version>
     <vendor email="xingrenfan@hotmail.com" url="https://github.com/xingrenfan/bookmark-pro">XingRenFan</vendor>
     <idea-version since-build="212.5080.55" until-build="222.*"/>
 
@@ -37,27 +37,38 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- 激活监听器 -->
-        <postStartupActivity implementation="org.bookmark.pro.listeners.app.AppActivationService"/>
-        <!-- 配置 -->
-        <applicationConfigurable instance="org.bookmark.pro.dialogs.setting.BookmarkSettingForm" id="bookmark.pro.config" displayName="Bookmark Pro"/>
+        <postStartupActivity implementation="org.bookmark.pro.listeners.StartedListener"/>
+        <!-- Setting 配置 -->
+        <applicationConfigurable instance="org.bookmark.pro.windows.setting.BookmarkSettingForm" id="bookmark.pro.config" displayName="BookmarkPro"/>
         <!-- 左边栏设置锚点，展示窗口 -->
-        <toolWindow id="Bookmark-Pro" anchor="left" icon="/icons/bookmark.svg" factoryClass="org.bookmark.pro.extensions.BookmarkWindowFactory" secondary="true"/>
-        <!-- 书签持久化 -->
-        <projectService serviceImplementation="org.bookmark.pro.service.persistence.handler.PersistentService"/>
+        <toolWindow id="Bookmark-Pro" anchor="right" icon="/icons/bookmark.svg" factoryClass="org.bookmark.pro.extensions.BookmarkWindowFactory" secondary="true"/>
         <!--行尾拓展：显示书签名称-->
         <editor.linePainter implementation="org.bookmark.pro.extensions.EditorFileLinePainter"/>
         <!-- 文件变化监听器 -->
         <editorFactoryDocumentListener implementation="org.bookmark.pro.listeners.BookmarkDocumentListener"/>
-        <!-- 标签 -->
-        <!--<codeInsight.lineMarkerProvider language="JAVA" implementationClass="extensions.org.bookmark.pro.BookmarkLineProvider"/>
-        <codeInsight.lineMarkerProvider language="XML" implementationClass="extensions.org.bookmark.pro.BookmarkLineProvider"/>-->
-        <!--<codeInsight.lineMarkerProvider language="JAVA" implementationClass="org.eric.bookmark.extensions.BookmarkProProvider"/>
-        <codeInsight.lineMarkerProvider language="XML" implementationClass="org.eric.bookmark.extensions.BookmarkProProvider"/>-->
+        <!-- 书签树 -->
+        <!--<projectService serviceImplementation="org.bookmark.pro.service.tree.component.BookmarkTree"/>-->
+        <!-- 书签菜单集合 -->
+        <!--<projectService serviceImplementation="org.bookmark.pro.service.tree.component.BookmarkMenus"/>-->
+        <!-- 书签管理面板 -->
+        <!--<projectService serviceImplementation="org.bookmark.pro.windows.BookmarkPanel"/>-->
+        <!-- 书签树管理器 -->
+        <!--<projectService serviceInterface="org.bookmark.pro.service.tree.TreeService" serviceImplementation="org.bookmark.pro.service.tree.handler.TreeServiceImpl"/>-->
+        <!-- 书签持久化 -->
+        <projectService serviceImplementation="org.bookmark.pro.service.base.persistence.handler.PersistComponent"/>
+        <!--<projectService serviceInterface="org.bookmark.pro.service.persistence.PersistService" serviceImplementation="org.bookmark.pro.service.persistence.handler.PersistServiceImpl"/>-->
+        <!-- 缓存 -->
+        <!--<projectService serviceInterface="org.bookmark.pro.service.document.DocumentService" serviceImplementation="org.bookmark.pro.service.document.handler.DocumentServiceImpl"/>-->
+        <!-- 配置 -->
+        <applicationService serviceImplementation="org.bookmark.pro.service.base.settings.GlobalSettings"/>
+        <applicationService serviceImplementation="org.bookmark.pro.service.base.settings.BackupSettings"/>
+        <!-- 任务 -->
+        <applicationService serviceInterface="org.bookmark.pro.service.base.task.ScheduledService" serviceImplementation="org.bookmark.pro.service.base.task.handler.ScheduledServiceImpl"/>
     </extensions>
 
     <applicationListeners>
         <!-- 项目关闭监听器 -->
-        <listener class="org.bookmark.pro.listeners.app.AppCloseService" topic="com.intellij.openapi.project.ProjectManagerListener"/>
+        <listener class="org.bookmark.pro.listeners.ClosedListener" topic="com.intellij.openapi.project.ProjectManagerListener"/>
         <!-- 监听工具窗口的注册和显示事件 -->
         <listener class="org.bookmark.pro.listeners.BookmarkWindowListener" topic="com.intellij.openapi.wm.ex.ToolWindowManagerListener"/>
     </applicationListeners>

@@ -1,6 +1,8 @@
 package org.bookmark.pro.domain.model;
 
-import org.bookmark.pro.constants.BookmarkProIcon;
+import org.bookmark.pro.constants.BookmarkIcons;
+
+import java.util.Objects;
 
 /**
  * 书签分组模型
@@ -13,7 +15,7 @@ public class GroupNodeModel implements AbstractTreeNodeModel {
     /**
      * 分组唯一标识UUID
      */
-    private String uuid;
+    private String commitHash;
 
     private String name;
 
@@ -21,9 +23,9 @@ public class GroupNodeModel implements AbstractTreeNodeModel {
 
     }
 
-    public GroupNodeModel(String name, String uuid) {
+    public GroupNodeModel(String name, String commitHash) {
         this.name = name;
-        this.uuid = uuid;
+        this.commitHash = commitHash;
     }
 
     @Override
@@ -48,18 +50,18 @@ public class GroupNodeModel implements AbstractTreeNodeModel {
 
     @Override
     public String toString() {
-        return name + "[" + BookmarkProIcon.GROUP_SIGN + "]";
+        return name + "[" + BookmarkIcons.GROUP_SIGN + "]";
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getUuid() {
-        return uuid;
+    public String getCommitHash() {
+        return Objects.toString(commitHash, "");
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public void setCommitHash(String commitHash) {
+        this.commitHash = commitHash;
     }
 }

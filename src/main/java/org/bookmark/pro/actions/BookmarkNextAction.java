@@ -3,8 +3,7 @@ package org.bookmark.pro.actions;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
-import org.bookmark.pro.context.BookmarkRunService;
-import org.bookmark.pro.service.tree.BookmarkTreeManage;
+import org.bookmark.pro.service.tree.TreeService;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -21,7 +20,6 @@ public class BookmarkNextAction extends AnAction {
             return;
         }
         // 下一个书签
-        BookmarkTreeManage bookmarkTreeManage = BookmarkRunService.getBookmarkManage(project);
-        bookmarkTreeManage.nextBookmark(project);
+        TreeService.getInstance(project).nextBookmark();
     }
 }

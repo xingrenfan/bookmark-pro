@@ -8,8 +8,11 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.bookmark.pro.context.BookmarkRunService;
+import org.bookmark.pro.base.I18N;
+import org.bookmark.pro.service.base.persistence.PersistService;
+import org.bookmark.pro.service.tree.TreeService;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
+import org.bookmark.pro.windows.BookmarkPanel;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -20,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class BookmarkImportAction extends AnAction {
     public BookmarkImportAction() {
-        super("Bookmark Import", null, AllIcons.ToolbarDecorator.Import);
+        super(I18N.get("import.title"), null, AllIcons.ToolbarDecorator.Import);
     }
 
     @Override
@@ -39,7 +42,9 @@ public final class BookmarkImportAction extends AnAction {
         if (result == Messages.CANCEL) {
             return;
         }
-        if (BookmarkRunService.getPersistenceService(project).importBookmark(project, virtualFile)) {
+        if (PersistService.getInstance(project).importBookmark(virtualFile)) {
+            // 重新加载标签书
+            BookmarkPanel.getInstance(project).reloadBookmarkTree(TreeService.getInstance(project).getBookmarkTree());
             BookmarkNoticeUtil.projectNotice(project, "Bookmark import success.");
         }
     }

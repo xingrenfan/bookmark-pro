@@ -16,7 +16,7 @@ public interface AbstractTreeNodeModel {
 
     String getName();
 
-    String getUuid();
+    String getCommitHash();
 
     String toString();
 }
