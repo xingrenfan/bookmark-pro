@@ -20,6 +20,6 @@ public class BookmarkNextAction extends AnAction {
             return;
         }
         // 下一个书签
-        TreeService.getInstance(project).nextBookmark(project);
+        TreeService.getInstance(project).nextBookmark();
     }
 }

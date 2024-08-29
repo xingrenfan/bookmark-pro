@@ -98,7 +98,7 @@ public class GeneralSettings {
     }
 
     private void initDefaultValue() {
-        selectTips.setText(I18N.get("setting.general.tipLabel"));
+//        selectTips.setText(I18N.get("setting.general.tipLabel"));
         selectTipBox.addItem(BookmarkConstants.TIPS_FOR_TOOL);
         selectTipBox.addItem(BookmarkConstants.TIPS_FOR_WINDOW);
     }

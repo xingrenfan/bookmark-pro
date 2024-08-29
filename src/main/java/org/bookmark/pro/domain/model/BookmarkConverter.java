@@ -6,6 +6,8 @@ import com.intellij.openapi.vfs.VirtualFile;
 import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.domain.BookmarkPro;
 
+import java.util.Objects;
+
 /**
  * 书签转换器
  *
@@ -65,7 +67,7 @@ public class BookmarkConverter {
         if (bookmarkPro.isBookmark()) {
             // 书签模型
             BookmarkNodeModel model = new BookmarkNodeModel();
-            model.setCommitHash(bookmarkPro.getCommitHash());
+            model.setCommitHash(Objects.isNull(bookmarkPro.getCommitHash()) ? bookmarkPro.getUuid() : bookmarkPro.getCommitHash());
             model.setIndex(bookmarkPro.getIndex());
             model.setLine(bookmarkPro.getLine());
             model.setColumn(bookmarkPro.getColumn());
@@ -86,7 +88,7 @@ public class BookmarkConverter {
         } else {
             // 分组模型
             GroupNodeModel model = new GroupNodeModel();
-            model.setCommitHash(bookmarkPro.getCommitHash());
+            model.setCommitHash(Objects.isNull(bookmarkPro.getCommitHash()) ? bookmarkPro.getUuid() : bookmarkPro.getCommitHash());
             model.setName(bookmarkPro.getName());
             return model;
         }

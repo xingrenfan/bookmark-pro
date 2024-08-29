@@ -14,6 +14,7 @@ import java.util.List;
  */
 @XmlRootElement
 public class BookmarkPro {
+    private String uuid;
     private String commitHash;
     private int index;
     /**
@@ -59,6 +60,14 @@ public class BookmarkPro {
 
     public void setChildren(List<BookmarkPro> children) {
         this.children = children;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public String getCommitHash() {

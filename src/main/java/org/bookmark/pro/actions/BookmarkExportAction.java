@@ -8,6 +8,7 @@ import com.intellij.openapi.ui.InputValidatorEx;
 import com.intellij.openapi.ui.Messages;
 import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.base.BaseExportService;
+import org.bookmark.pro.base.I18N;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -22,7 +23,7 @@ import java.time.format.DateTimeFormatter;
  */
 public final class BookmarkExportAction extends AnAction implements BaseExportService {
     public BookmarkExportAction() {
-        super("Bookmark Export", null, AllIcons.ToolbarDecorator.Export);
+        super(I18N.get("export.title"), null, AllIcons.ToolbarDecorator.Export);
     }
 
     @Override

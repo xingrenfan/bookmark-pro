@@ -68,14 +68,14 @@ public interface TreeService {
      *
      * @param project 项目
      */
-    void nextBookmark(Project project);
+    void nextBookmark();
 
     /**
      * 上一个书签
      *
      * @param project 项目
      */
-    void preBookmark(Project project);
+    void preBookmark();
 
     static TreeService getInstance(Project project) {
         return ServiceContext.getContextAttribute(project).getTreeService();
