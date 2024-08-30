@@ -1,6 +1,5 @@
 package org.bookmark.pro.domain.model;
 
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.apache.commons.lang3.StringUtils;
@@ -59,7 +58,6 @@ public class BookmarkConverter {
     /**
      * 持久化对象转书签模型
      *
-     * @param project     项目
      * @param bookmarkPro 持久化对象
      * @return {@link AbstractTreeNodeModel}
      */

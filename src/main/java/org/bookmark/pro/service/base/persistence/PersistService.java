@@ -16,15 +16,12 @@ import org.bookmark.pro.service.tree.component.BookmarkTreeNode;
 public interface PersistService {
     /**
      * 保存书签
-     *
-     * @param project 项目
      */
     void saveBookmark(BookmarkTree bookmarkTree);
 
     /**
      * 导出书签
      *
-     * @param project  项目
      * @param savePath 保存路径
      * @return boolean
      */
@@ -33,7 +30,6 @@ public interface PersistService {
     /**
      * 导入书签
      *
-     * @param project     项目
      * @param virtualFile 虚拟文件
      * @return boolean
      */
@@ -43,14 +39,12 @@ public interface PersistService {
      * 添加一个书签
      *
      * @param bookmark 书签
-     * @param project  项目
      */
     void addOneBookmark(BookmarkPro bookmark);
 
     /**
      * 获取书签节点
      *
-     * @param project 项目
      * @return {@link BookmarkTreeNode}
      */
     BookmarkTreeNode getBookmarkNode();
@@ -58,7 +52,6 @@ public interface PersistService {
     /**
      * 获取书签节点----具有搜索功能
      *
-     * @param project 项目
      * @return {@link BookmarkTreeNode}
      */
     BookmarkTreeNode getBookmarkNodeSearch(String searchText);
