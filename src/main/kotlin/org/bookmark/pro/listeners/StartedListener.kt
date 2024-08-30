@@ -5,7 +5,7 @@ import com.intellij.notification.NotificationAction
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.startup.StartupActivity
+import com.intellij.openapi.startup.ProjectActivity
 import org.bookmark.pro.base.I18N
 import org.bookmark.pro.constants.BookmarkConstants
 import org.bookmark.pro.constants.BookmarkIcons
@@ -15,8 +15,8 @@ import org.bookmark.pro.utils.BookmarkNoticeUtil
 import java.awt.Desktop
 import java.net.URI
 
-class StartedListener : StartupActivity {
-    override fun runActivity(project: Project) {
+class StartedListener : ProjectActivity {
+    override suspend fun execute(project: Project) {
         // 初始化服务上下文
         ServiceContext(project)
         // 插件启动通知

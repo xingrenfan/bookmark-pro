@@ -76,14 +76,6 @@ public interface DocumentService {
      */
     List<BookmarkTreeNode> getBookmarkGroup();
 
-    /**
-     * 获取组节点
-     *
-     * @param nodeName 节点名称
-     * @return {@link BookmarkTreeNode}
-     */
-    BookmarkTreeNode getGroupNode(String nodeName);
-
     static DocumentService getInstance(Project project) {
         return ServiceContext.getContextAttribute(project).getDocumentService();
     }

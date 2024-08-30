@@ -11,6 +11,7 @@ import org.bookmark.pro.service.base.document.DocumentService;
 import org.bookmark.pro.service.tree.component.BookmarkTreeNode;
 
 import javax.swing.tree.TreeNode;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,9 +33,6 @@ public final class DocumentServiceImpl implements DocumentService {
     private static final Logger LOG = Logger.getInstance(DocumentServiceImpl.class);
     // 书签缓存{commitHash: BookmarkTreeNode}
     private final Map<String, BookmarkTreeNode> bookmarkHashCache = new ConcurrentHashMap<>(64);
-
-    // 分组节点缓存{bookmarkName:BookmarkTreeNode}
-    private final Map<String, BookmarkTreeNode> bookmarkNameCache = new ConcurrentHashMap<>(64);
 
     // BookmarkTreeNode 缓存: 通过 虚拟文件名 直接取到节点引用 {VirtualFileHash: [UUID]}
     private final Map<Integer, Set<BookmarkTreeNode>> virtualFileCache = new HashMap<>(64);
@@ -95,7 +93,6 @@ public final class DocumentServiceImpl implements DocumentService {
         if (bookmarkNode.isBookmark()) {
             BookmarkNodeModel markNodeModel = (BookmarkNodeModel) abstractTreeNodeModel;
             this.bookmarkHashCache.put(markNodeModel.getCommitHash(), bookmarkNode);
-            this.bookmarkNameCache.put(markNodeModel.getName(), bookmarkNode);
             if (markNodeModel.getVirtualFile() != null) {
                 this.setVirtualFileCache(markNodeModel.getVirtualFile(), bookmarkNode);
             } else {
@@ -106,7 +103,6 @@ public final class DocumentServiceImpl implements DocumentService {
         } else {
             GroupNodeModel groupNodeModel = (GroupNodeModel) abstractTreeNodeModel;
             this.bookmarkHashCache.put(groupNodeModel.getCommitHash(), bookmarkNode);
-            this.bookmarkNameCache.put(groupNodeModel.getName(), bookmarkNode);
         }
     }
 
@@ -116,14 +112,12 @@ public final class DocumentServiceImpl implements DocumentService {
         if (bookmarkNode.isBookmark()) {
             BookmarkNodeModel markNodeModel = (BookmarkNodeModel) abstractTreeNodeModel;
             this.bookmarkHashCache.remove(markNodeModel.getCommitHash());
-            this.bookmarkNameCache.remove(markNodeModel.getName());
             if (markNodeModel.getVirtualFile() != null) {
                 this.removeVirtualFileCache(markNodeModel.getVirtualFile(), bookmarkNode);
             }
         } else {
             GroupNodeModel groupNodeModel = (GroupNodeModel) abstractTreeNodeModel;
             this.bookmarkHashCache.remove(groupNodeModel.getCommitHash(), bookmarkNode);
-            this.bookmarkNameCache.remove(groupNodeModel.getName(), bookmarkNode);
         }
     }
 
@@ -158,10 +152,5 @@ public final class DocumentServiceImpl implements DocumentService {
         return this.bookmarkHashCache.entrySet().stream().map(
                 dto -> dto.getValue()
         ).filter(BookmarkTreeNode::isGroup).collect(Collectors.toList());
-    }
-
-    @Override
-    public BookmarkTreeNode getGroupNode(String nodeName) {
-        return this.bookmarkNameCache.get(nodeName);
     }
 }
