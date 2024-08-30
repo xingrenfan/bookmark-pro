@@ -1,7 +1,10 @@
 package org.bookmark.pro.domain;
 
+import org.apache.commons.lang3.StringUtils;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 书签持久化对象<br/>
@@ -71,6 +74,9 @@ public class BookmarkPro {
     }
 
     public String getCommitHash() {
+        if (StringUtils.isBlank(commitHash)) {
+            return StringUtils.isBlank(getUuid()) ? UUID.randomUUID().toString() : getUuid();
+        }
         return commitHash;
     }
 

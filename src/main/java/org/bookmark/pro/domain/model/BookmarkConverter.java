@@ -67,7 +67,7 @@ public class BookmarkConverter {
         if (bookmarkPro.isBookmark()) {
             // 书签模型
             BookmarkNodeModel model = new BookmarkNodeModel();
-            model.setCommitHash(Objects.isNull(bookmarkPro.getCommitHash()) ? bookmarkPro.getUuid() : bookmarkPro.getCommitHash());
+            model.setCommitHash(bookmarkPro.getCommitHash());
             model.setIndex(bookmarkPro.getIndex());
             model.setLine(bookmarkPro.getLine());
             model.setColumn(bookmarkPro.getColumn());
