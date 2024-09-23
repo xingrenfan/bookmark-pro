@@ -9,11 +9,22 @@ import com.intellij.openapi.ui.Messages;
 import org.apache.commons.lang3.StringUtils;
 import org.bookmark.pro.base.BaseExportService;
 import org.bookmark.pro.base.I18N;
+import org.bookmark.pro.service.tree.component.BookmarkTree;
+import org.bookmark.pro.utils.BookmarkNoticeUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+import static org.bookmark.pro.service.base.task.handler.ScheduledServiceImpl.saveToDatabase;
 
 /**
  * 书签导出操作
@@ -43,6 +54,16 @@ public final class BookmarkExportAction extends AnAction implements BaseExportSe
         if (StringUtils.isNotEmpty(newFileName)) {
             fileName = newFileName;
             exportSendNotice(project, backupRootFile.getPath(), fileName);
+            // 读取文件内容并存储到 MySQLame;
+            try {
+                // 读取文件中的 JSON 内容
+                String bookmarkData = new String(Files.readAllBytes(Paths.get(backupRootFile.getPath()+File.separator + fileName)));
+                // 保存到 MySQL
+                saveToDatabase(project.getName(), bookmarkData);
+            } catch (IOException ee) {
+                ee.printStackTrace();
+                BookmarkNoticeUtil.projectNotice(project, "Failed to read backup file and store to database.", null);
+            }
         }
     }
 }

@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import static org.bookmark.pro.service.base.task.handler.ScheduledServiceImpl.getLatestBookmarkData;
+
 /**
  * 持久化服务实现程序
  *
@@ -82,9 +84,10 @@ public final class PersistServiceImpl implements PersistService {
     }
 
     @Override
-    public boolean importBookmark(VirtualFile virtualFile) {
+    public boolean importBookmark(VirtualFile virtualFile, String projectName) {
         try {
-            String content = new String(virtualFile.contentsToByteArray());
+//            String content = new String(virtualFile.contentsToByteArray());
+            String content = getLatestBookmarkData(projectName);
             // 字符串 转 书签对象
             Gson gson = new Gson();
             // TODO 导入备份文件这一行异常
@@ -98,11 +101,16 @@ public final class PersistServiceImpl implements PersistService {
             // 重新设置持久化数据
             getPersistComponent().setState(bookmark);
             return true;
-        } catch (IOException e) {
+        } catch (Exception e) {
             BookmarkNoticeUtil.errorMessages(this.openProject, "Import bookmark fail, message: " + e.getMessage());
         }
         return false;
     }
+
+    /**
+     * 从数据库中取出最新的一条，获取数据据
+     */
+
 
     /**
      * 替换书签路径

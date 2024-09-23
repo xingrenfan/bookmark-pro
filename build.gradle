@@ -69,3 +69,7 @@ patchPluginXml {
 tasks.buildSearchableOptions {
     enabled = false
 }
+
+dependencies {
+    implementation 'mysql:mysql-connector-java:5.1.49'
+}

@@ -33,16 +33,16 @@ public final class BookmarkImportAction extends AnAction {
         descriptor.withFileFilter(file -> file != null && file.getName().toLowerCase().endsWith(".json"));
         // 获取项目信息
         Project project = e.getProject();
-        // 获取文件信息
-        VirtualFile virtualFile = FileChooser.chooseFile(descriptor, project, null);
-        if (null == virtualFile || null == project) {
-            return;
-        }
-        int result = Messages.showOkCancelDialog(project, "Bookmark Import Override", "Bookmark Import", "Import", "Cancel", Messages.getQuestionIcon());
-        if (result == Messages.CANCEL) {
-            return;
-        }
-        if (PersistService.getInstance(project).importBookmark(virtualFile)) {
+//        // 获取文件信息
+//        VirtualFile virtualFile = FileChooser.chooseFile(descriptor, project, null);
+//        if (null == virtualFile || null == project) {
+//            return;
+//        }
+//        int result = Messages.showOkCancelDialog(project, "Bookmark Import Override", "Bookmark Import", "Import", "Cancel", Messages.getQuestionIcon());
+//        if (result == Messages.CANCEL) {
+//            return;
+//        }
+        if (PersistService.getInstance(project).importBookmark(null,project.getName())) {
             // 重新加载标签书
             BookmarkPanel.getInstance(project).reloadBookmarkTree(TreeService.getInstance(project).getBookmarkTree());
             BookmarkNoticeUtil.projectNotice(project, "Bookmark import success.");

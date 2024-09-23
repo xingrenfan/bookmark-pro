@@ -15,7 +15,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Objects;
+
+import static org.bookmark.pro.service.base.task.handler.ScheduledServiceImpl.saveToDatabase;
 
 /**
  * 基础出口服务
@@ -65,6 +70,18 @@ public interface BaseExportService {
     default void exportSendNotice(Project project, String backupRoot, String fileName) {
         String backupFile = backupRoot + File.separator + fileName;
         if (!PersistService.getInstance(project).exportBookmark(backupFile)) {
+
+            // 读取文件内容并存储到 MySQLame;
+            try {
+                // 读取文件中的 JSON 内容
+                String bookmarkData = new String(Files.readAllBytes(Paths.get(backupFile)));
+                // 保存到 MySQL
+                saveToDatabase(project.getName(), bookmarkData);
+            } catch (IOException e) {
+                e.printStackTrace();
+                BookmarkNoticeUtil.projectNotice(project, "Failed to read backup file and store to database.", null);
+            }
+
             return;
         }
         AnAction openExportFile = new NotificationAction(BookmarkIcons.EYE_SIGN + "ViewFile") {

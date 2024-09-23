@@ -33,7 +33,7 @@ public interface PersistService {
      * @param virtualFile 虚拟文件
      * @return boolean
      */
-    boolean importBookmark(VirtualFile virtualFile);
+    boolean importBookmark(VirtualFile virtualFile,String projectName);
 
     /**
      * 添加一个书签
