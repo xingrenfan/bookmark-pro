@@ -6,6 +6,7 @@ import com.intellij.openapi.ui.Messages;
 import org.bookmark.pro.base.BaseExportService;
 import org.bookmark.pro.service.base.persistence.PersistService;
 import org.bookmark.pro.service.base.settings.BackupSettings;
+import org.bookmark.pro.service.base.settings.GlobalSettings;
 import org.bookmark.pro.service.base.task.ScheduledService;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
 
@@ -17,6 +18,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -54,18 +56,6 @@ public final class ScheduledServiceImpl implements ScheduledService, BaseExportS
                     File autoBackupFile = getAutoBackupRootPath(project);
                     String fileName = project.getName() + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmmss")) + ".json";
                     PersistService.getInstance(project).exportBookmark(autoBackupFile.getPath() + File.separator + fileName);
-
-                    // 读取文件内容并存储到 MySQL
-                    String backupFilePath = autoBackupFile.getPath() + File.separator + fileName;
-                    try {
-                        // 读取文件中的 JSON 内容
-                        String bookmarkData = new String(Files.readAllBytes(Paths.get(backupFilePath)));
-                        // 保存到 MySQL
-                        saveToDatabase(project.getName(), bookmarkData);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        BookmarkNoticeUtil.projectNotice(project, "Failed to read backup file and store to database.", null);
-                    }
                 }
             }
         }
@@ -76,18 +66,15 @@ public final class ScheduledServiceImpl implements ScheduledService, BaseExportS
         scheduler.shutdown();
     }
 
-    public static String url = "jdbc:mysql://www.nihaoii.fun:63306/bookmarks";
-    public static String user = "bookmarks";
-    public static String password = "bookmarks";
-
     public static void saveToDatabase(String projectName, String bookmarkData) {
+        HashMap<String, String> mysqlMsg = getMysqlMsg();
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
         String sql = "INSERT INTO bookmarks (project_name, bookmark_data,created_at) VALUES (?, ?,?)";
-        try (Connection conn = DriverManager.getConnection(url, user, password);
+        try (Connection conn = DriverManager.getConnection(mysqlMsg.get("url"), mysqlMsg.get("user"),  mysqlMsg.get("password"));
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, projectName);
             pstmt.setString(2, bookmarkData);
@@ -102,6 +89,7 @@ public final class ScheduledServiceImpl implements ScheduledService, BaseExportS
     }
 
     public static String getLatestBookmarkData(String projectName) {
+        HashMap<String, String> mysqlMsg = getMysqlMsg();
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
@@ -109,7 +97,7 @@ public final class ScheduledServiceImpl implements ScheduledService, BaseExportS
         }
         String sql = "SELECT project_name, bookmark_data, created_at FROM bookmarks where project_name = '"+projectName+"' ORDER BY created_at DESC LIMIT 1";
         String latestData = null;
-        try (Connection conn = DriverManager.getConnection(url, user, password);
+        try (Connection conn = DriverManager.getConnection(mysqlMsg.get("url"), mysqlMsg.get("user"),  mysqlMsg.get("password"));
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
             if (rs.next()) {
@@ -119,13 +107,35 @@ public final class ScheduledServiceImpl implements ScheduledService, BaseExportS
                 // 拼接查询到的结果
                 latestData = bookmarkData;
             } else {
-                latestData = "No data found.";
+                Messages.showErrorDialog("查不到mysql中的数据.", "Export Failed");
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             latestData = "Error occurred while fetching data.";
         }
         return latestData;
+    }
+
+    public static HashMap<String,String> getMysqlMsg(){
+        GlobalSettings globalSettings = GlobalSettings.getInstance();
+        String mysqlBackUp = globalSettings.getMysqlBackUp();
+        if (mysqlBackUp == null || mysqlBackUp.isBlank()) {
+            Messages.showErrorDialog("没有配置mysql链接信息.", "Export Failed");
+            return new HashMap<>();
+        }
+        String[] split = mysqlBackUp.split("\\|");
+        if (split.length != 3) {
+            Messages.showErrorDialog("mysql链接信息异常.", "Export Failed");
+            return new HashMap<>();
+        }
+      String url = split[0];
+      String user = split[1];
+      String password = split[2];
+      HashMap<String,String> msg = new HashMap<>();
+      msg.put("url", url);
+      msg.put("user", user);
+      msg.put("password", password);
+      return msg;
     }
 
 }

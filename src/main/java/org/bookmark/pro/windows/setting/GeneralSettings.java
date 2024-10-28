@@ -13,6 +13,7 @@ import java.util.Objects;
 
 public class GeneralSettings {
     protected JTextField markText;
+    protected JTextField mysqlBackUp;
     protected JLabel markLabSel;
     protected JLabel noteLabSel;
     protected JLabel separatorSel;
@@ -23,7 +24,7 @@ public class GeneralSettings {
     private JLabel selectTips;
     private JComboBox selectTipBox;
 
-    public GeneralSettings(JTextField markText, JLabel markLabSel, JLabel noteLabSel, JLabel separatorSel, JSpinner maxCharNum, JCheckBox lineDocument, JSpinner selectedShowNum, JLabel selectTips, JComboBox selectTipBox) {
+    public GeneralSettings(JTextField mysqlBackUp,JTextField markText, JLabel markLabSel, JLabel noteLabSel, JLabel separatorSel, JSpinner maxCharNum, JCheckBox lineDocument, JSpinner selectedShowNum, JLabel selectTips, JComboBox selectTipBox) {
         this.markText = markText;
         this.markLabSel = markLabSel;
         this.noteLabSel = noteLabSel;
@@ -33,6 +34,7 @@ public class GeneralSettings {
         this.lineDocument = lineDocument;
         this.selectTips = selectTips;
         this.selectTipBox = selectTipBox;
+        this.mysqlBackUp = mysqlBackUp;
     }
 
     protected void initGeneralSettings() {
@@ -155,5 +157,7 @@ public class GeneralSettings {
         globalSettings.setLineDocument(lineDocument.isSelected());
         // 选中提示样式
         globalSettings.setTipType(Objects.toString(selectTipBox.getSelectedItem()));
+        // 设置备份路径
+        globalSettings.setMysqlBackUp(mysqlBackUp.getText());
     }
 }

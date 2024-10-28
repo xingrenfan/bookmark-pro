@@ -109,4 +109,17 @@ public final class GlobalSettings extends BaseSetting {
     public String getTipType() {
         return properties.getValue(BookmarkConstants.BOOKMARK_TIPS_TYPE, BookmarkConstants.TIPS_FOR_TOOL);
     }
+
+
+    public String getMysqlBackUp() {
+        // 默认12个小时备份一次
+        return Objects.toString(properties.getValue(BookmarkConstants.BOOKMARK_MYSQL_BACK_UP), "12");
+    }
+
+    public void setMysqlBackUp(String text) {
+        if (text != null) {
+            properties.setValue(BookmarkConstants.BOOKMARK_MYSQL_BACK_UP, text);
+        }
+    }
+
 }

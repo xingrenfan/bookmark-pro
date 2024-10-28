@@ -227,9 +227,9 @@ public final class TreeServiceImpl implements TreeService {
                         // Show tooltip for the node
                         showToolTip(getToolTipText(e), e);
                     } else {
-                        if (this.lastPopup != null) {
-                            lastPopup.cancel();
-                        }
+//                        if (this.lastPopup != null) {
+//                            lastPopup.cancel();
+//                        }
                     }
                 }
 
@@ -244,7 +244,7 @@ public final class TreeServiceImpl implements TreeService {
                     return null;
                 }
 
-                private JBPopup lastPopup;
+//                private JBPopup lastPopup;
                 private AbstractTreeNodeModel lastAbstractTreeNodeModel;
 
                 private void showToolTip(AbstractTreeNodeModel nodeModel, MouseEvent e) {
@@ -254,17 +254,17 @@ public final class TreeServiceImpl implements TreeService {
                     if (lastAbstractTreeNodeModel == nodeModel) {
                         return;
                     }
-                    if (this.lastPopup != null) {
-                        lastPopup.cancel();
-                    }
+//                    if (this.lastPopup != null) {
+//                        lastPopup.cancel();
+//                    }
                     if (nodeModel.isBookmark()) {
                         lastAbstractTreeNodeModel = nodeModel;
-
-                        JBPopupFactory popupFactory = JBPopupFactory.getInstance();
-                        lastPopup = popupFactory.createComponentPopupBuilder(new BookmarkTipPanel(lastAbstractTreeNodeModel), null).setFocusable(true).setResizable(true).setRequestFocus(true).createPopup();
-
-                        Point adjustedLocation = new Point(e.getLocationOnScreen().x + 5, e.getLocationOnScreen().y + 10); // Adjust position
-                        lastPopup.show(RelativePoint.fromScreen(adjustedLocation));
+//
+//                        JBPopupFactory popupFactory = JBPopupFactory.getInstance();
+//                        lastPopup = popupFactory.createComponentPopupBuilder(new BookmarkTipPanel(lastAbstractTreeNodeModel), null).setFocusable(true).setResizable(true).setRequestFocus(true).createPopup();
+//
+//                        Point adjustedLocation = new Point(e.getLocationOnScreen().x + 5, e.getLocationOnScreen().y + 10); // Adjust position
+//                        lastPopup.show(RelativePoint.fromScreen(adjustedLocation));
                     }
                 }
             });
@@ -297,17 +297,27 @@ public final class TreeServiceImpl implements TreeService {
         bookmarkTree.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                printLog(project,"sjzlog双击了");
+                // 这个偶发会识别为1一次，就很烦
+                printLog(project,"sjzlog双击了3214324"+SwingUtilities.isLeftMouseButton(e));
+                printLog(project,"sjzlog双击了1231"+e.getClickCount());
                 // 双击事件
-                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
+                if (SwingUtilities.isLeftMouseButton(e)) {
+                    printLog(project,"sjzlog + "+"gwegewgewgew");
                     TreePath path = bookmarkTree.getSelectionPath();
+                    printLog(project,"sjzlog + "+path);
                     if (Objects.isNull(path)) {
+                        printLog(project,"路径为空");
                         return;
                     }
                     BookmarkTreeNode selectedNode = (BookmarkTreeNode) path.getLastPathComponent();
+                    printLog(project,"sjzlog + "+"52353253");
                     if (selectedNode != null && selectedNode.isBookmark()) {
                         // 是书签则直接跳转
                         BookmarkNodeModel bookmark = (BookmarkNodeModel) selectedNode.getUserObject();
+                        printLog(project,"sjzlog + "+"3244532434");
                         if (bookmark.getVirtualFile() != null) {
+                            printLog(project,"sjzlog查找打开文件");
                             // 打开文件跳转
                             bookmark.openFileDescriptor(project);
                         } else {
@@ -316,8 +326,14 @@ public final class TreeServiceImpl implements TreeService {
                             BookmarkNoticeUtil.errorMessages(project, "Bookmark [" + bookmark.getName() + BookmarkConstants.BOOKMARK_NAME_AND_DESC_SEPARATOR + bookmark.getDesc() + "] invalid");
                         }
                     }
+                    printLog(project,"sjzlog双击了结束了");
                 }
             }
         });
+    }
+
+    public void printLog(Project project,String Msg){
+        // 双击 单击 书签 打开
+//        BookmarkNoticeUtil.projectNotice(project,Msg);
     }
 }

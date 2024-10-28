@@ -54,16 +54,6 @@ public final class BookmarkExportAction extends AnAction implements BaseExportSe
         if (StringUtils.isNotEmpty(newFileName)) {
             fileName = newFileName;
             exportSendNotice(project, backupRootFile.getPath(), fileName);
-            // 读取文件内容并存储到 MySQLame;
-            try {
-                // 读取文件中的 JSON 内容
-                String bookmarkData = new String(Files.readAllBytes(Paths.get(backupRootFile.getPath()+File.separator + fileName)));
-                // 保存到 MySQL
-                saveToDatabase(project.getName(), bookmarkData);
-            } catch (IOException ee) {
-                ee.printStackTrace();
-                BookmarkNoticeUtil.projectNotice(project, "Failed to read backup file and store to database.", null);
-            }
         }
     }
 }

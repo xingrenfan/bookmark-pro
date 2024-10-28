@@ -18,6 +18,7 @@ import org.bookmark.pro.utils.BookmarkUtil;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -84,10 +85,14 @@ public final class PersistServiceImpl implements PersistService {
     }
 
     @Override
-    public boolean importBookmark(VirtualFile virtualFile, String projectName) {
+    public boolean importBookmark(VirtualFile virtualFile, String projectName,boolean mysql) {
         try {
-//            String content = new String(virtualFile.contentsToByteArray());
-            String content = getLatestBookmarkData(projectName);
+            String content = "";
+            if (mysql){
+                content = getLatestBookmarkData(projectName);
+            }else {
+                content = new String(virtualFile.contentsToByteArray(), StandardCharsets.UTF_8);
+            }
             // 字符串 转 书签对象
             Gson gson = new Gson();
             // TODO 导入备份文件这一行异常

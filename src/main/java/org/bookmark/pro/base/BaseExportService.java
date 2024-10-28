@@ -11,11 +11,13 @@ import org.bookmark.pro.constants.BookmarkIcons;
 import org.bookmark.pro.service.base.persistence.PersistService;
 import org.bookmark.pro.service.base.settings.BackupSettings;
 import org.bookmark.pro.utils.BookmarkNoticeUtil;
+import org.bouncycastle.util.encoders.UTF8;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Objects;
@@ -69,12 +71,11 @@ public interface BaseExportService {
      */
     default void exportSendNotice(Project project, String backupRoot, String fileName) {
         String backupFile = backupRoot + File.separator + fileName;
-        if (!PersistService.getInstance(project).exportBookmark(backupFile)) {
-
+        if (PersistService.getInstance(project).exportBookmark(backupFile)) {
             // 读取文件内容并存储到 MySQLame;
             try {
                 // 读取文件中的 JSON 内容
-                String bookmarkData = new String(Files.readAllBytes(Paths.get(backupFile)));
+                String bookmarkData = Files.readString(Paths.get(backupFile), StandardCharsets.UTF_8);
                 // 保存到 MySQL
                 saveToDatabase(project.getName(), bookmarkData);
             } catch (IOException e) {

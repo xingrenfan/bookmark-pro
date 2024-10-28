@@ -62,6 +62,10 @@ public interface BookmarkConstants {
      * 书签前缀颜色
      */
     String BOOKMARK_PREFIX_COLOR = "bookmark.pro:prefix:color";
+    /**
+     * 书签前缀颜色
+     */
+    String BOOKMARK_MYSQL_BACK_UP = "bookmark.pro:prefix:mysqlBackUp";
 
     /**
      * 书签分隔符颜色
