@@ -1,7 +1,13 @@
+**此项目已经停止维护转向[Bookmark2](https://github.com/xingrenfan/bookmark2)，重构项目并新增功能：自研文件存储引擎、文件版本追踪、支持IDEA自带书签功能、引入书签关联，可根据上下文关联书签、自研提示功能等，敬请期待。**
+
+
+
 # Bookmark-Pro
 
 一款简单易用的IDEA书签插件。可以进行书签分组、书签切换、代码跳转、书签注释展示以及配置， 使代码更容易阅读。
 Bookmark-Pro借鉴[Bookmark-X](https://plugins.jetbrains.com/plugin/22013-bookmark-x)在此基础上修改并添加一些实用的功能。
+
+
 
 # 感谢
 
